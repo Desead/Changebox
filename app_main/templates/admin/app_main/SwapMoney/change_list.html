@@ -1,0 +1,27 @@
+{% extends "admin/change_list.html" %}
+{% load admin_list i18n admin_urls %}
+
+
+{% block object-tools %}
+    <form action="import/" method="post">
+        {% csrf_token %}
+        <input type="submit" name="rnd_swap" value="Создать случайные модели"/>
+        <input type="submit" name="cbrbest" value="Получить данные с беста и цб"/>
+    </form>
+{% endblock %}
+
+{% block content_title %}
+    <h1> Основная таблица для настройки обменов </h1>
+{#    <p>#}
+{#        Обмен BTCUST<br>#}
+{#        BTC - валюта слева(from) - то, что клиент отдаст в обменник<br>#}
+{#        USDT - валюта справа(to) - то, что клиент получит себе на счёт#}
+{#    </p>#}
+{% endblock %}
+
+{#{% block result_list %}#}
+{#    <!-- Our content goes here... -->#}
+{#{% endblock %}#}
+{#{% block pagination %}#}
+{#    <p>1111111111   </p>#}
+{#{% endblock %}#}

@@ -1,0 +1,72 @@
+{
+  "GBP": {
+    "NumCode": "826",
+    "CharCode": "GBP",
+    "Nominal": "1",
+    "Name": "Фунт стерлингов Соединенного королевства",
+    "Value": "137,3839"
+  },
+  "BYN": {
+    "NumCode": "933",
+    "CharCode": "BYN",
+    "Nominal": "1",
+    "Name": "Белорусский рубль",
+    "Value": "31,7811"
+  },
+  "USD": {
+    "NumCode": "840",
+    "CharCode": "USD",
+    "Nominal": "1",
+    "Name": "Доллар США",
+    "Value": "104,8012"
+  },
+  "EUR": {
+    "NumCode": "978",
+    "CharCode": "EUR",
+    "Nominal": "1",
+    "Name": "Евро",
+    "Value": "115,9311"
+  },
+  "KZT": {
+    "NumCode": "398",
+    "CharCode": "KZT",
+    "Nominal": "100",
+    "Name": "Казахстанский тенге",
+    "Value": "20,6141"
+  },
+  "CAD": {
+    "NumCode": "124",
+    "CharCode": "CAD",
+    "Nominal": "1",
+    "Name": "Канадский доллар",
+    "Value": "82,6638"
+  },
+  "CNY": {
+    "NumCode": "156",
+    "CharCode": "CNY",
+    "Nominal": "1",
+    "Name": "Китайский юань",
+    "Value": "16,5039"
+  },
+  "TRY": {
+    "NumCode": "949",
+    "CharCode": "TRY",
+    "Nominal": "10",
+    "Name": "Турецкая лира",
+    "Value": "71,0257"
+  },
+  "UAH": {
+    "NumCode": "980",
+    "CharCode": "UAH",
+    "Nominal": "10",
+    "Name": "Украинская гривна",
+    "Value": "34,7309"
+  },
+  "JPY": {
+    "NumCode": "392",
+    "CharCode": "JPY",
+    "Nominal": "100",
+    "Name": "Японская иена",
+    "Value": "88,2128"
+  }
+}

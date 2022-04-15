@@ -1,0 +1,910 @@
+{
+  "Bitcoin (BTC)": [
+    "BTC",
+    "93"
+  ],
+  "Bitcoin LN (BTC)": [
+    "BTCLN",
+    "131"
+  ],
+  "Bitcoin BEP20 (BTC)": [
+    "BTCBEP20",
+    "43"
+  ],
+  "Wrapped BTC (WBTC)": [
+    "WBTC",
+    "73"
+  ],
+  "Bitcoin Cash (BCH)": [
+    "BCH",
+    "172"
+  ],
+  "Bitcoin SV (BSV)": [
+    "BSV",
+    "137"
+  ],
+  "Bitcoin Gold (BTG)": [
+    "BTG",
+    "184"
+  ],
+  "Ethereum (ETH)": [
+    "ETH",
+    "139"
+  ],
+  "Ethereum BEP20 (ETH)": [
+    "ETHBEP20",
+    "212"
+  ],
+  "Wrapped ETH (WETH)": [
+    "WETH",
+    "218"
+  ],
+  "Ether Classic (ETC)": [
+    "ETC",
+    "160"
+  ],
+  "Litecoin (LTC)": [
+    "LTC",
+    "99"
+  ],
+  "Ripple (XRP)": [
+    "XRP",
+    "161"
+  ],
+  "Monero (XMR)": [
+    "XMR",
+    "149"
+  ],
+  "Dogecoin (DOGE)": [
+    "DOGE",
+    "115"
+  ],
+  "Polygon (MATIC)": [
+    "MATIC",
+    "138"
+  ],
+  "Dash (DASH)": [
+    "DASH",
+    "140"
+  ],
+  "Zcash (ZEC)": [
+    "ZEC",
+    "162"
+  ],
+  "Tether Omni (USDT)": [
+    "USDTOMNI",
+    "163"
+  ],
+  "Tether ERC20 (USDT)": [
+    "USDTERC20",
+    "36"
+  ],
+  "Tether TRC20 (USDT)": [
+    "USDTTRC20",
+    "10"
+  ],
+  "Tether BEP20 (USDT)": [
+    "USDTBEP20",
+    "208"
+  ],
+  "USD Coin (USDC)": [
+    "USDC",
+    "23"
+  ],
+  "TrueUSD (TUSD)": [
+    "TUSD",
+    "24"
+  ],
+  "Pax Dollar (USDP)": [
+    "USDP",
+    "189"
+  ],
+  "Dai (DAI)": [
+    "DAI",
+    "203"
+  ],
+  "Binance USD (BUSD)": [
+    "BUSD",
+    "206"
+  ],
+  "NEM (XEM)": [
+    "XEM",
+    "173"
+  ],
+  "Augur (REP)": [
+    "REP",
+    "174"
+  ],
+  "NEO (NEO)": [
+    "NEO",
+    "177"
+  ],
+  "EOS (EOS)": [
+    "EOS",
+    "178"
+  ],
+  "IOTA (MIOTA)": [
+    "IOTA",
+    "179"
+  ],
+  "Lisk (LSK)": [
+    "LSK",
+    "180"
+  ],
+  "Cardano (ADA)": [
+    "ADA",
+    "181"
+  ],
+  "Stellar (XLM)": [
+    "XLM",
+    "182"
+  ],
+  "TRON (TRX)": [
+    "TRX",
+    "185"
+  ],
+  "Waves (WAVES)": [
+    "WAVES",
+    "133"
+  ],
+  "OMG Network (OMG)": [
+    "OMG",
+    "48"
+  ],
+  "Verge (XVG)": [
+    "XVG",
+    "124"
+  ],
+  "0x (ZRX)": [
+    "ZRX",
+    "168"
+  ],
+  "Binance Coin (BNB)": [
+    "BNB",
+    "19"
+  ],
+  "ICON (ICX)": [
+    "ICX",
+    "104"
+  ],
+  "Komodo (KMD)": [
+    "KMD",
+    "134"
+  ],
+  "BitTorrent (BTT)": [
+    "BTT",
+    "27"
+  ],
+  "BAT (BAT)": [
+    "BAT",
+    "61"
+  ],
+  "Ontology (ONT)": [
+    "ONT",
+    "135"
+  ],
+  "Qtum (QTUM)": [
+    "QTUM",
+    "26"
+  ],
+  "Chainlink (LINK)": [
+    "LINK",
+    "197"
+  ],
+  "Cosmos (ATOM)": [
+    "ATOM",
+    "198"
+  ],
+  "Tezos (XTZ)": [
+    "XTZ",
+    "175"
+  ],
+  "Polkadot (DOT)": [
+    "DOT",
+    "201"
+  ],
+  "Uniswap (UNI)": [
+    "UNI",
+    "202"
+  ],
+  "Ravencoin (RVN)": [
+    "RVN",
+    "205"
+  ],
+  "Solana (SOL)": [
+    "SOL",
+    "82"
+  ],
+  "VeChain (VET)": [
+    "VET",
+    "8"
+  ],
+  "Shiba Inu (SHIB)": [
+    "SHIB",
+    "210"
+  ],
+  "Algorand (ALGO)": [
+    "ALGO",
+    "216"
+  ],
+  "Maker (MKR)": [
+    "MKR",
+    "213"
+  ],
+  "Avalanche (AVAX)": [
+    "AVAX",
+    "217"
+  ],
+  "Yearn.finance (YFI)": [
+    "YFI",
+    "220"
+  ],
+  "Decentraland (MANA)": [
+    "MANA",
+    "227"
+  ],
+  "WMZ": [
+    "WMZ",
+    "1"
+  ],
+  "WMR": [
+    "WMR",
+    "2"
+  ],
+  "WMP": [
+    "WMP",
+    "76"
+  ],
+  "WME": [
+    "WME",
+    "3"
+  ],
+  "WMB": [
+    "WMB",
+    "18"
+  ],
+  "WMK": [
+    "WMK",
+    "47"
+  ],
+  "WMX": [
+    "WMX",
+    "96"
+  ],
+  "Paymer USD": [
+    "PMRUSD",
+    "87"
+  ],
+  "Paymer RUB": [
+    "PMRRUB",
+    "144"
+  ],
+  "Perfect Money USD": [
+    "PMUSD",
+    "40"
+  ],
+  "Perfect Money EUR": [
+    "PMEUR",
+    "41"
+  ],
+  "Perfect Money BTC": [
+    "PMBTC",
+    "128"
+  ],
+  "PM e-Voucher USD": [
+    "PMVUSD",
+    "156"
+  ],
+  "ЮMoney": [
+    "YAMRUB",
+    "6"
+  ],
+  "QIWI RUB": [
+    "QWRUB",
+    "63"
+  ],
+  "QIWI KZT": [
+    "QWKZT",
+    "127"
+  ],
+  "PayPal USD": [
+    "PPUSD",
+    "45"
+  ],
+  "PayPal RUB": [
+    "PPRUB",
+    "98"
+  ],
+  "PayPal EUR": [
+    "PPEUR",
+    "80"
+  ],
+  "PayPal GBP": [
+    "PPGBP",
+    "164"
+  ],
+  "Advanced Cash USD": [
+    "ADVCUSD",
+    "88"
+  ],
+  "Advanced Cash RUB": [
+    "ADVCRUB",
+    "121"
+  ],
+  "Advanced Cash EUR": [
+    "ADVCEUR",
+    "120"
+  ],
+  "Advanced Cash UAH": [
+    "ADVCUAH",
+    "142"
+  ],
+  "Advanced Cash KZT": [
+    "ADVCKZT",
+    "33"
+  ],
+  "Advanced Cash TRY": [
+    "ADVCTRY",
+    "20"
+  ],
+  "Payeer USD": [
+    "PRUSD",
+    "108"
+  ],
+  "Payeer RUB": [
+    "PRRUB",
+    "117"
+  ],
+  "Payeer EUR": [
+    "PREUR",
+    "122"
+  ],
+  "Skrill USD": [
+    "SKLUSD",
+    "44"
+  ],
+  "Skrill EUR": [
+    "SKLEUR",
+    "123"
+  ],
+  "Idram": [
+    "IDAMD",
+    "11"
+  ],
+  "Paxum": [
+    "PAXUMUSD",
+    "74"
+  ],
+  "Capitalist USD": [
+    "CPTSUSD",
+    "145"
+  ],
+  "Capitalist EUR": [
+    "CPTSEUR",
+    "226"
+  ],
+  "Capitalist RUB": [
+    "CPTSRUB",
+    "85"
+  ],
+  "Neteller USD": [
+    "NTLRUSD",
+    "72"
+  ],
+  "Neteller EUR": [
+    "NTLREUR",
+    "136"
+  ],
+  "PaySera USD": [
+    "PSRUSD",
+    "152"
+  ],
+  "PaySera EUR": [
+    "PSREUR",
+    "35"
+  ],
+  "ecoPayz": [
+    "ECPZUSD",
+    "200"
+  ],
+  "NixMoney USD": [
+    "NIXUSD",
+    "109"
+  ],
+  "NixMoney EUR": [
+    "NIXEUR",
+    "125"
+  ],
+  "Global24": [
+    "GMUAH",
+    "112"
+  ],
+  "VelesPay": [
+    "VLSPUSD",
+    "32"
+  ],
+  "Epay USD": [
+    "EPAYUSD",
+    "154"
+  ],
+  "Epay EUR": [
+    "EPAYEUR",
+    "97"
+  ],
+  "Alipay": [
+    "ALPCNY",
+    "165"
+  ],
+  "Payoneer": [
+    "PNRUSD",
+    "103"
+  ],
+  "Счет телефона RUB": [
+    "MWRUB",
+    "49"
+  ],
+  "Счет телефона UAH": [
+    "MWUAH",
+    "12"
+  ],
+  "Криптобиржи USD": [
+    "TRDUSD",
+    "148"
+  ],
+  "Криптобиржи EUR": [
+    "TRDEUR",
+    "153"
+  ],
+  "Exmo USD": [
+    "EXMUSD",
+    "129"
+  ],
+  "Exmo RUB": [
+    "EXMRUB",
+    "130"
+  ],
+  "Exmo UAH": [
+    "EXMUAH",
+    "169"
+  ],
+  "Exmo BTC": [
+    "EXMBTC",
+    "186"
+  ],
+  "Exmo USDT": [
+    "EXMUSDT",
+    "50"
+  ],
+  "Binance RUB": [
+    "BNACRUB",
+    "126"
+  ],
+  "Binance UAH": [
+    "BNACUAH",
+    "110"
+  ],
+  "Cryptex": [
+    "CRXUSD",
+    "190"
+  ],
+  "Kuna": [
+    "KUNAUAH",
+    "28"
+  ],
+  "Garantex": [
+    "GRNTXRUB",
+    "16"
+  ],
+  "WhiteBIT": [
+    "WHTBTUSD",
+    "214"
+  ],
+  "Сбербанк": [
+    "SBERRUB",
+    "42"
+  ],
+  "Сбербанк Код": [
+    "SBERDRUB",
+    "209"
+  ],
+  "Альфа-Банк": [
+    "ACRUB",
+    "52"
+  ],
+  "Альфа cash-in USD": [
+    "ACCUSD",
+    "143"
+  ],
+  "Альфа cash-in RUB": [
+    "ACCRUB",
+    "62"
+  ],
+  "Тинькофф": [
+    "TCSBRUB",
+    "105"
+  ],
+  "Тинькофф cash-in": [
+    "TCSBCRUB",
+    "46"
+  ],
+  "Тинькофф QR": [
+    "TCSBQRUB",
+    "147"
+  ],
+  "ВТБ": [
+    "TBRUB",
+    "51"
+  ],
+  "Русский Стандарт": [
+    "RUSSTRUB",
+    "64"
+  ],
+  "Авангард": [
+    "AVBRUB",
+    "79"
+  ],
+  "Промсвязьбанк": [
+    "PSBRUB",
+    "53"
+  ],
+  "Газпромбанк": [
+    "GPBRUB",
+    "95"
+  ],
+  "Кукуруза": [
+    "KUKRUB",
+    "57"
+  ],
+  "Райффайзен": [
+    "RFBRUB",
+    "157"
+  ],
+  "РНКБ": [
+    "RNKBRUB",
+    "132"
+  ],
+  "Открытие": [
+    "OPNBRUB",
+    "176"
+  ],
+  "Почта Банк": [
+    "POSTBRUB",
+    "170"
+  ],
+  "Россельхозбанк": [
+    "RSHBRUB",
+    "34"
+  ],
+  "Росбанк": [
+    "ROSBRUB",
+    "195"
+  ],
+  "МТС Банк": [
+    "MTSBRUB",
+    "191"
+  ],
+  "Хоум Кредит": [
+    "HCBRUB",
+    "215"
+  ],
+  "Приват 24 USD": [
+    "P24USD",
+    "55"
+  ],
+  "Приват 24 UAH": [
+    "P24UAH",
+    "56"
+  ],
+  "Райффайзен UAH": [
+    "RFBUAH",
+    "158"
+  ],
+  "Ощадбанк": [
+    "OSDBUAH",
+    "68"
+  ],
+  "УкрСиббанк": [
+    "USBUAH",
+    "22"
+  ],
+  "ПУМБ": [
+    "PMBBUAH",
+    "118"
+  ],
+  "Монобанк": [
+    "MONOBUAH",
+    "84"
+  ],
+  "Сбербанк UAH": [
+    "SBERUAH",
+    "196"
+  ],
+  "Альфа-Банк UAH": [
+    "ACUAH",
+    "37"
+  ],
+  "Беларусбанк": [
+    "BLRBBYN",
+    "4"
+  ],
+  "HalykBank": [
+    "HLKBKZT",
+    "90"
+  ],
+  "Сбербанк KZT": [
+    "SBERKZT",
+    "114"
+  ],
+  "ForteBank": [
+    "FRTBKZT",
+    "75"
+  ],
+  "Kaspi Bank": [
+    "KSPBKZT",
+    "66"
+  ],
+  "Jysan Bank": [
+    "JSNBKZT",
+    "207"
+  ],
+  "Visa/MasterCard USD": [
+    "CARDUSD",
+    "58"
+  ],
+  "Visa/MasterCard RUB": [
+    "CARDRUB",
+    "59"
+  ],
+  "Visa/MasterCard EUR": [
+    "CARDEUR",
+    "65"
+  ],
+  "Visa/MasterCard UAH": [
+    "CARDUAH",
+    "60"
+  ],
+  "Visa/MasterCard BYN": [
+    "CARDBYN",
+    "54"
+  ],
+  "Visa/MasterCard KZT": [
+    "CARDKZT",
+    "111"
+  ],
+  "Visa/MasterCard SEK": [
+    "CARDSEK",
+    "155"
+  ],
+  "Visa/MasterCard PLN": [
+    "CARDPLN",
+    "38"
+  ],
+  "Visa/MasterCard MDL": [
+    "CARDMDL",
+    "194"
+  ],
+  "Visa/MasterCard AMD": [
+    "CARDAMD",
+    "5"
+  ],
+  "Visa/MasterCard GBP": [
+    "CARDGBP",
+    "146"
+  ],
+  "Visa/MasterCard CNY": [
+    "CARDCNY",
+    "30"
+  ],
+  "Visa/MasterCard TRY": [
+    "CARDTRY",
+    "83"
+  ],
+  "Visa/MasterCard KGS": [
+    "CARDKGS",
+    "25"
+  ],
+  "Visa/MasterCard CAD": [
+    "CARDCAD",
+    "221"
+  ],
+  "Visa/MasterCard BGN": [
+    "CARDBGN",
+    "222"
+  ],
+  "Visa/MasterCard HUF": [
+    "CARDHUF",
+    "223"
+  ],
+  "Visa/MasterCard CZK": [
+    "CARDCZK",
+    "224"
+  ],
+  "Visa/MasterCard NOK": [
+    "CARDNOK",
+    "225"
+  ],
+  "Карта Мир": [
+    "MIRCRUB",
+    "17"
+  ],
+  "Карта UnionPay": [
+    "UPCNY",
+    "100"
+  ],
+  "Карта UZCARD": [
+    "UZCUZS",
+    "9"
+  ],
+  "Карта HUMO": [
+    "HUMOUZS",
+    "199"
+  ],
+  "Любой банк USD": [
+    "WIREUSD",
+    "69"
+  ],
+  "Любой банк RUB": [
+    "WIRERUB",
+    "71"
+  ],
+  "Любой банк EUR": [
+    "WIREEUR",
+    "70"
+  ],
+  "Любой банк UAH": [
+    "WIREUAH",
+    "102"
+  ],
+  "Любой банк BYN": [
+    "WIREBYN",
+    "31"
+  ],
+  "Любой банк KZT": [
+    "WIREKZT",
+    "113"
+  ],
+  "Любой банк GEL": [
+    "WIREGEL",
+    "219"
+  ],
+  "Любой банк GBP": [
+    "WIREGBP",
+    "81"
+  ],
+  "Любой банк CNY": [
+    "WIRECNY",
+    "166"
+  ],
+  "Любой банк TRY": [
+    "WIRETRY",
+    "39"
+  ],
+  "Любой банк PLN": [
+    "WIREPLN",
+    "29"
+  ],
+  "Любой банк THB": [
+    "WIRETHB",
+    "167"
+  ],
+  "Любой банк INR": [
+    "WIREINR",
+    "119"
+  ],
+  "Любой банк NGN": [
+    "WIRENGN",
+    "188"
+  ],
+  "Любой банк IDR": [
+    "WIREIDR",
+    "183"
+  ],
+  "Sepa EUR": [
+    "SEPAEUR",
+    "171"
+  ],
+  "ЕРИП Расчет": [
+    "ERIPBYN",
+    "187"
+  ],
+  "СБП": [
+    "SBPRUB",
+    "21"
+  ],
+  "Счет ИП или ООО": [
+    "STLMRUB",
+    "159"
+  ],
+  "Revolut USD": [
+    "REVBUSD",
+    "192"
+  ],
+  "Revolut EUR": [
+    "REVBEUR",
+    "193"
+  ],
+  "WU USD": [
+    "WUUSD",
+    "67"
+  ],
+  "WU EUR": [
+    "WUEUR",
+    "15"
+  ],
+  "WU RUB": [
+    "WURUB",
+    "7"
+  ],
+  "MoneyGram USD": [
+    "MGUSD",
+    "78"
+  ],
+  "MoneyGram EUR": [
+    "MGEUR",
+    "77"
+  ],
+  "Contact USD": [
+    "CNTUSD",
+    "101"
+  ],
+  "Contact RUB": [
+    "CNTRUB",
+    "106"
+  ],
+  "ЗК USD": [
+    "GCMTUSD",
+    "116"
+  ],
+  "ЗК RUB": [
+    "GCMTRUB",
+    "107"
+  ],
+  "UNI USD": [
+    "USTMUSD",
+    "86"
+  ],
+  "UNI RUB": [
+    "USTMRUB",
+    "14"
+  ],
+  "Ria USD": [
+    "RMTFUSD",
+    "150"
+  ],
+  "Ria EUR": [
+    "RMTFEUR",
+    "151"
+  ],
+  "Наличные USD": [
+    "CASHUSD",
+    "89"
+  ],
+  "Наличные RUB": [
+    "CASHRUB",
+    "91"
+  ],
+  "Наличные EUR": [
+    "CASHEUR",
+    "141"
+  ],
+  "Наличные UAH": [
+    "CASHUAH",
+    "92"
+  ],
+  "Наличные BYN": [
+    "CASHBYN",
+    "13"
+  ],
+  "Наличные KZT": [
+    "CASHKZT",
+    "94"
+  ],
+  "Наличные GBP": [
+    "CASHGBP",
+    "204"
+  ],
+  "Наличные AED": [
+    "CASHAED",
+    "211"
+  ]
+}

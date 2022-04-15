@@ -1,0 +1,25 @@
+{% extends "admin/change_list.html" %}
+{% load admin_list i18n admin_urls %}
+
+{% block content_title %}
+    <h1>Базовые настройки работы обменника</h1>
+
+{% endblock %}
+
+{% block object-tools %}
+    <form action="import/" method="post">
+        {% csrf_token %}
+        <div class="btn_w" style="max-width: 950px">
+            <input type="submit" name="city" value="Добавить города" style="width: 230px;"/>
+            <input type="submit" name="exchange" value="Добавить обменники" style="width: 230px"/>
+            <input type="submit" name="pays" value="Добавить платёжные системы" style="width: 230px"/>
+            <input type="submit" name="money" value="Добавить монеты и валюты" style="width: 230px"/>
+            <input type="submit" name="fullmoney" value="Соединить платёжки с деньгами" style="width: 230px"/>
+            <input type="submit" name="best" value="Получить данные с BestChange" style="width: 230px"/>
+            <input type="submit" name="clear_all" value="Очистить все данные" style="width: 230px"/>
+            <input type="submit" name="dump" value="Надо чё то ещё добавить" style="width: 230px"/>
+        </div>
+    </form>
+    <br>
+    {#    {{ block.super }}#}
+{% endblock %}

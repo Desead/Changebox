@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="40px" viewBox="0 0 30 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>44EC7796-A0F6-4CDC-98E5-69928C0C745A</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/currencys/ethereum/default">
+            <g transform="translate(0.000000, -4.000000)">
+                <rect id="Rectangle" fill-opacity="0" fill="#D8D8D8" fill-rule="nonzero" x="0" y="0" width="30" height="50"></rect>
+                <g id="ethereum" transform="translate(4.000000, 6.000000)">
+                    <polygon id="Path" fill="#343434" points="11.0470014 0 10.8057065 0.820143885 10.8057065 24.6188201 11.0470014 24.8596835 22.0940806 18.3297842"></polygon>
+                    <polygon id="Path" fill="#8C8C8C" points="11.0470791 0 0 18.3297842 11.0470791 24.8597698 11.0470791 13.3086043"></polygon>
+                    <polygon id="Path" fill="#3C3C3B" points="11.0470014 26.9513612 10.9110302 27.1171165 10.9110302 35.5947281 11.0470014 35.9919367 22.1006417 20.4247424"></polygon>
+                    <polygon id="Path" fill="#8C8C8C" points="11.0470791 35.9918158 11.0470791 26.9512403 0 20.4246216"></polygon>
+                    <polygon id="Path" fill="#141414" points="11.0470014 24.8596576 22.0939079 18.3298446 11.0470014 13.3086647"></polygon>
+                    <polygon id="Path" fill="#393939" points="7.76978417e-05 18.3298532 11.0469842 24.8596662 11.0469842 13.3086734"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

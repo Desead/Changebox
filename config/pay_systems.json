@@ -1,0 +1,90 @@
+[
+  {
+    "title": "Advanced Cash",
+    "active": true
+  },
+  {
+    "title": "Capitalist",
+    "active": true
+  },
+  {
+    "title": "Neteller",
+    "active": false
+  },
+  {
+    "title": "PayPal",
+    "active": true
+  },
+  {
+    "title": "Payeer",
+    "active": false
+  },
+  {
+    "title": "Perfect Money",
+    "active": true
+  },
+  {
+    "title": "Qiwi",
+    "active": true
+  },
+  {
+    "title": "Revolut",
+    "active": false
+  },
+  {
+    "title": "Skrill",
+    "active": false
+  },
+  {
+    "title": "Visa/MasterCard",
+    "active": true
+  },
+  {
+    "title": "WebMoney",
+    "active": true
+  },
+  {
+    "title": "Western Union",
+    "active": false
+  },
+  {
+    "title": "ЕРИП Расчет",
+    "active": false
+  },
+  {
+    "title": "Золотая корона",
+    "active": false
+  },
+  {
+    "title": "Карта Мир",
+    "active": true
+  },
+  {
+    "title": "Любой банк",
+    "active": false
+  },
+  {
+    "title": "Наличные",
+    "active": true
+  },
+  {
+    "title": "Сбербанк",
+    "active": true
+  },
+  {
+    "title": "Система быстрых платежей (СБП)",
+    "active": true
+  },
+  {
+    "title": "Счет ИП или ООО",
+    "active": false
+  },
+  {
+    "title": "Счет телефона",
+    "active": true
+  },
+  {
+    "title": "ЮMoney",
+    "active": true
+  }
+]

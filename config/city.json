@@ -1,0 +1,972 @@
+[
+  {
+    "title": "Агарак, Армения",
+    "id_best": 174,
+    "abc_code": "AGRK"
+  },
+  {
+    "title": "Адлер, Россия",
+    "id_best": 172,
+    "abc_code": "ADLER"
+  },
+  {
+    "title": "Актобе, Казахстан",
+    "id_best": 125,
+    "abc_code": "AKT"
+  },
+  {
+    "title": "Алма-Ата, Казахстан",
+    "id_best": 123,
+    "abc_code": "ALM"
+  },
+  {
+    "title": "Амстердам, Нидерланды",
+    "id_best": 89,
+    "abc_code": "AMST"
+  },
+  {
+    "title": "Анапа, Россия",
+    "id_best": 99,
+    "abc_code": "ANAPA"
+  },
+  {
+    "title": "Анкара, Турция",
+    "id_best": 168,
+    "abc_code": "ANKR"
+  },
+  {
+    "title": "Анталья, Турция",
+    "id_best": 167,
+    "abc_code": "ANTL"
+  },
+  {
+    "title": "Антверпен, Бельгия",
+    "id_best": 143,
+    "abc_code": "ANTW"
+  },
+  {
+    "title": "Антрацит, Украина",
+    "id_best": 11,
+    "abc_code": "ANTR"
+  },
+  {
+    "title": "Архангельск, Россия",
+    "id_best": 100,
+    "abc_code": "ARKH"
+  },
+  {
+    "title": "Астрахань, Россия",
+    "id_best": 101,
+    "abc_code": "ASTRA"
+  },
+  {
+    "title": "Афины, Греция",
+    "id_best": 177,
+    "abc_code": "ATH"
+  },
+  {
+    "title": "Баку, Азербайджан",
+    "id_best": 77,
+    "abc_code": "BAKU"
+  },
+  {
+    "title": "Барселона, Испания",
+    "id_best": 91,
+    "abc_code": "BARC"
+  },
+  {
+    "title": "Батуми, Грузия",
+    "id_best": 158,
+    "abc_code": "BTM"
+  },
+  {
+    "title": "Белгород, Россия",
+    "id_best": 163,
+    "abc_code": "BLGR"
+  },
+  {
+    "title": "Бердянск, Украина",
+    "id_best": 197,
+    "abc_code": "BRDNK"
+  },
+  {
+    "title": "Берлин, Германия",
+    "id_best": 86,
+    "abc_code": "BER"
+  },
+  {
+    "title": "Бишкек, Кыргызстан",
+    "id_best": 170,
+    "abc_code": "BSHK"
+  },
+  {
+    "title": "Братислава, Словакия",
+    "id_best": 180,
+    "abc_code": "BRAT"
+  },
+  {
+    "title": "Брест, Беларусь",
+    "id_best": 166,
+    "abc_code": "BREST"
+  },
+  {
+    "title": "Брюссель, Бельгия",
+    "id_best": 94,
+    "abc_code": "BRUS"
+  },
+  {
+    "title": "Брянск, Россия",
+    "id_best": 30,
+    "abc_code": "BRN"
+  },
+  {
+    "title": "Будапешт, Венгрия",
+    "id_best": 178,
+    "abc_code": "BUD"
+  },
+  {
+    "title": "Будва, Черногория",
+    "id_best": 162,
+    "abc_code": "BUDVA"
+  },
+  {
+    "title": "Бурса, Турция",
+    "id_best": 190,
+    "abc_code": "BURS"
+  },
+  {
+    "title": "Бухарест, Румыния",
+    "id_best": 195,
+    "abc_code": "BHRT"
+  },
+  {
+    "title": "Валенсия, Испания",
+    "id_best": 147,
+    "abc_code": "VALEN"
+  },
+  {
+    "title": "Варшава, Польша",
+    "id_best": 95,
+    "abc_code": "WARS"
+  },
+  {
+    "title": "Вена, Австрия",
+    "id_best": 181,
+    "abc_code": "WIEN"
+  },
+  {
+    "title": "Вильнюс, Литва",
+    "id_best": 96,
+    "abc_code": "VILN"
+  },
+  {
+    "title": "Винница, Украина",
+    "id_best": 60,
+    "abc_code": "VINN"
+  },
+  {
+    "title": "Витебск, Беларусь",
+    "id_best": 122,
+    "abc_code": "VTB"
+  },
+  {
+    "title": "Владивосток, Россия",
+    "id_best": 127,
+    "abc_code": "VVO"
+  },
+  {
+    "title": "Владимир, Россия",
+    "id_best": 176,
+    "abc_code": "VLAD"
+  },
+  {
+    "title": "Волгоград, Россия",
+    "id_best": 24,
+    "abc_code": "VLGD"
+  },
+  {
+    "title": "Воронеж, Россия",
+    "id_best": 102,
+    "abc_code": "VORON"
+  },
+  {
+    "title": "Вроцлав, Польша",
+    "id_best": 192,
+    "abc_code": "WRCL"
+  },
+  {
+    "title": "Гамбург, Германия",
+    "id_best": 141,
+    "abc_code": "HAMB"
+  },
+  {
+    "title": "Гданьск, Польша",
+    "id_best": 193,
+    "abc_code": "GDN"
+  },
+  {
+    "title": "Геленджик, Россия",
+    "id_best": 135,
+    "abc_code": "GLND"
+  },
+  {
+    "title": "Гомель, Беларусь",
+    "id_best": 74,
+    "abc_code": "GOMEL"
+  },
+  {
+    "title": "Гонконг, Китай",
+    "id_best": 78,
+    "abc_code": "HGKG"
+  },
+  {
+    "title": "Гродно, Беларусь",
+    "id_best": 165,
+    "abc_code": "GRDN"
+  },
+  {
+    "title": "Грозный, Россия",
+    "id_best": 128,
+    "abc_code": "GRZ"
+  },
+  {
+    "title": "Гуанчжоу, Китай",
+    "id_best": 59,
+    "abc_code": "GUAN"
+  },
+  {
+    "title": "Гуаякиль, Эквадор",
+    "id_best": 153,
+    "abc_code": "GUAQ"
+  },
+  {
+    "title": "Джерба, Тунис",
+    "id_best": 132,
+    "abc_code": "DJRB"
+  },
+  {
+    "title": "Днепр, Украина",
+    "id_best": 33,
+    "abc_code": "DNPR"
+  },
+  {
+    "title": "Донецк, Украина",
+    "id_best": 35,
+    "abc_code": "DNT"
+  },
+  {
+    "title": "Дрезден, Германия",
+    "id_best": 84,
+    "abc_code": "DRES"
+  },
+  {
+    "title": "Дубай, Объединенные Арабские Эмираты",
+    "id_best": 56,
+    "abc_code": "DUBAI"
+  },
+  {
+    "title": "Екатеринбург, Россия",
+    "id_best": 8,
+    "abc_code": "EKB"
+  },
+  {
+    "title": "Ереван, Армения",
+    "id_best": 9,
+    "abc_code": "ERVN"
+  },
+  {
+    "title": "Житомир, Украина",
+    "id_best": 61,
+    "abc_code": "ZHYTO"
+  },
+  {
+    "title": "Запорожье, Украина",
+    "id_best": 39,
+    "abc_code": "ZAP"
+  },
+  {
+    "title": "Ивано-Франковск, Украина",
+    "id_best": 62,
+    "abc_code": "IVFR"
+  },
+  {
+    "title": "Ижевск, Россия",
+    "id_best": 45,
+    "abc_code": "IZHV"
+  },
+  {
+    "title": "Измир, Турция",
+    "id_best": 189,
+    "abc_code": "IZMR"
+  },
+  {
+    "title": "Иркутск, Россия",
+    "id_best": 31,
+    "abc_code": "IRK"
+  },
+  {
+    "title": "Исфахан, Иран",
+    "id_best": 97,
+    "abc_code": "ISFHN"
+  },
+  {
+    "title": "Йошкар-Ола, Россия",
+    "id_best": 103,
+    "abc_code": "YOLA"
+  },
+  {
+    "title": "Казань, Россия",
+    "id_best": 12,
+    "abc_code": "KZN"
+  },
+  {
+    "title": "Калининград, Россия",
+    "id_best": 104,
+    "abc_code": "KLNG"
+  },
+  {
+    "title": "Калуга, Россия",
+    "id_best": 105,
+    "abc_code": "KLG"
+  },
+  {
+    "title": "Караганда, Казахстан",
+    "id_best": 126,
+    "abc_code": "KRGN"
+  },
+  {
+    "title": "Кемерово, Россия",
+    "id_best": 22,
+    "abc_code": "KEM"
+  },
+  {
+    "title": "Киев, Украина",
+    "id_best": 3,
+    "abc_code": "KIEV"
+  },
+  {
+    "title": "Киров, Россия",
+    "id_best": 106,
+    "abc_code": "KIROV"
+  },
+  {
+    "title": "Кито, Эквадор",
+    "id_best": 187,
+    "abc_code": "QUITO"
+  },
+  {
+    "title": "Кишинев, Молдова",
+    "id_best": 51,
+    "abc_code": "KISH"
+  },
+  {
+    "title": "Ковель, Украина",
+    "id_best": 196,
+    "abc_code": "KVL"
+  },
+  {
+    "title": "Копенгаген, Дания",
+    "id_best": 140,
+    "abc_code": "CPNH"
+  },
+  {
+    "title": "Костанай, Казахстан",
+    "id_best": 5,
+    "abc_code": "KST"
+  },
+  {
+    "title": "Кострома, Россия",
+    "id_best": 107,
+    "abc_code": "KOST"
+  },
+  {
+    "title": "Кошице, Словакия",
+    "id_best": 182,
+    "abc_code": "KSC"
+  },
+  {
+    "title": "Краков, Польша",
+    "id_best": 194,
+    "abc_code": "KRKW"
+  },
+  {
+    "title": "Краматорск, Украина",
+    "id_best": 64,
+    "abc_code": "KRAM"
+  },
+  {
+    "title": "Краснодар, Россия",
+    "id_best": 53,
+    "abc_code": "KRASN"
+  },
+  {
+    "title": "Красноярск, Россия",
+    "id_best": 23,
+    "abc_code": "KRSK"
+  },
+  {
+    "title": "Кременчуг, Украина",
+    "id_best": 47,
+    "abc_code": "KRMN"
+  },
+  {
+    "title": "Кривой Рог, Украина",
+    "id_best": 28,
+    "abc_code": "KRVR"
+  },
+  {
+    "title": "Кропивницкий, Украина",
+    "id_best": 63,
+    "abc_code": "KROP"
+  },
+  {
+    "title": "Курск, Россия",
+    "id_best": 13,
+    "abc_code": "KURSK"
+  },
+  {
+    "title": "Ларнака, Кипр",
+    "id_best": 131,
+    "abc_code": "LARN"
+  },
+  {
+    "title": "Лейпциг, Германия",
+    "id_best": 142,
+    "abc_code": "LZIG"
+  },
+  {
+    "title": "Лимасол, Кипр",
+    "id_best": 130,
+    "abc_code": "LIMAS"
+  },
+  {
+    "title": "Липецк, Россия",
+    "id_best": 108,
+    "abc_code": "LPT"
+  },
+  {
+    "title": "Лондон, Великобритания",
+    "id_best": 75,
+    "abc_code": "LNDN"
+  },
+  {
+    "title": "Лос-Анджелес, США",
+    "id_best": 76,
+    "abc_code": "LOSAN"
+  },
+  {
+    "title": "Луганск, Украина",
+    "id_best": 120,
+    "abc_code": "LUH"
+  },
+  {
+    "title": "Луцк, Украина",
+    "id_best": 65,
+    "abc_code": "LUTSK"
+  },
+  {
+    "title": "Львов, Украина",
+    "id_best": 26,
+    "abc_code": "LVOV"
+  },
+  {
+    "title": "Магнитогорск, Россия",
+    "id_best": 109,
+    "abc_code": "MGNT"
+  },
+  {
+    "title": "Мадрид, Испания",
+    "id_best": 148,
+    "abc_code": "MADR"
+  },
+  {
+    "title": "Майами, США",
+    "id_best": 151,
+    "abc_code": "MIAMI"
+  },
+  {
+    "title": "Малага, Испания",
+    "id_best": 149,
+    "abc_code": "MLG"
+  },
+  {
+    "title": "Манама, Бахрейн",
+    "id_best": 55,
+    "abc_code": "MANAM"
+  },
+  {
+    "title": "Мариуполь, Украина",
+    "id_best": 32,
+    "abc_code": "MRPL"
+  },
+  {
+    "title": "Махачкала, Россия",
+    "id_best": 138,
+    "abc_code": "MHKL"
+  },
+  {
+    "title": "Мелитополь, Украина",
+    "id_best": 66,
+    "abc_code": "MELIT"
+  },
+  {
+    "title": "Мехико, Мексика",
+    "id_best": 156,
+    "abc_code": "CDMX"
+  },
+  {
+    "title": "Милан, Италия",
+    "id_best": 88,
+    "abc_code": "MILAN"
+  },
+  {
+    "title": "Минск, Беларусь",
+    "id_best": 4,
+    "abc_code": "MINSK"
+  },
+  {
+    "title": "Могилев, Беларусь",
+    "id_best": 121,
+    "abc_code": "MGL"
+  },
+  {
+    "title": "Монако, Монако",
+    "id_best": 160,
+    "abc_code": "MON"
+  },
+  {
+    "title": "Москва, Россия",
+    "id_best": 1,
+    "abc_code": "MSK"
+  },
+  {
+    "title": "Мукачево, Украина",
+    "id_best": 185,
+    "abc_code": "MKCH"
+  },
+  {
+    "title": "Мурманск, Россия",
+    "id_best": 161,
+    "abc_code": "MRMK"
+  },
+  {
+    "title": "Мюнхен, Германия",
+    "id_best": 85,
+    "abc_code": "MUN"
+  },
+  {
+    "title": "Набережные Челны, Россия",
+    "id_best": 44,
+    "abc_code": "NABCH"
+  },
+  {
+    "title": "Нижний Новгород, Россия",
+    "id_best": 14,
+    "abc_code": "NNOV"
+  },
+  {
+    "title": "Николаев, Украина",
+    "id_best": 40,
+    "abc_code": "MYKL"
+  },
+  {
+    "title": "Ницца, Франция",
+    "id_best": 145,
+    "abc_code": "NICE"
+  },
+  {
+    "title": "Новокузнецк, Россия",
+    "id_best": 73,
+    "abc_code": "NVKZN"
+  },
+  {
+    "title": "Новороссийск, Россия",
+    "id_best": 98,
+    "abc_code": "NOVOR"
+  },
+  {
+    "title": "Новосибирск, Россия",
+    "id_best": 17,
+    "abc_code": "NSK"
+  },
+  {
+    "title": "Нордуз, Иран",
+    "id_best": 175,
+    "abc_code": "NRDZ"
+  },
+  {
+    "title": "Нур-Султан, Казахстан",
+    "id_best": 19,
+    "abc_code": "ASTN"
+  },
+  {
+    "title": "Нью-Йорк, США",
+    "id_best": 81,
+    "abc_code": "NYC"
+  },
+  {
+    "title": "Одесса, Украина",
+    "id_best": 38,
+    "abc_code": "ODS"
+  },
+  {
+    "title": "Омск, Россия",
+    "id_best": 16,
+    "abc_code": "OMSK"
+  },
+  {
+    "title": "Орел, Россия",
+    "id_best": 136,
+    "abc_code": "ORYOL"
+  },
+  {
+    "title": "Оренбург, Россия",
+    "id_best": 110,
+    "abc_code": "OREN"
+  },
+  {
+    "title": "Орландо, США",
+    "id_best": 152,
+    "abc_code": "ORLND"
+  },
+  {
+    "title": "Осло, Норвегия",
+    "id_best": 93,
+    "abc_code": "OSLO"
+  },
+  {
+    "title": "Париж, Франция",
+    "id_best": 90,
+    "abc_code": "PARIS"
+  },
+  {
+    "title": "Пафос, Кипр",
+    "id_best": 129,
+    "abc_code": "PAPH"
+  },
+  {
+    "title": "Пекин, Китай",
+    "id_best": 58,
+    "abc_code": "BEIJ"
+  },
+  {
+    "title": "Пенза, Россия",
+    "id_best": 111,
+    "abc_code": "PENZA"
+  },
+  {
+    "title": "Пермь, Россия",
+    "id_best": 34,
+    "abc_code": "PERM"
+  },
+  {
+    "title": "Полтава, Украина",
+    "id_best": 49,
+    "abc_code": "POLT"
+  },
+  {
+    "title": "Прага, Чехия",
+    "id_best": 83,
+    "abc_code": "PRAG"
+  },
+  {
+    "title": "Пятигорск, Россия",
+    "id_best": 42,
+    "abc_code": "PTGR"
+  },
+  {
+    "title": "Рига, Латвия",
+    "id_best": 48,
+    "abc_code": "RIGA"
+  },
+  {
+    "title": "Рим, Италия",
+    "id_best": 146,
+    "abc_code": "ROME"
+  },
+  {
+    "title": "Ровно, Украина",
+    "id_best": 67,
+    "abc_code": "RIVNE"
+  },
+  {
+    "title": "Ростов, Россия",
+    "id_best": 173,
+    "abc_code": "RSTV"
+  },
+  {
+    "title": "Ростов-на-Дону, Россия",
+    "id_best": 29,
+    "abc_code": "RSND"
+  },
+  {
+    "title": "Роттердам, Нидерланды",
+    "id_best": 144,
+    "abc_code": "RTRD"
+  },
+  {
+    "title": "Рязань, Россия",
+    "id_best": 137,
+    "abc_code": "RZN"
+  },
+  {
+    "title": "Самара, Россия",
+    "id_best": 6,
+    "abc_code": "SMR"
+  },
+  {
+    "title": "Санкт-Петербург, Россия",
+    "id_best": 2,
+    "abc_code": "SPB"
+  },
+  {
+    "title": "Санто-Доминго, Доминиканская республика",
+    "id_best": 155,
+    "abc_code": "SANTD"
+  },
+  {
+    "title": "Сантьяго, Доминиканская республика",
+    "id_best": 154,
+    "abc_code": "SANTG"
+  },
+  {
+    "title": "Саранск, Россия",
+    "id_best": 112,
+    "abc_code": "SRN"
+  },
+  {
+    "title": "Саратов, Россия",
+    "id_best": 113,
+    "abc_code": "SRT"
+  },
+  {
+    "title": "Севастополь, Россия",
+    "id_best": 169,
+    "abc_code": "SVSTP"
+  },
+  {
+    "title": "Северодвинск, Россия",
+    "id_best": 184,
+    "abc_code": "SVRD"
+  },
+  {
+    "title": "Северодонецк, Украина",
+    "id_best": 186,
+    "abc_code": "SVDN"
+  },
+  {
+    "title": "Симферополь, Россия",
+    "id_best": 25,
+    "abc_code": "SIMF"
+  },
+  {
+    "title": "Славянск, Украина",
+    "id_best": 183,
+    "abc_code": "SLV"
+  },
+  {
+    "title": "София, Болгария",
+    "id_best": 191,
+    "abc_code": "SFA"
+  },
+  {
+    "title": "Сочи, Россия",
+    "id_best": 15,
+    "abc_code": "SOCHI"
+  },
+  {
+    "title": "Ставрополь, Россия",
+    "id_best": 7,
+    "abc_code": "STAV"
+  },
+  {
+    "title": "Стамбул, Турция",
+    "id_best": 54,
+    "abc_code": "STAM"
+  },
+  {
+    "title": "Старый Оскол, Россия",
+    "id_best": 164,
+    "abc_code": "STOS"
+  },
+  {
+    "title": "Степанакерт, Армения",
+    "id_best": 80,
+    "abc_code": "STPNK"
+  },
+  {
+    "title": "Стокгольм, Швеция",
+    "id_best": 92,
+    "abc_code": "STOCK"
+  },
+  {
+    "title": "Сумы, Украина",
+    "id_best": 68,
+    "abc_code": "SUMY"
+  },
+  {
+    "title": "Сургут, Россия",
+    "id_best": 157,
+    "abc_code": "SGT"
+  },
+  {
+    "title": "Таганрог, Россия",
+    "id_best": 20,
+    "abc_code": "TGN"
+  },
+  {
+    "title": "Таллин, Эстония",
+    "id_best": 79,
+    "abc_code": "TALLN"
+  },
+  {
+    "title": "Тамбов, Россия",
+    "id_best": 114,
+    "abc_code": "TAMB"
+  },
+  {
+    "title": "Ташкент, Узбекистан",
+    "id_best": 82,
+    "abc_code": "TASHK"
+  },
+  {
+    "title": "Тбилиси, Грузия",
+    "id_best": 52,
+    "abc_code": "TBIL"
+  },
+  {
+    "title": "Тверь, Россия",
+    "id_best": 115,
+    "abc_code": "TVER"
+  },
+  {
+    "title": "Тегеран, Иран",
+    "id_best": 57,
+    "abc_code": "TEHR"
+  },
+  {
+    "title": "Тель-Авив, Израиль",
+    "id_best": 188,
+    "abc_code": "TLAV"
+  },
+  {
+    "title": "Тернополь, Украина",
+    "id_best": 69,
+    "abc_code": "TERNO"
+  },
+  {
+    "title": "Тирана, Албания",
+    "id_best": 139,
+    "abc_code": "TIRAN"
+  },
+  {
+    "title": "Тирасполь, Молдова",
+    "id_best": 179,
+    "abc_code": "TRSPL"
+  },
+  {
+    "title": "Триполи, Ливия",
+    "id_best": 134,
+    "abc_code": "TRIP"
+  },
+  {
+    "title": "Тула, Россия",
+    "id_best": 46,
+    "abc_code": "TULA"
+  },
+  {
+    "title": "Тунис, Тунис",
+    "id_best": 133,
+    "abc_code": "TUNIS"
+  },
+  {
+    "title": "Тюмень, Россия",
+    "id_best": 119,
+    "abc_code": "TYUM"
+  },
+  {
+    "title": "Ужгород, Украина",
+    "id_best": 70,
+    "abc_code": "UZHH"
+  },
+  {
+    "title": "Уфа, Россия",
+    "id_best": 116,
+    "abc_code": "UFA"
+  },
+  {
+    "title": "Франкфурт-на-Майне, Германия",
+    "id_best": 87,
+    "abc_code": "FRAN"
+  },
+  {
+    "title": "Хабаровск, Россия",
+    "id_best": 171,
+    "abc_code": "KHAB"
+  },
+  {
+    "title": "Харьков, Украина",
+    "id_best": 21,
+    "abc_code": "HRK"
+  },
+  {
+    "title": "Херсон, Украина",
+    "id_best": 71,
+    "abc_code": "KHERS"
+  },
+  {
+    "title": "Хмельницкий, Украина",
+    "id_best": 27,
+    "abc_code": "HMLN"
+  },
+  {
+    "title": "Чебоксары, Россия",
+    "id_best": 10,
+    "abc_code": "CHEB"
+  },
+  {
+    "title": "Челябинск, Россия",
+    "id_best": 18,
+    "abc_code": "CHEL"
+  },
+  {
+    "title": "Череповец, Россия",
+    "id_best": 117,
+    "abc_code": "CHRP"
+  },
+  {
+    "title": "Черкассы, Украина",
+    "id_best": 72,
+    "abc_code": "CHERK"
+  },
+  {
+    "title": "Чернигов, Украина",
+    "id_best": 159,
+    "abc_code": "CHRN"
+  },
+  {
+    "title": "Черновцы, Украина",
+    "id_best": 50,
+    "abc_code": "CHERN"
+  },
+  {
+    "title": "Чикаго, США",
+    "id_best": 150,
+    "abc_code": "CHCG"
+  },
+  {
+    "title": "Шымкент, Казахстан",
+    "id_best": 124,
+    "abc_code": "SHYM"
+  },
+  {
+    "title": "Экибастуз, Казахстан",
+    "id_best": 41,
+    "abc_code": "EKIB"
+  },
+  {
+    "title": "Ярославль, Россия",
+    "id_best": 118,
+    "abc_code": "YARS"
+  }
+]

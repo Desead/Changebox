@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="change row">
+        <div class="change_left col">
+            <div class="change_left_up choise_money_type col">
+                <div class="col menu_item item_select">All</div>
+                <div class="col menu_item">Fiat</div>
+                <div class="col menu_item">Crypto</div>
+            </div>
+            <div class="change_left_dn col list-group"></div>
+        </div>
+        <div class="change_right col">
+            <div class="change_right_up choise_money_type col">
+                <div class="col menu_item item_select">All</div>
+                <div class="col menu_item">Fiat</div>
+                <div class="col menu_item">Crypto</div>
+            </div>
+            <div class="change_right_dn col list-group"></div>
+        </div>
+        <div class="change_swap col">
+            <div class="change_swap_up col news_top">Здесь будет вход в лк</div>
+            <div class="change_swap_dn col">
+                <div class="swap_up">
+                    <p>Краткое приветствие</p>
+                </div>
+                <hr>
+                <div class="swap_midle">
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis quas qui recusandae!
+                        Asperiores assumenda debitis dolor excepturi, fugit magni molestiae quas quos similique tempore
+                        unde vel. Accusantium beatae delectus error!</p>
+                </div>
+                <hr>
+                <div class="swap_dn">
+                    <p>Здесь могут быть кнопки мониторингов</p>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

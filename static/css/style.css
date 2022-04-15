@@ -1,0 +1,58 @@
+body {
+    -ms-filter: "progid:DXImageTransform.Microsoft.gradient (GradientType=0, startColorstr=#FBF2EB, endColorstr=#cfe2ff)";
+    background: -webkit-linear-gradient(left, #FBF2EB, #cfe2ff);
+    background: -moz-linear-gradient(left, #FBF2EB, #cfe2ff);
+    background: -o-linear-gradient(left, #FBF2EB, #cfe2ff);
+    background: linear-gradient(to right, #FBF2EB, #cfe2ff);
+    margin: 10px;
+}
+
+.money {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+}
+
+.money_change_title {
+    margin-left: 14px;
+}
+
+
+.item_select {
+    background-color: #cfe2ff !important;
+    color: black !important;
+    font-weight: bold !important;
+}
+
+.choise_money_type, .news_top {
+    background-color: white;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+}
+
+.news_top {
+    min-height: 44px;
+}
+
+.menu_item {
+    text-align: center;
+    cursor: pointer;
+    margin: 10px;
+}
+
+
+.change_swap_dn, .change_right, .change_left {
+    min-width: 240px;
+}
+
+.change_swap_dn {
+    background-color: white;
+    padding: 14px;
+}
+
+.change_left_up, .change_right_up, .change_swap_up {
+    background-color: rgba(255,255,255,0);
+}
