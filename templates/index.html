@@ -21,7 +21,7 @@
         </div>
         <div class="change_swap col">
             <div class="change_swap_up col">Здесь будет вход в лк</div>
-            <div class="change_swap_dn col">
+            <div class="change_swap_dn col shadow-sm rounded">
                 <div class="swap_up">
                     <p>Краткое приветствие</p>
                     <hr>
@@ -41,19 +41,4 @@
             </div>
         </div>
     </div>
-
-    <template id="template_change">
-        <form action="/#" method="post">
-            {% csrf_token %}
-            <div id="swap_left"></div>
-            <div id="swap_right"></div>
-            <hr>
-            <input type="number" placeholder="Сумма">
-            <input type="text" placeholder="Кошелёк">
-            <input type="number" placeholder="Сумма">
-            <input type="text" placeholder="Кошелёк">
-            <input type="submit" value="Обменять">
-        </form>
-    </template>
-
 {% endblock %}

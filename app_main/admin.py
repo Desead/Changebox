@@ -60,6 +60,20 @@ class MoneyAdmin(admin.ModelAdmin):
     actions = [all_on, all_off]
 
 
+class FieldsFrom(admin.TabularInline):
+    model = FieldsLeft
+    extra = 0
+    verbose_name = 'Дополнительное поле'
+    verbose_name_plural = 'Список дополнительных полей которые надо заполнить клиенту на сайте чтобы отдать данную валюту'
+
+
+class FieldsTo(admin.TabularInline):
+    model = FieldsRight
+    extra = 0
+    verbose_name = 'Дополнительное поле'
+    verbose_name_plural = 'Список дополнительных полей которые надо заполнить клиенту на сайте чтобы получить данную валюту'
+
+
 @admin.register(FullMoney)
 class FullMoneyAdmin(admin.ModelAdmin):
     list_display = ('title', 'active', 'reserv',)
@@ -68,6 +82,7 @@ class FullMoneyAdmin(admin.ModelAdmin):
     search_fields = ('title', 'xml_code',)
     save_on_top = True
     actions = [all_on, all_off]
+    inlines = [FieldsFrom, FieldsTo]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "pay":
@@ -75,6 +90,15 @@ class FullMoneyAdmin(admin.ModelAdmin):
         if db_field.name == "money":
             kwargs["queryset"] = Money.objects.filter(active=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+    def save_model(self, request, obj, form, change):
+        temp = FieldsRight.objects.filter(pay=obj)
+        if temp.count() <= 0:
+            FieldsRight.objects.get_or_create(
+                title='Кошелёк',
+                pay=obj,
+            )
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(Settings)

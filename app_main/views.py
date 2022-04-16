@@ -5,12 +5,16 @@ from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
 
-from app_main.models import SwapMoney
+from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings
 
 
 class StartView(View):
     def get(self, req):
-        return render(req, 'index.html')
+        temp = Settings.objects.first()
+        context = {
+            'settings': temp
+        }
+        return render(req, 'index.html', context)
 
 
 def ExportXML(request):
@@ -171,5 +175,52 @@ def ExportDirect(request):
         return JsonResponse({
             'error': 'exchanges count: ' + str(money.count()),
         })
+    money = money[0]
+    temp = FieldsLeft.objects.filter(pay=money.money_left)
+    left = []
+    for i in temp:
+        left.append(i.title)
+
+    temp = FieldsRight.objects.filter(pay=money.money_right)
+    right = []
+    for i in temp:
+        right.append(i.title)
+
+    direct = {
+        'money_left': money.money_left.id,
+        'money_right': money.money_right.id,
+        'add_left': left,
+        'add_right': right,
+        'min_left': money.min_left,
+        'max_left': money.max_left,
+        'min_right': money.min_right,
+        'max_right': money.max_right,
+        'rate_left_final': money.rate_left_final,
+        'rate_right_final': money.rate_right_final,
+        'add_fee_left': money.add_fee_left,
+        'add_fee_right': money.add_fee_right,
+        'reserv': money.money_right.reserv,
+
+        'city': money.city,
+        'seo_title': money.seo_title,
+        'seo_descriptions': money.seo_descriptions,
+        'seo_keywords': money.seo_keywords,
+
+    }
+    return JsonResponse(direct)
+
+
+'''
+def ExportDirect(request):
+    cur_from = request.GET.get('cur_from')
+    cur_to = request.GET.get('cur_to')
+
+    money = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
+
+    if money.count() != 1:
+        return JsonResponse({
+            'error': 'exchanges count: ' + str(money.count()),
+        })
 
     return HttpResponse(serialize('jsonl', money))
+'''

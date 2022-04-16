@@ -245,3 +245,19 @@ class InfoPanel(models.Model):
         verbose_name = 'Информация'
         verbose_name_plural = '09. Информация'
         ordering = ['-time', ]
+
+
+class FieldsLeft(models.Model):
+    title = models.CharField('Название', max_length=20, unique=True)
+    pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return ''
+
+
+class FieldsRight(models.Model):
+    title = models.CharField('Название', max_length=20, unique=True)
+    pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return ''

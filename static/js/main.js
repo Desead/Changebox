@@ -93,7 +93,7 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     let elem_list = document.createElement('a')
     elem_list.setAttribute('href', '#')
     if (money_id !== '') elem_list.setAttribute('id', money_id)
-    elem_list.className = 'list-group-item list-group-item-action ' + money_type
+    elem_list.className = 'list-group-item list-group-item-action shadow-sm rounded ' + money_type
     elem_list.append(div_money)
 
     p_node.append(elem_list)
@@ -102,13 +102,15 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
 }
 
 function HideMoney() {
+    console.log('HideMoney')
+    // скрываем монетки по фильтру: All, fiat, Crypto
     let temp
 
     if (this.parentNode.classList.contains('change_left_up')) temp = document.querySelector('.change_left_dn').children
     if (this.parentNode.classList.contains('change_right_up')) temp = document.querySelector('.change_right_dn').children
 
     let class_view = this.textContent.toLowerCase()
-
+    console.log('HideMoney', temp,class_view)
     if (class_view === 'all') {
         for (let i of temp) i.style.display = ''
     } else {
@@ -120,6 +122,10 @@ function HideMoney() {
             }
         }
     }
+}
+
+function SetDisabledMoney() {
+
 }
 
 async function CreateRightMoney() {
@@ -191,6 +197,52 @@ async function MainLoop() {
     SetSelectFirstMoney()
 }
 
+function CreateSwapBlock(direct) {
+    console.log('direct', direct)
+
+    const main_block = document.querySelector('.change_swap_dn')
+    const template_block = document.querySelector('#template_change')
+    main_block.append(template_block.content.cloneNode(true))
+
+    document.querySelector('#swap_left').innerHTML = 'Отдаёте: ' + left_money_select['title']
+    document.querySelector('#swap_left_min').innerHTML = 'мин: ' + direct['min_left']
+    document.querySelector('#swap_left_max').innerHTML = 'макс: ' + direct['max_left']
+
+    document.querySelector('#swap_right').innerHTML = 'Получаете: ' + right_money_select['title']
+    document.querySelector('#swap_right_min').innerHTML = 'мин: ' + direct['min_right']
+    document.querySelector('#swap_right_max').innerHTML = 'макс: ' + direct['max_right']
+    document.querySelector('#swap_right_reserv').innerHTML = 'резерв: ' + direct['reserv']
+
+    // добавляем дополнительнрые поля
+    let temp = direct['add_left']
+    for (let i of temp) {
+        let add_field = document.createElement('input')
+        add_field.className = 'form-control'
+        add_field.setAttribute('type', 'text')
+        add_field.setAttribute('required', '')
+        add_field.setAttribute('placeholder', i)
+        document.querySelector('#left_fields').append(add_field)
+    }
+    temp = direct['add_right']
+    for (let i of temp) {
+        let add_field = document.createElement('input')
+        add_field.className = 'form-control'
+        add_field.setAttribute('type', 'text')
+        add_field.setAttribute('required', '')
+        add_field.setAttribute('placeholder', i)
+        document.querySelector('#right_fields').append(add_field)
+    }
+    SEOSet(direct['seo_title'], direct['seo_descriptions'], direct['seo_keywords'])
+}
+
+function SEOSet(title, descriptions, keywords) {
+    if (title !== '')
+        document.querySelector("title").innerHTML = title
+    if (keywords !== '')
+        document.querySelector("meta[name='keywords']").setAttribute("content", keywords)
+    if (descriptions !== '')
+        document.querySelector("meta[name='description']").setAttribute("content", descriptions)
+}
 
 //      swap            //////////////////////////////////////////////////
 async function SwapDelNew() {
@@ -199,21 +251,14 @@ async function SwapDelNew() {
             'cur_from': left_money_select['id'],
             'cur_to': right_money_select['id'],
         })
-        let direct = await GetRates(url)
-        console.log('direct', direct)
-
+        const direct = await GetRates(url)
 
         let temp = document.querySelector('.change_swap_dn').children
         for (let i = temp.length - 1; i >= 0; i--) {
             temp[i].remove()
         }
         //отображаем блок обмена
-        const main_block = document.querySelector('.change_swap_dn')
-        const template_block = document.querySelector('#template_change')
-        main_block.append(template_block.content.cloneNode(true))
-
-        document.querySelector('#swap_left').innerHTML = 'Отдаёте: ' + left_money_select['title']
-        document.querySelector('#swap_right').innerHTML = 'Получаете: ' + right_money_select['title']
+        CreateSwapBlock(direct)
     }
 }
 
