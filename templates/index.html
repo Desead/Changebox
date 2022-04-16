@@ -24,18 +24,36 @@
             <div class="change_swap_dn col">
                 <div class="swap_up">
                     <p>Краткое приветствие</p>
+                    <hr>
                 </div>
-                <hr>
                 <div class="swap_midle">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis quas qui recusandae!
+                    <p>
+                        Последние обмены
+                        <br>
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Corporis quas qui recusandae!
                         Asperiores assumenda debitis dolor excepturi, fugit magni molestiae quas quos similique tempore
                         unde vel. Accusantium beatae delectus error!</p>
+                    <hr>
                 </div>
-                <hr>
                 <div class="swap_dn">
                     <p>Здесь могут быть кнопки мониторингов</p>
                 </div>
             </div>
         </div>
     </div>
+
+    <template id="template_change">
+        <form action="/#" method="post">
+            {% csrf_token %}
+            <div id="swap_left"></div>
+            <div id="swap_right"></div>
+            <hr>
+            <input type="number" placeholder="Сумма">
+            <input type="text" placeholder="Кошелёк">
+            <input type="number" placeholder="Сумма">
+            <input type="text" placeholder="Кошелёк">
+            <input type="submit" value="Обменять">
+        </form>
+    </template>
+
 {% endblock %}

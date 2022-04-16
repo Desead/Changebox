@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as xml
 
+from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.views import View
@@ -9,11 +10,10 @@ from app_main.models import SwapMoney
 
 class StartView(View):
     def get(self, req):
-        context = {'msgs': 'hello wortld'}
-        return render(req, 'index.html', context=context)
+        return render(req, 'index.html')
 
 
-def ExportRates(request):
+def ExportXML(request):
     rates = SwapMoney.objects.filter(active=True, money_left__money__active=True, money_left__active=True,
                                      money_right__active=True, money_right__money__active=True)
     # добавить ограничения по монетам и резервам
@@ -98,7 +98,7 @@ def ExportRates(request):
     return HttpResponse(xml.tostring(root_element, method='xml', encoding='utf8'), content_type='text/xml')
 
 
-def ExportApi(request):
+def ExportRates(request):
     swap = SwapMoney.objects.all()
     swap_to_export = {}
     for i in swap:
@@ -155,6 +155,21 @@ def ExportApi(request):
 
         swap_to_export[left].append(temp)
 
-    # swap_to_export = json.dumps(swap_to_export, ensure_ascii=False)
-    # return HttpResponse(swap_to_export, content_type='application/json')
     return JsonResponse(swap_to_export)
+
+
+def ExportDirect(request):
+    # пример
+    # http://127.0.0.1:8000/api/v1/direct/?cur_from=BTC&cur_to=QWRUB
+
+    cur_from = request.GET.get('cur_from')
+    cur_to = request.GET.get('cur_to')
+
+    money = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
+
+    if money.count() != 1:
+        return JsonResponse({
+            'error': 'exchanges count: ' + str(money.count()),
+        })
+
+    return HttpResponse(serialize('jsonl', money))

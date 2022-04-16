@@ -1,0 +1,1 @@
+let temp = document.querySelector('.right_select')

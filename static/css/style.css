@@ -4,6 +4,7 @@ body {
     background: -moz-linear-gradient(left, var(--gradient-back-1), var(--gradient-back-2));
     background: -o-linear-gradient(left, var(--gradient-back-1), var(--gradient-back-2));
     background: linear-gradient(to right, var(--gradient-back-1), var(--gradient-back-2));
+    /*background: white url("../img/back7.jpg") no-repeat;*/
     margin: 10px;
 }
 
@@ -52,6 +53,10 @@ body {
     text-align: center;
     cursor: pointer;
     margin: 10px;
+}
+
+.disable_money {
+
 }
 
 

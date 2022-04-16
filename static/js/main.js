@@ -3,24 +3,63 @@
 const url_domain = 'http://127.0.0.1:8000/'
 const url_api = 'api/v1/'
 const url_rates = 'rates/'
+const url_direct = 'direct/'
 let rates
+let left_money_select = {}
+let right_money_select = {}
 
 function SetSelectFirstMoney() {
     // разовое начальное выделение монеткы слева. В дальнейшем выделение есть всегда и эта функция более не используется
-    const temp = document.querySelectorAll('.item_select')
+    let temp = document.querySelectorAll('.item_select')
     for (let i of temp) {
-        if (i.parentNode.classList.contains('change_left_dn'))
-            return
+        if (i.parentNode.classList.contains('change_left_dn')) return
     }
-    document.querySelector('.change_left_dn').firstChild.classList.add('item_select')
+    temp = document.querySelector('.change_left_dn').firstChild
+    temp.classList.add('item_select')
+
+    left_money_select['id'] = temp.id
+    for (let i of temp.firstChild.children) {
+        if (i.classList.contains('money_change_title')) {
+            left_money_select['title'] = i.innerHTML
+        }
+    }
     CreateRightMoney()
 }
 
 function SetItemSelect() {
     const menu = this.parentNode
-    for (let i of menu.children)
-        i.classList.remove('item_select')
+    for (let i of menu.children) i.classList.remove('item_select')
     this.classList.add('item_select')
+
+    if (this.parentNode.classList.contains('change_left_dn')) {
+        left_money_select['id'] = this.id
+        for (let i of this.firstChild.children) {
+            if (i.classList.contains('money_change_title')) {
+                left_money_select['title'] = i.innerHTML
+            }
+        }
+        // Если  выделение слева изменилось, то выделение справа сбрасываем
+        right_money_select = {}
+    } else {
+        if (this.parentNode.classList.contains('change_right_dn')) {
+            right_money_select['id'] = this.id
+            for (let i of this.firstChild.children) {
+                if (i.classList.contains('money_change_title')) {
+                    right_money_select['title'] = i.innerHTML
+                }
+            }
+        }
+    }
+}
+
+function GetLeftSelectedMoney() {
+    // сохранили выделение для монетки слева
+    let temp = document.querySelectorAll('.item_select')
+
+    for (let i of temp) {
+        if (i.parentNode.classList.contains('change_left_dn')) return i
+    }
+    alert('Не выделен ни один элемент. Ошибка')
 }
 
 function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
@@ -62,17 +101,25 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     return elem_list
 }
 
-function GetLeftSelectedMoney() {
-    // сохранили выделение для монетки слева
-    let temp = document.querySelectorAll('.item_select')
+function HideMoney() {
+    let temp
 
-    for (let i of temp) {
-        if (i.parentNode.classList.contains('change_left_dn')) return i
+    if (this.parentNode.classList.contains('change_left_up')) temp = document.querySelector('.change_left_dn').children
+    if (this.parentNode.classList.contains('change_right_up')) temp = document.querySelector('.change_right_dn').children
+
+    let class_view = this.textContent.toLowerCase()
+
+    if (class_view === 'all') {
+        for (let i of temp) i.style.display = ''
+    } else {
+        for (let i of temp) {
+            if (i.classList.contains(class_view)) {
+                i.style.display = ''
+            } else {
+                i.style.display = 'none'
+            }
+        }
     }
-    // если ничего не выделено то выделяем слева первую монету. Вообще это странно что ничего не выделено
-    const elements = document.querySelector('.change_left_dn').firstChild
-    elements.classList.add('item_select')
-    return elements
 }
 
 async function CreateRightMoney() {
@@ -93,15 +140,13 @@ async function CreateRightMoney() {
     for (let money of rates[GetLeftSelectedMoney().id]) {
         const elem = CreateMoney(document.querySelector('.change_right_dn'), money['name_right'], money['right'], money['type_right'], '/static/img/c-qiwi.svg')
         elem.addEventListener('click', SetItemSelect)
+        elem.addEventListener('click', SwapDelNew)
 
-        if (class_view !== 'all')
-            if (class_view !== money['type_right'])
-                elem.style.display = 'none'
+        if (class_view !== 'all') if (class_view !== money['type_right']) elem.style.display = 'none'
     }
 }
 
-async function GetRates() {
-    const url = url_domain + url_api + url_rates
+async function GetRates(url) {
     try {
         const response = await fetch(url)
         if (response.ok) {
@@ -114,7 +159,7 @@ async function GetRates() {
 
 async function MainLoop() {
     //все новые монетки
-    rates = await GetRates()
+    rates = await GetRates(url_domain + url_api + url_rates)
 
     //дополнительный массив с названиями новых монеток, нужен чтобы не портить начальынй объект rates и показывать
     //из него монетки справа
@@ -146,30 +191,33 @@ async function MainLoop() {
     SetSelectFirstMoney()
 }
 
-function HideMoney() {
-    let temp
 
-    if (this.parentNode.classList.contains('change_left_up'))
-        temp = document.querySelector('.change_left_dn').children
-    if (this.parentNode.classList.contains('change_right_up'))
-        temp = document.querySelector('.change_right_dn').children
+//      swap            //////////////////////////////////////////////////
+async function SwapDelNew() {
+    if (left_money_select['id'] !== undefined && right_money_select['id'] !== undefined) {
+        const url = url_domain + url_api + url_direct + '?' + new URLSearchParams({
+            'cur_from': left_money_select['id'],
+            'cur_to': right_money_select['id'],
+        })
+        let direct = await GetRates(url)
+        console.log('direct', direct)
 
-    let class_view = this.textContent.toLowerCase()
 
-    if (class_view === 'all') {
-        for (let i of temp)
-            i.style.display = ''
-    } else {
-        for (let i of temp) {
-            if (i.classList.contains(class_view))
-                i.style.display = ''
-            else
-                i.style.display = 'none'
+        let temp = document.querySelector('.change_swap_dn').children
+        for (let i = temp.length - 1; i >= 0; i--) {
+            temp[i].remove()
         }
+        //отображаем блок обмена
+        const main_block = document.querySelector('.change_swap_dn')
+        const template_block = document.querySelector('#template_change')
+        main_block.append(template_block.content.cloneNode(true))
+
+        document.querySelector('#swap_left').innerHTML = 'Отдаёте: ' + left_money_select['title']
+        document.querySelector('#swap_right').innerHTML = 'Получаете: ' + right_money_select['title']
     }
 }
 
-////////////////////////////////////////////////////////////////////////////
+//      main loop       //////////////////////////////////////////////////
 for (let i of document.querySelectorAll('.menu_item')) {
     i.addEventListener('click', SetItemSelect)
     i.addEventListener('click', HideMoney)
