@@ -103,7 +103,7 @@ class FullMoneyAdmin(admin.ModelAdmin):
 
 @admin.register(Settings)
 class SettingsAdmin(admin.ModelAdmin):
-    list_display = ('title', 'pause', 'job_start', 'job_end', 'description_comment',)
+    list_display = ('title', 'pause', 'job_start', 'job_end',)
     list_editable = ('pause',)
 
     def get_urls(self):

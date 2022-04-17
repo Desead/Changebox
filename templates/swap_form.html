@@ -3,34 +3,40 @@
         {% csrf_token %}
         <div class="col">
             <div id="swap_left"></div>
-            <div id="swap_left_min">100</div>
-            <div id="swap_left_max">20000</div>
-
-            <div id="left_fields">
-                <input id="xxx" type="number" min="0" step="0.01" class="form-control" placeholder="Сумма" required>
+            <div class="minmax mm_left">
+                <p id="swap_left_min">100</p>
+                <p id="swap_left_max">20000</p>
             </div>
 
+            {#обернули в див чтобы можно было добавить доп.поле при его наличии#}
+            <div id="left_fields">
+                <input type="number" id="left_sum" min="0" step="0.01" class="form-control" placeholder="Сумма"
+                       required>
+            </div>
 
             <hr>
             <div id="swap_right"></div>
-            <div id="swap_right_min">100</div>
-            <div id="swap_right_max">20000</div>
-            <div id="swap_right_reserv">xxxxx</div>
+            <div class="minmax mm_right">
+                <p id="swap_right_min">100</p>
+                <p id="swap_right_max">20000</p>
+            </div>
+            <p id="swap_right_reserv">xxxxx</p>
+
             <div id="right_fields">
-                <input type="number" min="0" step="0.01" class="form-control" placeholder="Сумма" required>
+                <input type="number" id="right_sum" min="0" step="0.01" class="form-control" placeholder="Сумма"
+                       required>
             </div>
 
             <hr>
             <input type="tel" min="0" class="form-control" placeholder="Ваш номер" required>
             <input type="email" class="form-control" placeholder="Электронная почта" required>
             <hr>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="" id="invalidCheck2" required>
-                <label class="form-check-label" for="invalidCheck2">
-                    Я согласен с правилами обмена
-                </label>
+            <p style="font-size: small; text-align: center;">Нажимая кнопку
+                <a href="/rules/" target="_blank"><strong>Оплатить</strong></a>
+                я соглашаюсь с правилами работы сервиса</p>
+            <div class="pay_btn">
+                <button class="btn btn-primary" type="submit">Оплатить</button>
             </div>
-            <button class="btn btn-primary" type="submit">Оплатить</button>
         </div>
     </form>
 </template>

@@ -8,6 +8,10 @@ body {
     margin: 10px;
 }
 
+a {
+    text-decoration: none;
+}
+
 .change_left_up, .change_right_up, .change_swap_up {
     background-color: rgba(255, 255, 255, 0);
     display: flex;
@@ -20,7 +24,6 @@ body {
     min-width: 240px;
 }
 
-
 .money {
     display: flex;
     flex-wrap: nowrap;
@@ -32,6 +35,14 @@ body {
     margin-left: 14px;
 }
 
+.shadow-money {
+    box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .25) !important;
+}
+
+.disabled {
+    text-decoration: line-through;
+    text-decoration-color: red;
+}
 
 .item_select {
     background-color: var(--select-item-back) !important;
@@ -39,7 +50,13 @@ body {
     font-weight: var(--select-item-font) !important;
 }
 
+.menu_item {
+    text-align: center;
+    cursor: pointer;
+    margin: 10px;
+}
 
+/*      swap block        */
 .change_swap_up {
     min-height: 45px;
 }
@@ -49,15 +66,21 @@ body {
     padding: 14px;
 }
 
-.menu_item {
-    text-align: center;
+#swap_left_min, #swap_left_max, #swap_right_min, #swap_right_max {
     cursor: pointer;
-    margin: 10px;
 }
 
-.disable_money {
-
+.minmax {
+    display: flex;
+    justify-content: space-between;
 }
+
+.pay_btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 
 
 

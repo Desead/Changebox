@@ -93,7 +93,7 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     let elem_list = document.createElement('a')
     elem_list.setAttribute('href', '#')
     if (money_id !== '') elem_list.setAttribute('id', money_id)
-    elem_list.className = 'list-group-item list-group-item-action shadow-sm rounded ' + money_type
+    elem_list.className = 'list-group-item list-group-item-action shadow-money rounded ' + money_type
     elem_list.append(div_money)
 
     p_node.append(elem_list)
@@ -102,7 +102,6 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
 }
 
 function HideMoney() {
-    console.log('HideMoney')
     // скрываем монетки по фильтру: All, fiat, Crypto
     let temp
 
@@ -110,7 +109,6 @@ function HideMoney() {
     if (this.parentNode.classList.contains('change_right_up')) temp = document.querySelector('.change_right_dn').children
 
     let class_view = this.textContent.toLowerCase()
-    console.log('HideMoney', temp,class_view)
     if (class_view === 'all') {
         for (let i of temp) i.style.display = ''
     } else {
@@ -145,6 +143,9 @@ async function CreateRightMoney() {
 
     for (let money of rates[GetLeftSelectedMoney().id]) {
         const elem = CreateMoney(document.querySelector('.change_right_dn'), money['name_right'], money['right'], money['type_right'], '/static/img/c-qiwi.svg')
+        if (!money['active']) {
+            elem.classList.add('disabled')
+        }
         elem.addEventListener('click', SetItemSelect)
         elem.addEventListener('click', SwapDelNew)
 
@@ -198,8 +199,6 @@ async function MainLoop() {
 }
 
 function CreateSwapBlock(direct) {
-    console.log('direct', direct)
-
     const main_block = document.querySelector('.change_swap_dn')
     const template_block = document.querySelector('#template_change')
     main_block.append(template_block.content.cloneNode(true))
@@ -232,6 +231,14 @@ function CreateSwapBlock(direct) {
         add_field.setAttribute('placeholder', i)
         document.querySelector('#right_fields').append(add_field)
     }
+
+    temp = document.querySelectorAll('.minmax')
+    for (let i of temp) {
+        for (let j of i.children) {
+            j.onclick = minmax
+        }
+    }
+
     SEOSet(direct['seo_title'], direct['seo_descriptions'], direct['seo_keywords'])
 }
 
@@ -262,6 +269,19 @@ async function SwapDelNew() {
     }
 }
 
+function minmax() {
+    // переносим мин и макс в поле сумма
+    if (this.closest('.mm_left')) {
+        const num = +(this.textContent.split(':')[1])
+        document.querySelector('#left_sum').setAttribute('value', num)
+    } else {
+        if (this.closest('.mm_right')) {
+            const num = +(this.textContent.split(':')[1])
+            document.querySelector('#right_sum').setAttribute('value', num)
+        }
+    }
+}
+
 //      main loop       //////////////////////////////////////////////////
 for (let i of document.querySelectorAll('.menu_item')) {
     i.addEventListener('click', SetItemSelect)
@@ -270,4 +290,5 @@ for (let i of document.querySelectorAll('.menu_item')) {
 
 MainLoop()
 setInterval(MainLoop, 2000)
+
 

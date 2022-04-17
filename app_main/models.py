@@ -17,7 +17,8 @@ class Settings(models.Model):
     job_end = models.PositiveSmallIntegerField('Час окончания работы', default=24)
     off_money = models.BooleanField('Отключать монеты', default=True,
                                     help_text='Отключать монеты и валюты, котировки которых небылы найдены среди ЦБ или Binance')
-    description_comment = models.TextField('Комментарий', blank=True, help_text='Просто любой комментарий для себя')
+    rules_exchange = models.TextField('Правила обменника', blank=True,)
+    rules_security = models.TextField('Политика безопасности', blank=True,)
 
     def __str__(self):
         return 'Базовые настройки'

@@ -163,6 +163,20 @@ def ExportRates(request):
 
 
 def ExportDirect(request):
+    '''
+    def ExportDirect(request):
+        cur_from = request.GET.get('cur_from')
+        cur_to = request.GET.get('cur_to')
+
+        money = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
+
+        if money.count() != 1:
+            return JsonResponse({
+                'error': 'exchanges count: ' + str(money.count()),
+            })
+
+        return HttpResponse(serialize('jsonl', money))
+    '''
     # пример
     # http://127.0.0.1:8000/api/v1/direct/?cur_from=BTC&cur_to=QWRUB
 
@@ -176,6 +190,8 @@ def ExportDirect(request):
             'error': 'exchanges count: ' + str(money.count()),
         })
     money = money[0]
+
+    # добавили дополнительные поля
     temp = FieldsLeft.objects.filter(pay=money.money_left)
     left = []
     for i in temp:
@@ -186,41 +202,69 @@ def ExportDirect(request):
     for i in temp:
         right.append(i.title)
 
+    # считаем и передём минимальный минимум и максимальный максимум
+    reserv = money.money_right.reserv
+
+    min_left = money.min_left
+    if money.rate_right_final > 0:
+        min_left = money.min_right / money.rate_right_final * money.rate_left_final
+        min_left = max(money.min_left, min_left)
+
+    min_right = money.rate_left_final
+    if money.rate_left_final > 0:
+        min_right = money.min_left / money.rate_left_final * money.rate_right_final
+        min_right = max(money.min_right, min_right)
+
+    max_left = money.max_left
+    if money.rate_right_final > 0:
+        max_left = min(money.max_right, reserv) / money.rate_right_final * money.rate_left_final
+        max_left = min(money.max_left, max_left)
+
+    max_right = money.max_right
+    if money.rate_left_final > 0:
+        max_right = money.max_left / money.rate_left_final * money.rate_right_final
+        max_right = min(money.max_right, max_right)
+
+    if money.money_left.money.money_type == 'fiat':
+        min_left = round(min_left, 2)
+        max_left = round(max_left, 2)
+    else:
+        min_left = round(min_left, 8)
+        max_left = round(max_left, 8)
+
+    if money.money_right.money.money_type == 'fiat':
+        min_right = round(min_right, 2)
+        max_right = round(max_right, 2)
+        reserv = round(reserv, 2)
+    else:
+        min_right = round(min_right, 8)
+        max_right = round(max_right, 8)
+        reserv = round(reserv, 8)
+
     direct = {
         'money_left': money.money_left.id,
         'money_right': money.money_right.id,
         'add_left': left,
         'add_right': right,
-        'min_left': money.min_left,
-        'max_left': money.max_left,
-        'min_right': money.min_right,
-        'max_right': money.max_right,
+        'min_left': min_left,
+        'max_left': max_left,
+        'min_right': min_right,
+        'max_right': max_right,
         'rate_left_final': money.rate_left_final,
         'rate_right_final': money.rate_right_final,
         'add_fee_left': money.add_fee_left,
         'add_fee_right': money.add_fee_right,
-        'reserv': money.money_right.reserv,
+        'reserv': reserv,
 
         'city': money.city,
         'seo_title': money.seo_title,
         'seo_descriptions': money.seo_descriptions,
         'seo_keywords': money.seo_keywords,
-
     }
     return JsonResponse(direct)
 
 
-'''
-def ExportDirect(request):
-    cur_from = request.GET.get('cur_from')
-    cur_to = request.GET.get('cur_to')
-
-    money = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
-
-    if money.count() != 1:
-        return JsonResponse({
-            'error': 'exchanges count: ' + str(money.count()),
-        })
-
-    return HttpResponse(serialize('jsonl', money))
-'''
+class RulesView(View):
+    def get(self, request):
+        context = {'rules': Settings.objects.first()}
+        return render(request, 'rules.html', context)
