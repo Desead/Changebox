@@ -29,6 +29,5 @@ if not DEBUG:
 
 urlpatterns = [
     path(admin_path, admin.site.urls),
-    # path('api/v1/', include('api.urls')),
     path('', include('app_main.urls')),
 ]
