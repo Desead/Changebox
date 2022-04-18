@@ -182,6 +182,7 @@ def ExportDirect(request):
 
     cur_from = request.GET.get('cur_from')
     cur_to = request.GET.get('cur_to')
+    city = request.GET.get('city')
 
     money = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
 
