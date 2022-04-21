@@ -1,11 +1,11 @@
 <template id="template_change">
-    <form class="row" method="get">
+    <form action="{% url 'view_confirm' %}" class="row" method="post">
         {% csrf_token %}
         <div class="col">
             <div id="swap_left"></div>
             <div class="minmax mm_left">
-                <p id="swap_left_min">100</p>
-                <p id="swap_left_max">20000</p>
+                <p id="swap_left_min"></p>
+                <p id="swap_left_max"></p>
             </div>
 
             {#обернули в див чтобы можно было добавить доп.поле при его наличии#}
@@ -17,10 +17,10 @@
             <hr>
             <div id="swap_right"></div>
             <div class="minmax mm_right">
-                <p id="swap_right_min">100</p>
-                <p id="swap_right_max">20000</p>
+                <p id="swap_right_min"></p>
+                <p id="swap_right_max"></p>
             </div>
-            <p id="swap_right_reserv">xxxxx</p>
+            <p id="swap_right_reserv"></p>
 
             <div id="right_fields">
                 <input type="number" id="right_sum" min="0" step="0.01" class="form-control" placeholder="Сумма"
@@ -28,8 +28,8 @@
             </div>
 
             <hr>
-            <input type="tel" min="0" class="form-control" placeholder="Ваш номер" required>
-            <input type="email" class="form-control" placeholder="Электронная почта" required>
+            <input type="tel" min="0" class="form-control" placeholder="Ваш номер">
+            <input type="email" class="form-control" placeholder="Электронная почта">
             <hr>
             <p style="font-size: small; text-align: center;">Нажимая кнопку
                 <a href="/rules/" target="_blank"><strong>Оплатить</strong></a>

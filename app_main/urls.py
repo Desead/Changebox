@@ -17,5 +17,6 @@ urlpatterns = [
     path('api/v1/direct/', ExportDirect, name='view_direct'),
     path(export_url, ExportXML, name='view_xml'),
     path('rules/', RulesView.as_view(), name='view_rules'),
+    path('confirm/', ConfirmView.as_view(), name='view_confirm'),
     path('', StartView.as_view(), name='view_index'),
 ]

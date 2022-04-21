@@ -17,8 +17,8 @@ class Settings(models.Model):
     job_end = models.PositiveSmallIntegerField('Час окончания работы', default=24)
     off_money = models.BooleanField('Отключать монеты', default=True,
                                     help_text='Отключать монеты и валюты, котировки которых небылы найдены среди ЦБ или Binance')
-    rules_exchange = models.TextField('Правила обменника', blank=True,)
-    rules_security = models.TextField('Политика безопасности', blank=True,)
+    rules_exchange = models.TextField('Правила обменника', blank=True, help_text='Можно писать с html тэгами')
+    rules_security = models.TextField('Политика безопасности', blank=True, help_text='Можно писать с html тэгами')
 
     def __str__(self):
         return 'Базовые настройки'
@@ -216,7 +216,6 @@ class SwapMoney(models.Model):  # Основная таблица настрое
     class Meta:
         verbose_name = 'Обмен: Настройки'
         verbose_name_plural = '02. Обмен: Настройки'
-        ordering = ['-active', 'money_left', 'money_right']
         unique_together = ['money_left', 'money_right']
 
 
@@ -249,7 +248,7 @@ class InfoPanel(models.Model):
 
 
 class FieldsLeft(models.Model):
-    title = models.CharField('Название', max_length=20, unique=True)
+    title = models.CharField('Название', max_length=20)
     pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -257,7 +256,7 @@ class FieldsLeft(models.Model):
 
 
 class FieldsRight(models.Model):
-    title = models.CharField('Название', max_length=20, unique=True)
+    title = models.CharField('Название', max_length=20)
     pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
 
     def __str__(self):

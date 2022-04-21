@@ -18,6 +18,11 @@ function SetSelectFirstMoney() {
     temp.classList.add('item_select')
 
     left_money_select['id'] = temp.id
+    if (temp.classList.contains('crypto')) {
+        left_money_select['type'] = 'crypto'
+    } else if (temp.classList.contains('fiat')) {
+        left_money_select['type'] = 'fiat'
+    }
     for (let i of temp.firstChild.children) {
         if (i.classList.contains('money_change_title')) {
             left_money_select['title'] = i.innerHTML
@@ -31,8 +36,13 @@ function SetItemSelect() {
     for (let i of menu.children) i.classList.remove('item_select')
     this.classList.add('item_select')
 
-    if (this.parentNode.classList.contains('change_left_dn')) {
+    if (menu.classList.contains('change_left_dn')) {
         left_money_select['id'] = this.id
+        if (this.classList.contains('crypto')) {
+            left_money_select['type'] = 'crypto'
+        } else if (this.classList.contains('fiat')) {
+            left_money_select['type'] = 'fiat'
+        }
         for (let i of this.firstChild.children) {
             if (i.classList.contains('money_change_title')) {
                 left_money_select['title'] = i.innerHTML
@@ -41,8 +51,13 @@ function SetItemSelect() {
         // Если  выделение слева изменилось, то выделение справа сбрасываем
         right_money_select = {}
     } else {
-        if (this.parentNode.classList.contains('change_right_dn')) {
+        if (menu.classList.contains('change_right_dn')) {
             right_money_select['id'] = this.id
+            if (this.classList.contains('crypto')) {
+                right_money_select['type'] = 'crypto'
+            } else if (this.classList.contains('fiat')) {
+                right_money_select['type'] = 'fiat'
+            }
             for (let i of this.firstChild.children) {
                 if (i.classList.contains('money_change_title')) {
                     right_money_select['title'] = i.innerHTML
@@ -120,10 +135,6 @@ function HideMoney() {
             }
         }
     }
-}
-
-function SetDisabledMoney() {
-
 }
 
 async function CreateRightMoney() {
@@ -232,12 +243,19 @@ function CreateSwapBlock(direct) {
         document.querySelector('#right_fields').append(add_field)
     }
 
-    temp = document.querySelectorAll('.minmax')
-    for (let i of temp) {
-        for (let j of i.children) {
-            j.onclick = minmax
-        }
-    }
+    //запоминаем курс обмена
+    left_money_select['rate'] = direct['rate_left_final']
+    right_money_select['rate'] = direct['rate_right_final']
+
+    //вешаем событие на поля сумм
+    document.querySelector('#left_sum').addEventListener('input', SumToSum)
+    document.querySelector('#right_sum').addEventListener('input', SumToSum)
+
+    //изменяем атрибуты точности у полей сумма
+    if (left_money_select['type'] === 'crypto')
+        document.querySelector('#left_sum').setAttribute('step', '0.000000011')
+    if (right_money_select['type'] === 'crypto')
+        document.querySelector('#right_sum').setAttribute('step', '0.00000001')
 
     SEOSet(direct['seo_title'], direct['seo_descriptions'], direct['seo_keywords'])
 }
@@ -249,6 +267,29 @@ function SEOSet(title, descriptions, keywords) {
         document.querySelector("meta[name='keywords']").setAttribute("content", keywords)
     if (descriptions !== '')
         document.querySelector("meta[name='description']").setAttribute("content", descriptions)
+}
+
+function SumToSum() {
+    //Меняем сумму в одном и сразу автоматом меняется курс в другом поле
+    const left = document.querySelector('#left_sum')
+    const right = document.querySelector('#right_sum')
+
+    if (left === this) {
+        let temp = left.value * right_money_select['rate'] / left_money_select['rate']
+        if (left_money_select['type'] === 'fiat') temp = +temp.toFixed(2)
+        else temp = +temp.toFixed(8)
+        right.value = temp
+    }
+    if (right === this) {
+        let temp = right.value * left_money_select['rate'] / right_money_select['rate']
+        if (right_money_select['type'] === 'fiat') temp = +temp.toFixed(2)
+        else temp = +temp.toFixed(8)
+        left.value = temp
+    }
+
+    // let temp = left.value
+    console.log(this, left, right)
+    console.log(left_money_select, right_money_select)
 }
 
 //      swap            //////////////////////////////////////////////////
@@ -266,19 +307,6 @@ async function SwapDelNew() {
         }
         //отображаем блок обмена
         CreateSwapBlock(direct)
-    }
-}
-
-function minmax() {
-    // переносим мин и макс в поле сумма
-    if (this.closest('.mm_left')) {
-        const num = +(this.textContent.split(':')[1])
-        document.querySelector('#left_sum').setAttribute('value', num)
-    } else {
-        if (this.closest('.mm_right')) {
-            const num = +(this.textContent.split(':')[1])
-            document.querySelector('#right_sum').setAttribute('value', num)
-        }
     }
 }
 

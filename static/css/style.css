@@ -66,10 +66,6 @@ a {
     padding: 14px;
 }
 
-#swap_left_min, #swap_left_max, #swap_right_min, #swap_right_max {
-    cursor: pointer;
-}
-
 .minmax {
     display: flex;
     justify-content: space-between;

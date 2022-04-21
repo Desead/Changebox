@@ -269,3 +269,9 @@ class RulesView(View):
     def get(self, request):
         context = {'rules': Settings.objects.first()}
         return render(request, 'rules.html', context)
+
+
+class ConfirmView(View):
+    def post(self, request):
+        context = {}
+        return render(request, 'confirm.html', context)
