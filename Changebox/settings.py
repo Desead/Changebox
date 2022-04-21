@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'Changebox.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'cbdb.sqlite3',
     }
 }
 
@@ -169,3 +169,8 @@ CELERY_ALWAYS_EAGER = True
 #     },
 # }
 
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
+AUTH_USER_MODEL = 'app_main.CustomUser'
+LOGIN_REDIRECT_URL = '/'
+LOGOUT_REDIRECT_URL = '/'

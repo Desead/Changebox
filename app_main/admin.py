@@ -1,11 +1,37 @@
 from django.contrib import admin
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import Group
 from django.http import HttpResponseRedirect
 from django.urls import path
 
+from app_main.forms import CustomUserCreationForm, CustomUserChangeForm
 from app_main.lib.calculate_all_rates import set_all_rates
 from app_main.lib.seo import set_seo_inner
 from app_main.lib.set_change_rate import set_change_rate
 from app_main.models import *
+
+
+class CustomUserAdmin(UserAdmin):
+    add_form = CustomUserCreationForm
+    form = CustomUserChangeForm
+    model = CustomUser
+    list_display = ('email', 'referal', 'is_staff', 'is_active',)
+    list_filter = ('is_staff', 'is_active',)
+    fieldsets = (
+        (None, {'fields': ('email', 'password', 'referal')}),
+        ('Permissions', {'fields': ('is_staff', 'is_active')}),
+    )
+    add_fieldsets = (
+        (None, {
+            'classes': ('wide',),
+            'fields': ('email', 'password1', 'password2', 'is_staff', 'is_active')}
+         ),
+    )
+    search_fields = ('email', 'referal',)
+    ordering = ('email',)
+
+
+admin.site.register(CustomUser, CustomUserAdmin)
 
 
 @admin.action(description='Включить выделенные')
@@ -33,7 +59,7 @@ class CityAdmin(admin.ModelAdmin):
 
 @admin.register(Exchange)
 class ExchangeAdmin(admin.ModelAdmin):
-    list_display = ('id_best', 'title', 'ignore', 'description',)
+    list_display = ('id_best', 'title', 'ignore',)
     list_display_links = ('id_best', 'title',)
     list_editable = ('ignore',)
     list_filter = ('ignore',)
@@ -60,14 +86,14 @@ class MoneyAdmin(admin.ModelAdmin):
     actions = [all_on, all_off]
 
 
-class FieldsFrom(admin.TabularInline):
+class FieldsLeftInline(admin.TabularInline):
     model = FieldsLeft
     extra = 0
     verbose_name = 'Дополнительное поле'
     verbose_name_plural = 'Список дополнительных полей которые надо заполнить клиенту на сайте чтобы отдать данную валюту'
 
 
-class FieldsTo(admin.TabularInline):
+class FieldsRightInline(admin.TabularInline):
     model = FieldsRight
     extra = 0
     verbose_name = 'Дополнительное поле'
@@ -82,7 +108,7 @@ class FullMoneyAdmin(admin.ModelAdmin):
     search_fields = ('title', 'xml_code',)
     save_on_top = True
     actions = [all_on, all_off]
-    inlines = [FieldsFrom, FieldsTo]
+    inlines = [FieldsLeftInline, FieldsRightInline]
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "pay":
@@ -90,15 +116,6 @@ class FullMoneyAdmin(admin.ModelAdmin):
         if db_field.name == "money":
             kwargs["queryset"] = Money.objects.filter(active=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def save_model(self, request, obj, form, change):
-        temp = FieldsRight.objects.filter(pay=obj)
-        if temp.count() <= 0:
-            FieldsRight.objects.get_or_create(
-                title='Кошелёк',
-                pay=obj,
-            )
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(Settings)
@@ -226,7 +243,7 @@ class SwapMoneyAdmin(admin.ModelAdmin):
 
 @admin.register(PaySystem)
 class PaySystemAdmin(admin.ModelAdmin):
-    list_display = ('title', 'active', 'description',)
+    list_display = ('title', 'active',)
     list_editable = ('active',)
     list_filter = ('active',)
     search_fields = ('title',)
@@ -238,9 +255,8 @@ class SwapOrdersAdmin(admin.ModelAdmin):
     actions = [all_on, all_off]
 
 
-# default: "Django Administration"
-admin.site.site_header = 'Панель управления'
-# default: "Site administration"
-admin.site.index_title = 'Обменник'
-# default: "Django site admin"
-admin.site.site_title = 'Управление'
+admin.site.unregister(Group)
+
+admin.site.site_header = 'Панель управления'  # default: "Django Administration"
+admin.site.index_title = 'Обменник'  # default: "Site administration"
+admin.site.site_title = 'Управление'  # default: "Django site admin"

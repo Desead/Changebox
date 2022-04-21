@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from app_main.views import *
 
@@ -13,10 +13,24 @@ except:
     pass
 
 urlpatterns = [
+    path('accounts/', include('django.contrib.auth.urls')),
+    path('accounts/signup/', SignUpView.as_view(), name="signup"),
+    path('accounts/lk/', LKView.as_view(), name='view_lk'),
     path('api/v1/rates/', ExportRates, name='view_rates'),
     path('api/v1/direct/', ExportDirect, name='view_direct'),
     path(export_url, ExportXML, name='view_xml'),
     path('rules/', RulesView.as_view(), name='view_rules'),
     path('confirm/', ConfirmView.as_view(), name='view_confirm'),
-    path('', StartView.as_view(), name='view_index'),
+    path('', StartView.as_view(), name='home'),
 ]
+
+''' 
+accounts/login/ [name='login']
+accounts/logout/ [name='logout']
+accounts/password_change/ [name='password_change']
+accounts/password_change/done/ [name='password_change_done']
+accounts/password_reset/ [name='password_reset']
+accounts/password_reset/done/ [name='password_reset_done']
+accounts/reset/<uidb64>/<token>/ [name='password_reset_confirm']
+accounts/reset/done/ [name='password_reset_complete']
+'''

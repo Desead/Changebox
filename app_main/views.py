@@ -3,9 +3,18 @@ import xml.etree.ElementTree as xml
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
+from django.urls import reverse_lazy
 from django.views import View
+from django.views.generic import CreateView
 
+from app_main.forms import CustomUserCreationForm
 from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings
+
+
+class SignUpView(CreateView):
+    form_class = CustomUserCreationForm
+    success_url = reverse_lazy("login")
+    template_name = "registration/signup.html"
 
 
 class StartView(View):
@@ -15,6 +24,23 @@ class StartView(View):
             'settings': temp
         }
         return render(req, 'index.html', context)
+
+
+class LKView(View):
+    def get(self, req):
+        return render(req, 'lk.html')
+
+
+class RulesView(View):
+    def get(self, request):
+        context = {'rules': Settings.objects.first()}
+        return render(request, 'rules.html', context)
+
+
+class ConfirmView(View):
+    def post(self, request):
+        context = {}
+        return render(request, 'confirm.html', context)
 
 
 def ExportXML(request):
@@ -176,9 +202,10 @@ def ExportDirect(request):
             })
 
         return HttpResponse(serialize('jsonl', money))
-    '''
+
     # пример
     # http://127.0.0.1:8000/api/v1/direct/?cur_from=BTC&cur_to=QWRUB
+    '''
 
     cur_from = request.GET.get('cur_from')
     cur_to = request.GET.get('cur_to')
@@ -263,15 +290,3 @@ def ExportDirect(request):
         'seo_keywords': money.seo_keywords,
     }
     return JsonResponse(direct)
-
-
-class RulesView(View):
-    def get(self, request):
-        context = {'rules': Settings.objects.first()}
-        return render(request, 'rules.html', context)
-
-
-class ConfirmView(View):
-    def post(self, request):
-        context = {}
-        return render(request, 'confirm.html', context)

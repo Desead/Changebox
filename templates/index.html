@@ -20,7 +20,14 @@
             <div class="change_right_dn col list-group"></div>
         </div>
         <div class="change_swap col">
-            <div class="change_swap_up col">Здесь будет вход в лк</div>
+            <div class="change_swap_up col">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'view_lk' %}">{{ user }}</a>
+                    (<a href="{% url 'logout' %}">Выход</a>)
+                {% else %}
+                    <a href="{% url 'login' %}">Вход</a> / <a href="{% url 'signup' %}">Регистрация</a>
+                {% endif %}
+            </div>
             <div class="change_swap_dn col shadow-sm rounded">
                 <div class="swap_up">
                     <p>Краткое приветствие</p>

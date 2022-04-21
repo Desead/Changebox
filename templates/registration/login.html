@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="lk-form">
+        <h2>Войти в личный кабинет</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="lk-btn">
+                <button type="submit">Войти</button>
+                <a href="{% url 'password_reset' %}">Не помню пароль</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}

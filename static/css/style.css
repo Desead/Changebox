@@ -12,12 +12,12 @@ a {
     text-decoration: none;
 }
 
-.change_left_up, .change_right_up, .change_swap_up {
-    background-color: rgba(255, 255, 255, 0);
+.change_left_up, .change_right_up {
     display: flex;
     flex-direction: row;
     justify-content: space-around;
     align-items: center;
+    min-height: 45px;
 }
 
 .change_swap_dn, .change_right, .change_left {
@@ -58,6 +58,11 @@ a {
 
 /*      swap block        */
 .change_swap_up {
+    background-color: rgba(255, 255, 255, 0);
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+    align-items: center;
     min-height: 45px;
 }
 
@@ -75,6 +80,19 @@ a {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+/*          lk                  */
+.lk-form,
+.lk-form-send {
+    max-width: 500px;
+    margin: 100px auto 0 auto;
+    padding: 20px;
+}
+
+.lk-btn {
+    display: flex;
+    justify-content: space-between;
 }
 
 

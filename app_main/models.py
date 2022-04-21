@@ -1,5 +1,41 @@
+from django.contrib.auth.models import AbstractUser
 from django.core.validators import MinValueValidator
 from django.db import models
+from django.utils.translation import gettext_lazy as _
+
+from app_main.managers import CustomUserManager
+
+
+class CustomUser(AbstractUser):
+    MAX_REFERALNUM_LETTERS = 10
+
+    username = None
+    email = models.EmailField(_('email address'), unique=True)
+    referal = models.CharField('Referal num', max_length=MAX_REFERALNUM_LETTERS, default='')
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
+
+    objects = CustomUserManager()
+
+    def __str__(self):
+        return self.email
+
+    def save(self, *args, **kwargs):
+        def gen_referal_num():
+            from string import ascii_letters
+            import random
+            count = 1
+            while True:
+                num = ''.join([random.choice(ascii_letters) for i in range(self.MAX_REFERALNUM_LETTERS)])
+                if CustomUser.objects.filter(referal=num).count() == 0:
+                    return num
+                count += 1
+                if count >= 5: break
+            return num
+
+        self.referal = gen_referal_num()
+        super().save()
 
 
 class Settings(models.Model):
@@ -47,7 +83,6 @@ class Exchange(models.Model):
     id_best = models.PositiveIntegerField('ID', help_text='ID обменника на Bestchange')
     ignore = models.BooleanField('Игнорировать', default=False,
                                  help_text='Игнорировать данный обменник при анализе курсов')
-    description = models.TextField('Комментарий', blank=True, help_text='Просто любой комментарий для себя')
 
     def __str__(self):
         return self.title
@@ -107,7 +142,6 @@ class Money(models.Model):  # список валют
 class PaySystem(models.Model):  # список платёжных систем: киви, яндекс, вебмани и т.д.
     title = models.CharField('Название', max_length=100, help_text='Название платёжной системы', unique=True)
     active = models.BooleanField('Использовать', default=False)
-    description = models.TextField('Комментарий', blank=True, help_text='Просто любой комментарий для себя')
 
     def __str__(self):
         return self.title
@@ -127,7 +161,6 @@ class FullMoney(models.Model):
                             null=True, help_text='У крипты платёжная система может отсутствовать')
     money = models.ForeignKey(Money, verbose_name='Код валюты', on_delete=models.CASCADE)
     reserv = models.FloatField('Резерв', default=0, help_text='Доступный для обмена резерв')
-    description = models.TextField('Комментарий', help_text='Просто любой комментарий для себя', blank=True)
 
     def __str__(self):
         return self.title
@@ -247,17 +280,18 @@ class InfoPanel(models.Model):
         ordering = ['-time', ]
 
 
-class FieldsLeft(models.Model):
-    title = models.CharField('Название', max_length=20)
+class AddFields(models.Model):
+    # Модель для дополнительных полей, нужных для обмена. Необходимо две идентичных модели для левой и правой монеты
+    title = models.CharField('Название', max_length=20, unique=True)
     pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
 
-    def __str__(self):
-        return ''
+    class Meta:
+        abstract = True
 
 
-class FieldsRight(models.Model):
-    title = models.CharField('Название', max_length=20)
-    pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
+class FieldsLeft(AddFields):
+    pass
 
-    def __str__(self):
-        return ''
+
+class FieldsRight(AddFields):
+    pass
