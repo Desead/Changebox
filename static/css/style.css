@@ -83,6 +83,10 @@ a {
 }
 
 /*          lk                  */
+.form-control {
+    margin: 5px 0;
+}
+
 .lk-form,
 .lk-form-send {
     max-width: 500px;
@@ -95,6 +99,10 @@ a {
     justify-content: space-between;
 }
 
+.lk-table {
+    margin: 100px auto 0 auto;
+    padding: 20px;
+}
 
 
 

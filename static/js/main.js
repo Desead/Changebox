@@ -7,6 +7,7 @@ const url_direct = 'direct/'
 let rates
 let left_money_select = {}
 let right_money_select = {}
+const TIME_REFRESH_IN_MSEC = 5000
 
 function SetSelectFirstMoney() {
     // разовое начальное выделение монеткы слева. В дальнейшем выделение есть всегда и эта функция более не используется
@@ -176,6 +177,9 @@ async function GetRates(url) {
 }
 
 async function MainLoop() {
+    if (document.location.pathname !== '/')
+        return
+
     //все новые монетки
     rates = await GetRates(url_domain + url_api + url_rates)
 
@@ -317,6 +321,6 @@ for (let i of document.querySelectorAll('.menu_item')) {
 }
 
 MainLoop()
-setInterval(MainLoop, 2000)
+setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
 
 

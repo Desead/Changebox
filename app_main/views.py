@@ -4,6 +4,7 @@ from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.datetime_safe import datetime
 from django.views import View
 from django.views.generic import CreateView
 
@@ -20,9 +21,25 @@ class SignUpView(CreateView):
 class StartView(View):
     def get(self, req):
         temp = Settings.objects.first()
+
+        if not bool(temp) or temp.pause or temp.reload_exchange:
+            return render(req, 'pause.html')
+
+        now_hour = datetime.now().hour
+        if temp.job_start < temp.job_end:
+            if now_hour < temp.job_start or now_hour > temp.job_end:
+                return render(req, 'pause.html')
+        elif temp.job_start > temp.job_end:
+            if now_hour < temp.job_start and now_hour >= temp.job_end:
+                return render(req, 'pause.html')
+        else:
+            if temp.job_start != now_hour:
+                return render(req, 'pause.html')
+
         context = {
             'settings': temp
         }
+
         return render(req, 'index.html', context)
 
 

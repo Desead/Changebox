@@ -53,11 +53,19 @@ class Settings(models.Model):
     job_end = models.PositiveSmallIntegerField('Час окончания работы', default=24)
     off_money = models.BooleanField('Отключать монеты', default=True,
                                     help_text='Отключать монеты и валюты, котировки которых небылы найдены среди ЦБ или Binance')
-    rules_exchange = models.TextField('Правила обменника', blank=True, help_text='Можно писать с html тэгами')
-    rules_security = models.TextField('Политика безопасности', blank=True, help_text='Можно писать с html тэгами')
+    rules_exchange = models.TextField('Правила обменника',
+                                      default='<h1>Правила сервиса</h1><div class="rules"> Lorem ipsum dolor sit amet.</div>',
+                                      help_text='Можно писать с html тэгами')
+    rules_security = models.TextField('Политика безопасности',
+                                      default='<h1>политика безопасности</h1><div class="rules"> Lorem ipsum dolor sit amet.</div>',
+                                      help_text='Можно писать с html тэгами')
 
     def __str__(self):
         return 'Базовые настройки'
+
+    def save(self, *args, **kwargs):
+        self.job_end = min(self.job_end, 24)
+        super().save(*args, **kwargs)
 
     class Meta:
         verbose_name = 'Базовые настройки'

@@ -2,7 +2,14 @@
 {% load static %}
 
 {% block content %}
-        <p>LK</p>
-        <p><a href="{% url 'password_reset' %}">Reset Password</a></p>
-        <a href="{% url 'logout' %}">Выход</a>
+    <div class="lk-table list-group-item shadow-money rounded">
+        <p>Личный кабинет</p>
+        <hr>
+        <hr>
+        <div class="lk-btn" style="justify-content: space-evenly">
+            <p><a href="{% url 'home' %}">На главную</a></p>
+            <p><a href="{% url 'password_reset' %}">Изменить пароль</a></p>
+            <a href="{% url 'logout' %}">Выход</a>
+        </div>
+    </div>
 {% endblock %}
