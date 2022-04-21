@@ -172,7 +172,8 @@ async function GetRates(url) {
             return await response.json()
         }
     } catch (e) {
-        console.log('Error get data from', url, e)
+        // console.log('Error get data from', url, e)
+        return false
     }
 }
 
@@ -184,6 +185,9 @@ async function MainLoop() {
     rates = await GetRates(url_domain + url_api + url_rates)
 
     try {
+        if (!rates)
+            return
+
         if (Boolean(rates['error'])) {
             return
         }
