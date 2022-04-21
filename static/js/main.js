@@ -183,8 +183,11 @@ async function MainLoop() {
     //все новые монетки
     rates = await GetRates(url_domain + url_api + url_rates)
 
-    if (Boolean(rates['error'])) {
-        console.log('Перерыв')
+    try {
+        if (Boolean(rates['error'])) {
+            return
+        }
+    } catch (e) {
         return
     }
 
