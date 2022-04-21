@@ -7,7 +7,7 @@ const url_direct = 'direct/'
 let rates
 let left_money_select = {}
 let right_money_select = {}
-const TIME_REFRESH_IN_MSEC = 5000
+const TIME_REFRESH_IN_MSEC = 1000
 
 function SetSelectFirstMoney() {
     // разовое начальное выделение монеткы слева. В дальнейшем выделение есть всегда и эта функция более не используется
@@ -183,13 +183,24 @@ async function MainLoop() {
     //все новые монетки
     rates = await GetRates(url_domain + url_api + url_rates)
 
+    if (Boolean(rates['error'])) {
+        console.log('Перерыв')
+        return
+    }
+
+
     //дополнительный массив с названиями новых монеток, нужен чтобы не портить начальынй объект rates и показывать
     //из него монетки справа
     let rates_money_name = []
     for (let name in rates) rates_money_name.push(name)
 
     //старые монетки слева, которые уже показаны на сайте
-    let old_money_left = document.querySelector('.change_left_dn').childNodes
+    let old_money_left = document.querySelector('.change_left_dn')
+    if (old_money_left) old_money_left = old_money_left.childNodes
+    else {
+        // Сюда можно добавить перерисовку главной, когда перерыв закончился
+        return
+    }
 
     //Убираем из старого массива те монетки которых нету в новом
     //а из нового то которые есть в старом.
@@ -304,6 +315,10 @@ async function SwapDelNew() {
             'cur_to': right_money_select['id'],
         })
         const direct = await GetRates(url)
+
+        if (Boolean(rates['error'])) {
+            return
+        }
 
         let temp = document.querySelector('.change_swap_dn').children
         for (let i = temp.length - 1; i >= 0; i--) {

@@ -9,6 +9,7 @@ from django.views import View
 from django.views.generic import CreateView
 
 from app_main.forms import CustomUserCreationForm
+from app_main.lib.pause import get_pause
 from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings
 
 
@@ -22,19 +23,8 @@ class StartView(View):
     def get(self, req):
         temp = Settings.objects.first()
 
-        if not bool(temp) or temp.pause or temp.reload_exchange:
+        if get_pause(temp):
             return render(req, 'pause.html')
-
-        now_hour = datetime.now().hour
-        if temp.job_start < temp.job_end:
-            if now_hour < temp.job_start or now_hour > temp.job_end:
-                return render(req, 'pause.html')
-        elif temp.job_start > temp.job_end:
-            if now_hour < temp.job_start and now_hour >= temp.job_end:
-                return render(req, 'pause.html')
-        else:
-            if temp.job_start != now_hour:
-                return render(req, 'pause.html')
 
         context = {
             'settings': temp
@@ -146,6 +136,9 @@ def ExportXML(request):
 
 
 def ExportRates(request):
+    if get_pause(Settings.objects.first()):
+        return JsonResponse({'error': 'pause'})
+
     swap = SwapMoney.objects.all()
     swap_to_export = {}
     for i in swap:
@@ -206,24 +199,6 @@ def ExportRates(request):
 
 
 def ExportDirect(request):
-    '''
-    def ExportDirect(request):
-        cur_from = request.GET.get('cur_from')
-        cur_to = request.GET.get('cur_to')
-
-        money = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
-
-        if money.count() != 1:
-            return JsonResponse({
-                'error': 'exchanges count: ' + str(money.count()),
-            })
-
-        return HttpResponse(serialize('jsonl', money))
-
-    # пример
-    # http://127.0.0.1:8000/api/v1/direct/?cur_from=BTC&cur_to=QWRUB
-    '''
-
     cur_from = request.GET.get('cur_from')
     cur_to = request.GET.get('cur_to')
     city = request.GET.get('city')
