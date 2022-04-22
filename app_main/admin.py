@@ -77,11 +77,11 @@ class ExchangeAdmin(admin.ModelAdmin):
 
 @admin.register(Money)
 class MoneyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'abc_code', 'money_type', 'active', 'nominal', 'cost', 'time')
+    list_display = ('title', 'abc_code', 'money_type', 'active', 'nominal', 'cost_str', 'time')
     list_filter = ('active', 'money_type',)
     list_editable = ('active',)
     search_fields = ('title', 'abc_code',)
-    readonly_fields = ('cost', 'time',)
+    readonly_fields = ('time',)
     save_on_top = True
     actions = [all_on, all_off]
 
@@ -102,8 +102,8 @@ class FieldsRightInline(admin.TabularInline):
 
 @admin.register(FullMoney)
 class FullMoneyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'active', 'reserv',)
-    list_editable = ('active', 'reserv',)
+    list_display = ('title', 'active', 'reserv_str',)
+    list_editable = ('active', 'reserv_str',)
     list_filter = ('active', 'pay',)
     search_fields = ('title', 'xml_code',)
     save_on_top = True
@@ -163,35 +163,34 @@ class SettingsAdmin(admin.ModelAdmin):
 
 @admin.register(SwapMoney)
 class SwapMoneyAdmin(admin.ModelAdmin):
-    fieldsets = (
-        ('Основные настройки обмена',
-         {'fields': (
-             'active', ('money_left', 'money_right'), 'min_left', 'max_left', 'min_right', 'max_right',
-             'city', 'pause',)}),
-        ('Настройка курсов обмена',
-         {'fields': (('manual_rate_left', 'manual_rate_right', 'manual_active',),
-                     'best_place', ('rate_left', 'rate_right',),
-                     ('change_left', 'change_right',),
-                     ('rate_left_final', 'rate_right_final',),)}),
-        ('Дополнительные комиссии',
-         {'fields': (('add_fee_left', 'add_fee_right',),)}),
-        ('Метки для обмена', {'classes': ('collapse',), 'fields': (
-            'manual', 'juridical', 'verifying', 'cardverify', 'floating', 'otherin', 'otherout', 'reg', 'card2card',
-            'delivery', 'hold',)}),
-        ('SEO для каждой текущей страницы. Имеют приоритет перед общими настройками SEO',
-         {'classes': ('collapse',), 'fields': ('seo_title', 'seo_descriptions', 'seo_keywords')}),
-    )
-
-    list_display = (
-        'money_left', 'money_right', 'active', 'min_left', 'max_left', 'min_right', 'max_right',
-        'best_place', 'rate_left_final', 'rate_right_final', 'time',)
-
-    list_display_links = ('money_left', 'money_right', 'rate_left_final', 'rate_right_final',)
-    list_editable = ('active', 'min_left', 'max_left', 'min_right', 'max_right', 'best_place',)
-    list_filter = ('active', 'best_place', 'money_left', 'money_right',)
-    # todo выяснить почему не работают поля для поиска по имени валют
-    # search_fields = ('money_left', 'money_right',)
-    readonly_fields = ('time',)
+    # fieldsets = (
+    #     ('Основные настройки обмена',
+    #      {'fields': (
+    #          'active', ('money_left', 'money_right'), ('min_left_str', 'min_right_str',),
+    #          ('max_left_str', 'max_right_str',), 'city', 'pause',)}),
+    #     ('Настройка курсов обмена',
+    #      {'fields': (('manual_rate_left', 'manual_rate_right', 'manual_active',),
+    #                  'best_place', ('rate_left_str', 'rate_right_str',),
+    #                  ('change_left', 'change_right',),
+    #                  ('change_left_str', 'change_right_str',),
+    #                  ('rate_left_final', 'rate_right_final',),)}),
+    #     ('Дополнительные комиссии',
+    #      {'fields': (('add_fee_left', 'add_fee_right',),)}),
+    #     ('Метки для обмена', {'classes': ('collapse',), 'fields': (
+    #         'manual', 'juridical', 'verifying', 'cardverify', 'floating', 'otherin', 'otherout', 'reg', 'card2card',
+    #         'delivery', 'hold',)}),
+    #     ('SEO для каждой текущей страницы. Имеют приоритет перед общими настройками SEO',
+    #      {'classes': ('collapse',), 'fields': ('seo_title', 'seo_descriptions', 'seo_keywords')}),
+    # )
+    #
+    # list_display = (
+    #     'money_left', 'money_right', 'active', 'min_left_str', 'max_left_str', 'min_right_str', 'max_right_str',
+    #     'best_place', 'rate_left_final', 'rate_right_final', 'time',)
+    #
+    # list_display_links = ('money_left', 'money_right', 'rate_left_final', 'rate_right_final',)
+    # list_editable = ('active', 'best_place', 'min_left_str', 'max_left_str', 'min_right_str', 'max_right_str',)
+    # list_filter = ('active', 'best_place', 'money_left', 'money_right',)
+    # readonly_fields = ('time',)
     save_on_top = True
     actions = [all_on, all_off]
 
@@ -234,11 +233,6 @@ class SwapMoneyAdmin(admin.ModelAdmin):
             pass
 
         return HttpResponseRedirect("../")
-
-    def save_model(self, request, obj, form, change):
-        set_change_rate(obj)
-        set_seo_inner(obj)
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(PaySystem)

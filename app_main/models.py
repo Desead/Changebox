@@ -1,16 +1,32 @@
-from django.contrib.auth.models import AbstractUser
-from django.core.validators import MinValueValidator
-from django.db import models
-from django.utils.translation import gettext_lazy as _
+from decimal import Decimal
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
+from app_main.lib.number_2_str import number_2_str
+from app_main.lib.remove_space_from_string import remove_space_from_string
+from app_main.lib.seo import set_seo_inner
+from app_main.lib.validators import validate_string
 from app_main.managers import CustomUserManager
+
+DECIMAL_PLACES = 8
+MAX_DIGITS = 20
+'''
+поля Decimal в моделях имеют копию типа CharField. Эта копия нужна для красивого отображения в админке
+Чтобы постоянно не конверировать значения - ввод или изменение происходит через _str, а участвует в расчётах Decimal поле
+'''
+
+
+def copy_str_to_decimal(str_field):
+    str_field = remove_space_from_string(str_field).replace(',', '.')
+    return Decimal(str_field), number_2_str(str_field)
 
 
 class CustomUser(AbstractUser):
     MAX_REFERALNUM_LETTERS = 10
 
     username = None
-    email = models.EmailField(_('email address'), unique=True)
+    email = models.EmailField('email address', unique=True)
     referal = models.CharField('Referal num', max_length=MAX_REFERALNUM_LETTERS, default='')
 
     USERNAME_FIELD = 'email'
@@ -114,7 +130,8 @@ class Money(models.Model):  # список валют
         ('crypto', 'Крипта'),
         ('fiat', 'Фиат'),
     )
-    active = models.BooleanField('Использовать', default=False)
+    active = models.BooleanField('Использовать', default=False,
+                                 help_text='В базовых настройках есть опция для автоматического отключения не найденной валюты')
     title = models.CharField('Название', max_length=100, unique=True)
     abc_code = models.CharField('Код', max_length=20,
                                 help_text='Буквенный код валюты: RUB, USD, BTC, XMR...')
@@ -122,17 +139,16 @@ class Money(models.Model):  # список валют
     money_type = models.CharField('Тип', choices=MONEY_TYPE, max_length=10, default='crypto')
     nominal = models.PositiveIntegerField('Номинал', default=1,
                                           help_text='Единица в которых котируется данная валюта')
-    cost = models.FloatField('USD', default=1, help_text='Текущая стоимость валюты/монеты выраженная в USD(T)')
+    cost = models.DecimalField(default=1, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS, editable=False)
+    cost_str = models.CharField('USD', default='1', max_length=MAX_DIGITS, validators=[validate_string],
+                                help_text='Текущая стоимость валюты/монеты выраженная в USD(T)')
     time = models.DateTimeField('Время обновления котировки', auto_now=True)
-    memo = models.CharField('Доп. поле', max_length=255, blank=True,
-                            help_text='Используется только для криптовалюты: MEMO, Destination tag, Message')
     conformation = models.PositiveSmallIntegerField('Подтверждения', default=1,
                                                     help_text='Количество необходимых подтверждения для начала перевода. Актуально только для крипты')
 
-    def __str__(self):
-        return self.abc_code + ': ' + self.title
-
     def save(self, *args, **kwargs):
+        self.cost, self.cost_str = copy_str_to_decimal(self.cost_str)
+
         if self.tiker == '':
             if self.money_type == 'crypto':
                 if self.abc_code == 'USDT':
@@ -140,6 +156,9 @@ class Money(models.Model):  # список валют
                 else:
                     self.tiker = self.abc_code + 'USDT'
         super(Money, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.abc_code + ': ' + self.title
 
     class Meta:
         verbose_name = 'Валюта/Монета'
@@ -160,7 +179,7 @@ class PaySystem(models.Model):  # список платёжных систем: 
         ordering = ['-active', '-title']
 
 
-class FullMoney(models.Model):
+class FullMoney(models.Model):  # объединили монетки и платёжные системы
     active = models.BooleanField('Использовать', default=False)
     title = models.CharField('Название', max_length=30, unique=True, help_text='Это название отображается на сайте')
     xml_code = models.CharField('XML', max_length=20,
@@ -168,7 +187,14 @@ class FullMoney(models.Model):
     pay = models.ForeignKey(PaySystem, verbose_name='Платёжная система', on_delete=models.CASCADE, blank=True,
                             null=True, help_text='У крипты платёжная система может отсутствовать')
     money = models.ForeignKey(Money, verbose_name='Код валюты', on_delete=models.CASCADE)
-    reserv = models.FloatField('Резерв', default=0, help_text='Доступный для обмена резерв')
+    reserv = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS, editable=False)
+    reserv_str = models.CharField('Резерв', max_length=MAX_DIGITS, help_text='Доступный для обмена резерв',
+                                  default='0.00',
+                                  validators=[validate_string])
+
+    def save(self, *args, **kwargs):
+        self.reserv, self.reserv_str = copy_str_to_decimal(self.reserv_str)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
@@ -186,41 +212,71 @@ class SwapMoney(models.Model):  # Основная таблица настрое
                                    related_name='money_left_re')
     money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
                                     related_name='money_right_re')
-    min_left = models.FloatField('Минимум слева', default=0, help_text='Минимальная сумма обмена',
-                                 validators=[MinValueValidator(0)])
-    max_left = models.FloatField('Максимум слева', default=0, help_text='Максимальная сумма обмена',
-                                 validators=[MinValueValidator(0)])
-    min_right = models.FloatField('Минимум справа', default=0, help_text='Минимальная сумма обмена',
-                                  validators=[MinValueValidator(0)])
-    max_right = models.FloatField('Максимум справа', default=0, help_text='Максимальная сумма обмена',
-                                  validators=[MinValueValidator(0)])
-    pause = models.PositiveIntegerField('Заморозка', default=0,
-                                        help_text='Заморозка средст при обмене. Указывается в минутах.')
-    rate_left = models.FloatField('Курс слева', default=0, validators=[MinValueValidator(0)])
-    rate_right = models.FloatField('Курс справа', default=0, validators=[MinValueValidator(0)],
-                                   help_text='Начальный курс, полученный с ЦБ, Binance или BestChange. Менять не рекомендуется. Данный курс периодически изменяется автоматически')
-    rate_left_final = models.FloatField('Итого слева', default=0)
-    rate_right_final = models.FloatField('Итого справа', default=0,
-                                         help_text='Итоговый курс. Если в результате расчётов получился итоговый курс <= 0, то автоматически устанавливается значение = 1')
-    change_left = models.FloatField('+/- % слева', default=0)
-    change_right = models.FloatField('+/- % справа', default=0,
-                                     help_text='Изменение курса в % (прибыль) Пример расчёта: Если = 5, то курс умножается на 1.05, если = -5, то на 0.95')
-    add_fee_left = models.FloatField('Доп слева', default=0, validators=[MinValueValidator(0, 'Комиссия >= 0')])
-    add_fee_right = models.FloatField('Доп справа', default=0, validators=[MinValueValidator(0, 'Комиссия >= 0')],
-                                      help_text='Сумма фиксированной удерживаемой комисии. На курс обмена не влияет, изменяется только итоговая отдаваемая сумма!')
 
-    # todo Городов для обмена наличными может быть несколько.
+    min_left = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    max_left = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    min_right = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    max_right = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+
+    min_left_str = models.CharField('Минимум слева', max_length=MAX_DIGITS, default='0.00',
+                                    validators=[validate_string])
+    max_left_str = models.CharField('Максимум слева', max_length=MAX_DIGITS, default='0.00',
+                                    validators=[validate_string])
+    min_right_str = models.CharField('Минимум справа', max_length=MAX_DIGITS, default='0.00',
+                                     validators=[validate_string])
+    max_right_str = models.CharField('Максимум справа', max_length=MAX_DIGITS, default='0.00',
+                                     validators=[validate_string])
+
+    rate_left = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    rate_right = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+
+    rate_left_str = models.CharField('Курс слева', max_length=MAX_DIGITS, default='1', validators=[validate_string])
+    rate_right_str = models.CharField('Курс справа', max_length=MAX_DIGITS, default='1', validators=[validate_string],
+                                      help_text='Начальный курс, полученный с ЦБ, Binance или BestChange. Менять не рекомендуется. Данный курс периодически изменяется автоматически')
+
+    change_left = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    change_right = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+
+    change_left_str = models.CharField('+/- % слева', max_length=MAX_DIGITS, default='0.00',
+                                       validators=[validate_string])
+    change_right_str = models.CharField('+/- % справа', max_length=MAX_DIGITS, default='0.00',
+                                        validators=[validate_string],
+                                        help_text='Изменение курса в % (прибыль) Пример расчёта: Если = 5, то курс умножается на 1.05, если = -5, то на 0.95')
+
+    rate_left_final = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    rate_right_final = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+
+    rate_left_final_str = models.CharField('Итого слева', max_length=MAX_DIGITS, default='0.00',
+                                           validators=[validate_string])
+    rate_right_final_str = models.CharField('Итого справа', max_length=MAX_DIGITS, default='0.00',
+                                            validators=[validate_string],
+                                            help_text='Итоговый курс. Если в результате расчётов получился итоговый курс <= 0, то автоматически устанавливается значение = 1')
+
+    add_fee_left = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    add_fee_right = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+
+    add_fee_left_str = models.CharField('Доп слева', max_length=MAX_DIGITS, default='0.00',
+                                        validators=[validate_string])
+    add_fee_right_str = models.CharField('Доп справа', max_length=MAX_DIGITS, default='0.00',
+                                         validators=[validate_string],
+                                         help_text='Сумма фиксированной удерживаемой комисии. На курс обмена не влияет, изменяется только итоговая отдаваемая сумма!')
+
+    manual_active = models.BooleanField('Ручной курс', default=False,
+                                        help_text='Курс установленный вручную является приоритетным')
+    manual_rate_left = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+    manual_rate_right = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
+
+    manual_rate_left_str = models.CharField('Ручной курс слева', max_length=MAX_DIGITS, default='0.00',
+                                            validators=[validate_string])
+    manual_rate_right_str = models.CharField('Ручной курс справа', max_length=MAX_DIGITS, default='0.00',
+                                             validators=[validate_string])
+
+    pause = models.PositiveIntegerField('Заморозка', default=0, help_text='Заморозка средств при обмене, в минутах.')
     city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='Город', null=True, blank=True,
                              help_text='Город для обмена. Актуально только для обмена с наличными деньгами', default='')
     time = models.DateTimeField('Время установки курса', auto_now=True)
     best_place = models.PositiveSmallIntegerField('Место', default=1,
                                                   help_text='Желаемое место на BestChange, если обмен не найден, то автоматически устанавливается в 0. Если стоит 0, то курс устанавливается по ЦБ и Binance. Если по ЦБ и Binance также не удалось установить, то используются значения из ручного курса')
-
-    # Manual Settings
-    manual_active = models.BooleanField('Ручной курс', default=False,
-                                        help_text='Курс установленный вручную является приоритетным')
-    manual_rate_left = models.FloatField('Ручной курс слева', default=0, validators=[MinValueValidator(0)])
-    manual_rate_right = models.FloatField('Ручной курс справа', default=0, validators=[MinValueValidator(0)])
 
     # SEO Setting
     seo_title = models.CharField('Title для данной страницы', max_length=255, blank=True)
@@ -250,6 +306,32 @@ class SwapMoney(models.Model):  # Основная таблица настрое
                                    help_text='Обменный пункт не имеет офиса в выбранном городе, оплата курьерской доставки включена в курс обмена или отображена посредством метки "Дополнительная комиссия"')
     hold = models.BooleanField(default=False,
                                help_text='Проведение обмена может быть задержано')
+
+    def save(self, *args, **kwargs):
+        set_seo_inner(self)
+        # set_change_rate(self)
+
+        self.min_left, self.min_left_str = copy_str_to_decimal(self.min_left_str)
+        self.max_left, self.max_left_str = copy_str_to_decimal(self.max_left_str)
+        self.min_right, self.min_right_str = copy_str_to_decimal(self.min_right_str)
+        self.max_right, self.max_right_str = copy_str_to_decimal(self.max_right_str)
+
+        self.rate_left, self.rate_left_str = copy_str_to_decimal(self.rate_left_str)
+        self.rate_right, self.rate_right_str = copy_str_to_decimal(self.rate_right_str)
+
+        self.change_left, self.change_left_str = copy_str_to_decimal(self.change_left_str)
+        self.change_right, self.change_right_str = copy_str_to_decimal(self.change_right_str)
+
+        self.rate_left_final, self.rate_left_final_str = copy_str_to_decimal(self.rate_left_final_str)
+        self.rate_right_final, self.rate_right_final_str = copy_str_to_decimal(self.rate_right_final_str)
+
+        self.add_fee_left, self.add_fee_left_str = copy_str_to_decimal(self.add_fee_left_str)
+        self.add_fee_right, self.add_fee_right_str = copy_str_to_decimal(self.add_fee_right_str)
+
+        self.manual_rate_left, self.manual_rate_left_str = copy_str_to_decimal(self.manual_rate_left_str)
+        self.manual_rate_right, self.manual_rate_right_str = copy_str_to_decimal(self.manual_rate_right_str)
+
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.money_left) + " -> " + str(self.money_right)
