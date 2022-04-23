@@ -26,7 +26,7 @@ def get_binance_data() -> tuple[bool, dict]:
 
     binance = {}
     for i in json.loads(response.text):  # с бинанса получаем строку, поэтому её надо перевести итерируемый объект
-        binance[i['symbol']] = float(i['price'])
+        binance[i['symbol']] = i['price']
 
     return True, binance
 
@@ -46,5 +46,5 @@ def set_binance_rate(money, binance):
                     info.description = error_string
                     info.save()
             else:
-                i.cost = binance[i.tiker]
+                i.cost_str = binance[i.tiker]
             i.save()

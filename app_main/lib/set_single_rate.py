@@ -1,9 +1,6 @@
-# todo если стоит желаемое месте на бесте = 0 то курс можно устанавливать с курса монет, а если нет,
-#  то можно проверить наличие файла курсов с беста и выставить в зависимости от желаемого места
-
-def set_change_rate(swap):
+def set_single_rate(swap):
     '''
-    Функция получает модель обмена SwapMoney.
+    Функция получает один обмен SwapMoney.
     Далее смотрит какой курс стоит активнм - ручной или авто и в зависимости от этого изменяет итоговый курс
     Функция не сохраняет данные. Сохранить их необходимо в точке вызова!
     '''
@@ -39,5 +36,10 @@ def set_change_rate(swap):
 
     # приводим курс обмена к виду 1:х
     min_cost = min(left_cost, right_cost)
-    swap.rate_left_final = left_cost / min_cost
-    swap.rate_right_final = right_cost / min_cost
+    swap.rate_left_final_str = left_cost / min_cost
+    swap.rate_right_final_str = right_cost / min_cost
+
+    swap.manual_rate_left_str = swap.manual_rate_left
+    swap.manual_rate_right_str = swap.manual_rate_right
+    swap.rate_left_str = swap.rate_left
+    swap.rate_right_str = swap.rate_right

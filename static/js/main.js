@@ -7,7 +7,7 @@ const url_direct = 'direct/'
 let rates
 let left_money_select = {}
 let right_money_select = {}
-const TIME_REFRESH_IN_MSEC = 1000
+const TIME_REFRESH_IN_MSEC = 3000
 
 function SetSelectFirstMoney() {
     // разовое начальное выделение монеткы слева. В дальнейшем выделение есть всегда и эта функция более не используется

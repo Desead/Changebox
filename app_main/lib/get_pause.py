@@ -2,6 +2,9 @@ from django.utils.datetime_safe import datetime
 
 
 def get_pause(model_settings) -> bool:
+    '''
+    функция проверяет можно ли сейчас обменнику работать или он стоит на паузе
+    '''
     if not bool(model_settings):
         return True
 

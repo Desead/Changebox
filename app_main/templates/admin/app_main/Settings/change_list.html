@@ -7,19 +7,23 @@
 {% endblock %}
 
 {% block object-tools %}
-    <form action="import/" method="post">
-        {% csrf_token %}
-        <div class="btn_w" style="max-width: 950px">
-            <input type="submit" name="city" value="Добавить города" style="width: 230px;"/>
-            <input type="submit" name="exchange" value="Добавить обменники" style="width: 230px"/>
-            <input type="submit" name="pays" value="Добавить платёжные системы" style="width: 230px"/>
-            <input type="submit" name="money" value="Добавить монеты и валюты" style="width: 230px"/>
-            <input type="submit" name="fullmoney" value="Соединить платёжки с деньгами" style="width: 230px"/>
-            <input type="submit" name="best" value="Получить данные с BestChange" style="width: 230px"/>
-            <input type="submit" name="clear_all" value="Очистить все данные" style="width: 230px"/>
-            <input type="submit" name="dump" value="Надо чё то ещё добавить" style="width: 230px"/>
-        </div>
-    </form>
+    <details>
+        <summary>Ввести начальные данные</summary>
+        <form action="import/" method="post">
+            {% csrf_token %}
+            <div class="btn_w" style="max-width: 950px">
+                <input type="submit" name="city" value="Добавить города" style="width: 230px;"/>
+                <input type="submit" name="exchange" value="Добавить обменники" style="width: 230px"/>
+                <input type="submit" name="pays" value="Добавить платёжные системы" style="width: 230px"/>
+                <input type="submit" name="money" value="Добавить монеты и валюты" style="width: 230px"/>
+                <input type="submit" name="cbr_rates" value="Получить курсы с ЦБ" style="width: 230px"/>
+                <input type="submit" name="binance_rates" value="Получить данные с Binance" style="width: 230px"/>
+                <input type="submit" name="best_load" value="Загрузить данные с BestChange" style="width: 230px"/>
+                <input type="submit" name="best_read" value="Прочитать данные BestChange" style="width: 230px"/>
+            </div>
+        </form>
+    </details>
+
     <br>
     {#    {{ block.super }}#}
 {% endblock %}

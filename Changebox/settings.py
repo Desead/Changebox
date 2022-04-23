@@ -84,7 +84,7 @@ DATABASES = {
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'change_db',
+#         'NAME': 'change_db2',
 #         'USER': 'alx_db',
 #         'PASSWORD': '1111',
 #         'HOST': '127.0.0.1',

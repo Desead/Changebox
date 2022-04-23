@@ -1,10 +1,6 @@
-"""
-bm_exch.dat - список обменников в формате:
-ID обменника; название обменника; xx; xx; xx
-"""
 import io
-import json
 import zipfile
+from decimal import Decimal
 from pathlib import Path
 from time import sleep
 from typing import Dict
@@ -12,30 +8,31 @@ from typing import Dict
 import requests
 
 from Changebox.settings import BESTCHANGE_FILES
-from app_main.lib.set_change_rate import set_change_rate
+from app_main.lib.set_single_rate import set_single_rate
 from app_main.models import Exchange, InfoPanel
 
 
-def download_files_from_bestchange(save_file=False):
+def download_files_from_bestchange(save_file=False) -> (bool, dict):
     """
-    Получаем zip с беста, разархивируем его и сохраняем всё содержимое в словаре files.
+    Получаем zip с беста, разархивируем его и сохраняем всё содержимое в словаре best_files.
     При желании можно создать файлы на диске в каталоге BESTCHANGE_FILES
     на выходе получаем кортеж (bool, dict)
     первый элемент - успешность загрузки файлов
     второй - словарь - всё, что загружено с беста. ключ = имя файла из архива info.zip
+    так будет выглядеть наш словарик со всем файлами с беста - каждый ключ = содержимому одного файла
+
+    'bm_info.dat': [],
+    'bm_top.dat': [],
+    'bm_news.dat': [],
+    'bm_bcodes.dat': [],
+    'bm_cities.dat': [],
+    'bm_cycodes.dat': [],
+    'bm_exch.dat': [],
+    'bm_brates.dat': [],
+    'bm_cy.dat': [],
+    'bm_rates.dat': [],
     """
-    files = {  # так будет выглядеть наш словарик со всем файлами с беста - каждый ключ = содержимому одного файла
-        # 'bm_info.dat': [],
-        # 'bm_top.dat': [],
-        # 'bm_news.dat': [],
-        # 'bm_bcodes.dat': [],
-        # 'bm_cities.dat': [],
-        # 'bm_cycodes.dat': [],
-        # 'bm_exch.dat': [],
-        # 'bm_brates.dat': [],
-        # 'bm_cy.dat': [],
-        # 'bm_rates.dat': [],
-    }
+
     if not Path(BESTCHANGE_FILES).exists():
         Path(BESTCHANGE_FILES).mkdir(parents=True, exist_ok=True)
 
@@ -53,30 +50,37 @@ def download_files_from_bestchange(save_file=False):
             print('Ошибка загрузки данных с беста: ', best)
             sleep(5)
     else:
-        return False,
+        return False, {}
 
     if save_file:
         with open(BESTCHANGE_FILES / 'info.zip', mode='wb') as fl:
             fl.write(responce.content)
 
+    best_files = {}
     with zipfile.ZipFile(io.BytesIO(responce.content), 'r') as zf:
         if save_file:
             zf.extractall(BESTCHANGE_FILES)
 
         for i in zf.namelist():
-            files[i] = []
+            best_files[i] = []
             with zf.open(i) as f:
-                files[i] = f.read().decode('cp1251').split('\n')
+                best_files[i] = f.read().decode('cp1251').split('\n')
 
-    return True, files
+    return True, best_files
 
 
-def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, save_file=False):
+def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, use_local_files=False):
     '''
     на выходе получаем словарь словарей где собраны все мои обмены с курсами.
     '''
-    rates = best_files['bm_rates.dat']
-    money = best_files['bm_cycodes.dat']
+    if use_local_files:
+        with open(BESTCHANGE_FILES / 'bm_rates.dat', mode='r') as fl:
+            rates = fl.read().split('\n')
+        with open(BESTCHANGE_FILES / 'bm_cycodes.dat', mode='r') as fl:
+            money = fl.read().split('\n')
+    else:
+        rates = best_files['bm_rates.dat']
+        money = best_files['bm_cycodes.dat']
 
     # Составили список ID обменников, курсы с которых надо игнорировать
     temp = Exchange.objects.filter(ignore=True)
@@ -92,19 +96,7 @@ def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, save_file=Fa
         money_to_id[j[1]] = j[0]
         id_to_money[j[0]] = j[1]
 
-    if save_file:
-        with open(BESTCHANGE_FILES / 'Best Money ID.json', mode='w', encoding='utf8') as fl:
-            json.dump(money_to_id, fl, ensure_ascii=False)
-        with open(BESTCHANGE_FILES / 'Best ID Money.json', mode='w', encoding='utf8') as fl:
-            # Словарь в список и обратно только для того чтобы в итоге ключи были отсортированы по ID.
-            # Сделано для удоства поиcка глазками
-            import copy
-            temp = copy.deepcopy(id_to_money)
-            temp = sorted([(int(k), v) for k, v in temp.items()])
-            temp = dict(temp)
-            json.dump(temp, fl, ensure_ascii=False)
-
-    # Создаём словарь словарей changes с настроенными обменами
+    # Создаём словарь словарей changes с настроенными из админке обменами
     changes = {}
     for i in swap:
         if i.best_place == 0:
@@ -157,13 +149,9 @@ def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, save_file=Fa
                         double_exchange[current_key].append(exchange_id)
                         changes[money_left][money_right].append(line)
 
-    if save_file:
-        with open(BESTCHANGE_FILES / 'Best All current exchange rates.json', mode='w', encoding='utf8') as fl:
-            json.dump(changes, fl, ensure_ascii=False)
-
     # Все курсы собраны. осталось определить нужный и записать его в бд
     for num, i in enumerate(swap):
-        if i.best_place == 0:
+        if i.best_place == 0:  # значит курсы обмена ставим не с беста
             continue
 
         money_left = i.money_left.xml_code  # берём название валюты и переводим его в id
@@ -188,8 +176,7 @@ def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, save_file=Fa
             i.save()
             continue  # значит текущего обмена на бесте нету и его надо составить из курсов монет
 
-        need_place = i.best_place  # необходимое место на бесте
-        need_place = min(need_place, len_rate - 1)  # желаемая позиция на бесте
+        need_place = i.best_place - 1  # желаемая позиция на бесте
 
         '''
         выбор места на бесте:
@@ -201,30 +188,25 @@ def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, save_file=Fa
         '''
 
         if rate_left[0] == '1':
-            try:
-                temp = [float(x) for x in rate_right]
-            except:
-                temp = [str(x).replace('.', ',') for x in rate_right]
-
-            delta = 0.01 if i.money_right.money.money_type == 'fiat' else 0.00001
-
+            temp = [Decimal(x) for x in rate_right]
+            delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
             temp.sort(reverse=True)
-            i.rate_left = 1
-            i.rate_right = temp[need_place] + delta
+            i.rate_left_str = Decimal('1')
+            if need_place >= len_rate:
+                i.rate_right_str = temp[len_rate - 1] - delta  # значит хотим занять последнюю позицию
+            else:
+                i.rate_right_str = temp[need_place] + delta
 
         if rate_right[0] == '1':
-            try:
-                temp = [float(x) for x in rate_left]
-            except:
-                temp = [str(x).replace('.', ',') for x in rate_left]
-
-            delta = 0.01 if i.money_right.money.money_type == 'fiat' else 0.00001
-
+            temp = [Decimal(x) for x in rate_left]
+            delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
             temp.sort(reverse=False)
-            i.rate_right = 1
-            print(i)
-            i.rate_left = temp[need_place] - delta
+            i.rate_right_str = Decimal('1')
+            if need_place >= len_rate:
+                i.rate_left_str = temp[len_rate - 1] + delta  # значит хотим занять последнюю позицию
+            else:
+                i.rate_left_str = temp[need_place] - delta
 
-        set_change_rate(i)
+        set_single_rate(i)
         mark_changes[num] = True
         i.save()

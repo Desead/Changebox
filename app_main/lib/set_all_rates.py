@@ -1,9 +1,8 @@
 from Changebox.settings import BEST_SAVE
 from app_main.lib.bestchange import get_rates_from_bestchange, download_files_from_bestchange
-from app_main.lib.binance import set_binance_rate, get_binance_data
-from app_main.lib.cbr import set_cbr_rates, get_cbr_data, convert_cbr_data_to_dict
-from app_main.lib.seo import set_seo_inner
-from app_main.lib.set_change_rate import set_change_rate
+from app_main.lib.start.binance import set_binance_rate, get_binance_data
+from app_main.lib.start.cbr import set_cbr_rates, get_cbr_data, convert_cbr_data_to_dict
+from app_main.lib.set_single_rate import set_single_rate
 from app_main.models import Money, SwapMoney, InfoPanel
 
 
@@ -37,14 +36,14 @@ def set_all_rates():
     # установим обменный курс с помошью ЦБ и Binance
     mark_changes = [False] * len(swap)
 
-    # загружаем данные с беста только если в этом есть необходимость
-    # здесь же устнавливаем курс обмена с бста, там где он нужен
+    # пробежались по всем обменам и посмотрели надо ли где то устанавливать курс с беста
+    # если не надо, то к бесту не обращаемся
     for i in swap:
         if i.best_place > 0:
             best_files = download_files_from_bestchange(BEST_SAVE)  # загрузили
             if not best_files[0]:
                 info = InfoPanel()
-                info.description = 'Ошибка получения данные с BestChange'
+                info.description = 'Ошибка получения данных с BestChange'
                 info.save()
             else:
                 get_rates_from_bestchange(swap, mark_changes, best_files[1])
@@ -105,6 +104,5 @@ def set_all_rates():
             change.rate_left = rate_left
             change.rate_right = rate_right
 
-            set_change_rate(change)
-            set_seo_inner(change)
+            set_single_rate(change)
             change.save()

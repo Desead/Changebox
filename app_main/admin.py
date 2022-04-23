@@ -5,9 +5,6 @@ from django.http import HttpResponseRedirect
 from django.urls import path
 
 from app_main.forms import CustomUserCreationForm, CustomUserChangeForm
-from app_main.lib.calculate_all_rates import set_all_rates
-from app_main.lib.seo import set_seo_inner
-from app_main.lib.set_change_rate import set_change_rate
 from app_main.models import *
 
 
@@ -52,8 +49,8 @@ class InfoPanelAdmin(admin.ModelAdmin):
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ('abc_code', 'title')
-    list_display_links = ('abc_code', 'title')
+    list_display = ('abc_code', 'title',)
+    list_display_links = ('abc_code', 'title',)
     search_fields = ('title',)
 
 
@@ -77,11 +74,11 @@ class ExchangeAdmin(admin.ModelAdmin):
 
 @admin.register(Money)
 class MoneyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'abc_code', 'money_type', 'active', 'nominal', 'cost', 'time')
+    list_display = ('title', 'abc_code', 'money_type', 'active', 'nominal', 'cost_str', 'time')
     list_filter = ('active', 'money_type',)
     list_editable = ('active',)
     search_fields = ('title', 'abc_code',)
-    readonly_fields = ('cost', 'time',)
+    readonly_fields = ('time',)
     save_on_top = True
     actions = [all_on, all_off]
 
@@ -102,8 +99,8 @@ class FieldsRightInline(admin.TabularInline):
 
 @admin.register(FullMoney)
 class FullMoneyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'active', 'reserv',)
-    list_editable = ('active', 'reserv',)
+    list_display = ('title', 'active', 'reserv_str',)
+    list_editable = ('active', 'reserv_str',)
     list_filter = ('active', 'pay',)
     search_fields = ('title', 'xml_code',)
     save_on_top = True
@@ -131,33 +128,36 @@ class SettingsAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def my_view(self, request):
-        if request.POST.get('clear_all'):
-            from django.apps import apps
-            for k, v in apps.all_models['app_main'].items():
-                v = str(v).split('.')
-                try:
-                    eval(v[len(v) - 1][:-2] + '.objects.all().delete()')
-                except:
-                    continue
-        elif request.POST.get('city'):
-            from app_main.lib.city import city_load
+        if request.POST.get('city'):
+            from app_main.lib.start.city_load import city_load
             city_load()
         elif request.POST.get('exchange'):
-            from app_main.lib.exchange import exchange_load
+            from app_main.lib.start.exchange_load import exchange_load
             exchange_load()
         elif request.POST.get('pays'):
-            from app_main.lib.paysystem import pays_load
+            from app_main.lib.start.pays_load import pays_load
             pays_load()
         elif request.POST.get('money'):
-            from app_main.lib.money import money_load
+            from app_main.lib.start.money_load import money_load
             money_load()
-        elif request.POST.get('fullmoney'):
-            from app_main.lib.fullmoney import full_money_load
-            full_money_load()
-        elif request.POST.get('best'):
+        elif request.POST.get('best_load'):
             from app_main.lib.bestchange import download_files_from_bestchange
             download_files_from_bestchange(True)
-
+        elif request.POST.get('best_read'):
+            from app_main.lib.bestchange import get_rates_from_bestchange
+            get_rates_from_bestchange(SwapMoney.objects.all(), {}, {}, True)
+        elif request.POST.get('cbr_rates'):
+            from app_main.lib.start.cbr import get_cbr_data
+            from app_main.lib.start.cbr import convert_cbr_data_to_dict
+            from app_main.lib.start.cbr import set_cbr_rates
+            cbr = get_cbr_data()
+            cbr = convert_cbr_data_to_dict(cbr[1])
+            set_cbr_rates(Money.objects.filter(money_type='fiat'), cbr)
+        elif request.POST.get('binance_rates'):
+            from app_main.lib.start.binance import get_binance_data
+            from app_main.lib.start.binance import set_binance_rate
+            binance = get_binance_data()
+            set_binance_rate(Money.objects.filter(money_type='crypto'), binance[1])
         return HttpResponseRedirect("../")
 
 
@@ -166,15 +166,18 @@ class SwapMoneyAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Основные настройки обмена',
          {'fields': (
-             'active', ('money_left', 'money_right'), 'min_left', 'max_left', 'min_right', 'max_right',
-             'city', 'pause',)}),
+             'active', 'freeze',('money_left', 'money_right'), ('min_left_str', 'min_right_str',),
+             ('max_left_str', 'max_right_str',), )}),
         ('Настройка курсов обмена',
-         {'fields': (('manual_rate_left', 'manual_rate_right', 'manual_active',),
-                     'best_place', ('rate_left', 'rate_right',),
-                     ('change_left', 'change_right',),
-                     ('rate_left_final', 'rate_right_final',),)}),
+         {'fields': ('best_place', ('manual_rate_left_str', 'manual_rate_right_str', 'manual_active',),
+                     ('rate_left_str', 'rate_right_str',),
+                     ('change_left_str', 'change_right_str',),
+                     ('rate_left_final_str', 'rate_right_final_str',),)}),
         ('Дополнительные комиссии',
-         {'fields': (('add_fee_left', 'add_fee_right',),)}),
+         {'fields': (('add_fee_left_str', 'add_fee_right_str',),)}),
+
+        ('Города', {'classes': ('collapse',), 'fields': ('city',)}),
+
         ('Метки для обмена', {'classes': ('collapse',), 'fields': (
             'manual', 'juridical', 'verifying', 'cardverify', 'floating', 'otherin', 'otherout', 'reg', 'card2card',
             'delivery', 'hold',)}),
@@ -183,17 +186,21 @@ class SwapMoneyAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'money_left', 'money_right', 'active', 'min_left', 'max_left', 'min_right', 'max_right',
-        'best_place', 'rate_left_final', 'rate_right_final', 'time',)
+        'money_left', 'money_right', 'active', 'min_left_str', 'max_left_str', 'min_right_str', 'max_right_str',
+        'best_place', 'rate_left_final_str', 'rate_right_final_str', 'time',)
 
-    list_display_links = ('money_left', 'money_right', 'rate_left_final', 'rate_right_final',)
-    list_editable = ('active', 'min_left', 'max_left', 'min_right', 'max_right', 'best_place',)
+    list_display_links = ('money_left', 'money_right', 'rate_left_final_str', 'rate_right_final_str',)
+    list_editable = ('active', 'best_place', 'min_left_str', 'max_left_str', 'min_right_str', 'max_right_str',)
     list_filter = ('active', 'best_place', 'money_left', 'money_right',)
-    # todo выяснить почему не работают поля для поиска по имени валют
-    # search_fields = ('money_left', 'money_right',)
     readonly_fields = ('time',)
     save_on_top = True
     actions = [all_on, all_off]
+    filter_horizontal = ('city',)
+
+    # def formfield_for_manytomany(self, db_field, request, **kwargs):
+    #     if db_field.name == "city":
+    #         kwargs["queryset"] = City.objects.filter(active=True)
+    #     return super().formfield_for_manytomany(db_field, request, **kwargs)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "money_left":
@@ -210,8 +217,6 @@ class SwapMoneyAdmin(admin.ModelAdmin):
         return my_urls + urls
 
     def my_view(self, request):
-        if request.POST.get('cbrbest'):
-            set_all_rates()
         if request.POST.get('rnd_swap'):
             fm = FullMoney.objects.all()
             if fm.count() <= 0: return
@@ -230,15 +235,7 @@ class SwapMoneyAdmin(admin.ModelAdmin):
                 except:
                     continue
 
-        if request.POST.get('rates'):
-            pass
-
         return HttpResponseRedirect("../")
-
-    def save_model(self, request, obj, form, change):
-        set_change_rate(obj)
-        set_seo_inner(obj)
-        super().save_model(request, obj, form, change)
 
 
 @admin.register(PaySystem)
