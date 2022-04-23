@@ -1,6 +1,5 @@
-def remove_space_from_string(check_string: str) -> str:
-
-    check_string = list(check_string)
+def remove_space_from_string(check_string) -> str:
+    check_string = list(str(check_string))
 
     while True:
         if ' ' in check_string:

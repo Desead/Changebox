@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+from decimal import Decimal
 from time import sleep
 
 import requests
@@ -53,11 +54,11 @@ def convert_cbr_data_to_dict(dirty_data: str) -> dict:
     cbr['RUB']['Value'] = '1.0'
 
     # получаем курс usd
-    usd = float(str(cbr['USD']['Value']).replace(',', '.'))
+    usd = Decimal(str(cbr['USD']['Value']).replace(',', '.'))
 
     # Устанавливаем все курсы к USD
     for i in cbr:
-        cbr[i]['Value'] = float(str(cbr[i]['Value']).replace(',', '.')) / usd
+        cbr[i]['Value'] = Decimal(str(cbr[i]['Value']).replace(',', '.')) / usd
         cbr[i]['Nominal'] = int(cbr[i]['Nominal'])
 
     return cbr
@@ -92,6 +93,7 @@ def set_cbr_rates(money, cbr):
             else:
                 cost = cbr[i.abc_code]['Value']  # получили цену с ЦБ текущей валюты, но она выражена в RUB
                 nominal = cbr[i.abc_code]['Nominal']
-            i.cost = cost
+            i.cost_str = cost
             i.nominal = nominal
             i.save()
+

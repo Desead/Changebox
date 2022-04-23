@@ -1,9 +1,5 @@
 from Changebox.celery import app
-from app_main.lib.bestchange import download_files_from_bestchange
-from app_main.lib.binance import get_binance_data, set_binance_rate
-from app_main.lib.calculate_all_rates import set_all_rates
-from app_main.lib.cbr import get_cbr_data, convert_cbr_data_to_dict, set_cbr_rates, cbr_to_redis
-from app_main.models import Money
+from app_main.lib.set_all_rates import set_all_rates
 
 '''
 @app.task(time_limit=20, soft_time_limit=15)

@@ -22,10 +22,23 @@ def number_2_str(number_for_slice, comma: str = '.') -> str:
         int_part = int_part[:-3]
         if not int_part:
             if fract_part:
-                temp = temp + comma + fract_part[:8]
+
+                fract_part = list(fract_part)[:8]
+                while True:  # убираем последние 0, кроме первого, после .
+                    n = len(fract_part) - 1
+                    if n <= 0:
+                        break
+                    if fract_part[n] == '0':
+                        fract_part.pop(n)
+                    else:
+                        break
+                temp = temp + comma + ''.join(fract_part)
+
+            else:
+                return (temp + comma + '0').strip()
 
             if float(remove_space_from_string(temp)) == 0:
-                return '0.00'
+                return '0.0'
 
             return temp.strip()
 

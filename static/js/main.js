@@ -342,7 +342,7 @@ for (let i of document.querySelectorAll('.menu_item')) {
     i.addEventListener('click', HideMoney)
 }
 
-// MainLoop()
-// setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
+MainLoop()
+setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
 
 

@@ -9,7 +9,7 @@ from django.views import View
 from django.views.generic import CreateView
 
 from app_main.forms import CustomUserCreationForm
-from app_main.lib.pause import get_pause
+from app_main.lib.get_pause import get_pause
 from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings
 
 
