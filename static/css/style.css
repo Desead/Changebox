@@ -4,12 +4,16 @@ body {
     background: -moz-linear-gradient(left, var(--gradient-back-1), var(--gradient-back-2));
     background: -o-linear-gradient(left, var(--gradient-back-1), var(--gradient-back-2));
     background: linear-gradient(to right, var(--gradient-back-1), var(--gradient-back-2));
-    /*background: white url("../img/back7.jpg") no-repeat;*/
     margin: 10px;
+    background-image: url('../img/back/back2.jpg');
 }
 
 a {
     text-decoration: none;
+}
+
+li {
+    list-style-type: none;
 }
 
 .change_left_up, .change_right_up {
@@ -54,6 +58,10 @@ a {
     text-align: center;
     cursor: pointer;
     margin: 10px;
+}
+
+.swap_up {
+    text-align: right;
 }
 
 /*      swap block        */
@@ -103,6 +111,60 @@ a {
     margin: 100px auto 0 auto;
     padding: 20px;
 }
+
+/*  /////////////////// header      footer  ///////////////////        */
+header, menu, footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+header, footer {
+    background: white;
+    padding: 5px;
+}
+
+
+.head_logo a {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.head_logo h1 {
+    font-size: x-large;
+    color: black;
+}
+.head_logo a img{
+    height: auto;
+    width: auto;
+    max-width: 50px;
+    max-height: 50px;
+    margin: 5px;
+}
+
+
+footer {
+    margin-top: 20px;
+    background-color: rgb(36 46 62);
+    justify-content: space-evenly !important;
+}
+
+footer * {
+    color: white;
+    font-size: smaller;
+}
+
+footer *:hover {
+    color: rgb(208, 208, 208);
+}
+
+menu li {
+    margin: 0 20px;
+}
+
 
 
 

@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <br>
+    <h1>Политика безопасности</h1>
+    <br>
+    <div class="rules">
+        {{ rules.rules_security|safe }}
+    </div>
+    <script type="text/javascript">
+        const site_name = location.origin
+        document.body.innerHTML = document.body.innerHTML.replace(/domain_name/g, site_name)
+    </script>
+{% endblock %}

@@ -67,7 +67,7 @@ class Settings(models.Model):
     description = models.TextField('Description', help_text='descriptions на сайте', default='Самый крутой обменник')
     keywords = models.TextField('Keywords', help_text='keywords на сайте', default=' Меняем киви и не только')
     adminka = models.CharField('Админка', max_length=100, help_text='Адрес админки. Рекомендуется поменять',
-                               default='admin_changebox')
+                               default='admin')
     xml_address = models.CharField('Адрес для отдачи файла экспорт курсов', max_length=200, default='xml_export')
     reload_url = models.CharField('Технический адрес', max_length=50, default='update_12345')
     pause = models.BooleanField('Перерыв', default=False, help_text='Сайт не работает. На главной висит перерыв')
@@ -77,6 +77,8 @@ class Settings(models.Model):
     job_end = models.PositiveSmallIntegerField('Час окончания работы', default=24)
     off_money = models.BooleanField('Отключать монеты', default=True,
                                     help_text='Отключать монеты и валюты, котировки которых небылы найдены среди ЦБ или Binance')
+    logo = models.ImageField('Логотип', upload_to='static/image/', default='', blank=True)
+    exchane_name = models.CharField('Название на сайт', max_length=200, default='Exchange Money')
     rules_exchange = models.TextField('Правила обменника',
                                       default='<h1>Правила сервиса</h1><div class="rules"> Lorem ipsum dolor sit amet.</div>',
                                       help_text='Можно писать с html тэгами')
@@ -217,8 +219,8 @@ class FullMoney(models.Model):  # объединили монетки и пла�
     money = models.ForeignKey(Money, verbose_name='Код валюты', on_delete=models.CASCADE)
     reserv = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS, editable=False)
     reserv_str = models.CharField('Резерв', max_length=MAX_DIGITS, help_text='Доступный для обмена резерв',
-                                  default='0.0',
-                                  validators=[validate_string])
+                                  default='0.0', validators=[validate_string])
+    logo = models.ImageField('Логотип', upload_to='static/image/', default='', blank=True)
 
     def save(self, *args, **kwargs):
         self.reserv, self.reserv_str = copy_str_to_decimal(self.reserv_str)
@@ -303,7 +305,7 @@ class SwapMoney(models.Model):  # Основная таблица настрое
     # city = models.ForeignKey(City, on_delete=models.CASCADE, verbose_name='Город', null=True, blank=True,
     #                          help_text='Город для обмена. Актуально только для обмена с наличными деньгами', default='')
     time = models.DateTimeField('Время установки курса', auto_now=True)
-    best_place = models.PositiveSmallIntegerField('Место на Bestchange', default=1,
+    best_place = models.PositiveSmallIntegerField('BC', default=1,
                                                   help_text='Необходимое место на BestChange, если обмен не найден, '
                                                             'то место устанавливается в 0, а курс устанавливается с ЦБ или Binance.'
                                                             ' Если по ЦБ и Binance также не удалось установить, то используются '
@@ -311,7 +313,7 @@ class SwapMoney(models.Model):  # Основная таблица настрое
                                                             'последнее место на Bestchange, то можно поставить большое '
                                                             'число, к примеру 1000. Если курс устанавливается в зависимости от места на Bestchange, '
                                                             'то никакие дополнительные комиссии на него не действуют.')
-    city = models.ManyToManyField(City, blank=True, verbose_name='Города на обмена наличных',)
+    city = models.ManyToManyField(City, blank=True, verbose_name='Города на обмена наличных', )
     # SEO Setting
     seo_title = models.CharField('Title для данной страницы', max_length=255, blank=True)
     seo_descriptions = models.CharField('Descriptions для данной страницы', max_length=255, blank=True)
@@ -412,6 +414,9 @@ class AddFields(models.Model):
     # Модель для дополнительных полей, нужных для обмена. Необходимо две идентичных модели для левой и правой монеты
     title = models.CharField('Название', max_length=20, unique=True)
     pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return ''
 
     class Meta:
         abstract = True

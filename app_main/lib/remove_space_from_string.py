@@ -1,13 +1,5 @@
 def remove_space_from_string(check_string) -> str:
-    check_string = list(str(check_string))
-
-    while True:
-        if ' ' in check_string:
-            check_string.remove(' ')
-        else:
-            break
-
-    return ''.join(check_string)
+    return ''.join(check_string.split())
 
 
 if __name__ == '__main__':

@@ -15,15 +15,13 @@ def get_pause(model_settings) -> bool:
     job_start = model_settings.job_start
     job_end = model_settings.job_end
 
-    if job_start < job_end:
+    if job_start == job_end or (job_start == 0 and job_end == 24) or (job_start == 24 and job_end == 0):
+        return False
+    elif job_start < job_end:
         if now_hour < job_start or now_hour > job_end:
             return True
-
-    elif job_start > job_end:
+    else:  # job_start > job_end:
         if now_hour < job_start and now_hour >= job_end:
-            return True
-    else:
-        if job_start != now_hour:
             return True
 
     return False

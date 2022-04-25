@@ -1,10 +1,8 @@
 import xml.etree.ElementTree as xml
 
-from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.utils.datetime_safe import datetime
 from django.views import View
 from django.views.generic import CreateView
 
@@ -23,11 +21,20 @@ class StartView(View):
     def get(self, req):
         temp = Settings.objects.first()
 
+        job_start = temp.job_start
+        job_end = temp.job_end
+
+        if job_start == job_end or (job_start == 0 and job_end == 24) or (job_start == 24 and job_end == 00):
+            time_job = 'Круглосуточно'
+        else:
+            time_job = f' с {job_start}:00 по {job_end}:00 (МСК)'
+
         if get_pause(temp):
             return render(req, 'pause.html')
 
         context = {
-            'settings': temp
+            'settings': temp,
+            'time_job': time_job,
         }
 
         return render(req, 'index.html', context)
@@ -38,10 +45,28 @@ class LKView(View):
         return render(req, 'lk.html')
 
 
+class FAQView(View):
+    def get(self, request):
+        context = {'rules': Settings.objects.first()}
+        return render(request, 'faq.html', context)
+
+
+class FeedbackView(View):
+    def get(self, request):
+        context = {'rules': Settings.objects.first()}
+        return render(request, 'feedback.html', context)
+
+
 class RulesView(View):
     def get(self, request):
         context = {'rules': Settings.objects.first()}
         return render(request, 'rules.html', context)
+
+
+class SecurityView(View):
+    def get(self, request):
+        context = {'rules': Settings.objects.first()}
+        return render(request, 'security.html', context)
 
 
 class ConfirmView(View):
@@ -59,6 +84,9 @@ def ExportXML(request):
     for i in rates:
         # Минимумы и максимум для обмена надо высчитывать для левой монеты, поэтому правый мин и макс переводим в левую валюту
         # начальный курс обмена должен уже учитывать номинал, поэтому здесь в расчётах он не участвует
+
+        if (i.rate_right_final <= 0 or i.rate_left_final <= 0):
+            continue
 
         min_right_to_left = i.min_right / i.rate_right_final * i.rate_left_final
         minamount = max(i.min_left, min_right_to_left)
@@ -128,9 +156,10 @@ def ExportXML(request):
             param_element = xml.SubElement(item_element, 'param')
             param_element.text = param_str
 
-        if i.city != None:
+        city = ','.join([i.abc_code for i in i.city.all()])
+        if city:
             city_element = xml.SubElement(item_element, 'city')
-            city_element.text = i.city.abc_code
+            city_element.text = city
 
     return HttpResponse(xml.tostring(root_element, method='xml', encoding='utf8'), content_type='text/xml')
 
@@ -172,15 +201,15 @@ def ExportRates(request):
         # для подсчёта доступности обмена по резервам, надо минимальную сумму слева и справа привести к правой монете
         # и сравнить с имеющимися резервами
 
-        if active:
-            min_left = i.min_left
-            min_right = i.min_right
-            rate_left = i.rate_left_final
-            rate_right = i.rate_right_final
-            reserv = i.money_right.reserv
-            min_left_to_right = min_left * rate_right / rate_left
-
-            if max(min_left_to_right, min_right) > reserv: active = False
+        # if active:
+        #     min_left = i.min_left
+        #     min_right = i.min_right
+        #     rate_left = i.rate_left_final
+        #     rate_right = i.rate_right_final
+        #     reserv = i.money_right.reserv
+        #     min_left_to_right = min_left * rate_right / rate_left
+        #
+        #     if max(min_left_to_right, min_right) > reserv: active = False
 
         temp = {}
         temp['active'] = active
@@ -189,8 +218,8 @@ def ExportRates(request):
         temp['name_right'] = i.money_right.title
         temp['type_left'] = i.money_left.money.money_type
         temp['type_right'] = i.money_right.money.money_type
-        temp['img_left'] = ''
-        temp['img_right'] = ''
+        temp['img_left'] = str(i.money_left.logo)
+        temp['img_right'] = str(i.money_right.logo)
         temp['place'] = 1
 
         swap_to_export[left].append(temp)
@@ -276,9 +305,12 @@ def ExportDirect(request):
         'add_fee_right': money.add_fee_right,
         'reserv': reserv,
 
-        'city': money.city,
         'seo_title': money.seo_title,
         'seo_descriptions': money.seo_descriptions,
         'seo_keywords': money.seo_keywords,
     }
+    city = ','.join([i.abc_code for i in money.city.all()])
+    if city:
+        direct['city'] = city
+
     return JsonResponse(direct)

@@ -1,13 +1,13 @@
 "use strict"
 
-const url_domain = 'http://127.0.0.1:8000/'
+const url_domain = location.origin + '/'
 const url_api = 'api/v1/'
 const url_rates = 'rates/'
 const url_direct = 'direct/'
 let rates
 let left_money_select = {}
 let right_money_select = {}
-const TIME_REFRESH_IN_MSEC = 3000
+const TIME_REFRESH_IN_MSEC = 5000
 
 function SetSelectFirstMoney() {
     // разовое начальное выделение монеткы слева. В дальнейшем выделение есть всегда и эта функция более не используется
@@ -95,8 +95,10 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     let div_money_img = document.createElement('div')
     div_money_img.className = 'money_change_img'
     let money_img = document.createElement('img')
-    money_img.setAttribute('height', '30')
-    money_img.setAttribute('width', '30')
+    money_img.setAttribute('height', 'auto')
+    money_img.setAttribute('width', 'auto')
+    money_img.setAttribute('max-height', '50px')
+    money_img.setAttribute('max-width', '50px')
     // money_img.setAttribute('alt', money_name)
     money_img.setAttribute('src', img_path)
     div_money_img.append(money_img)
@@ -154,7 +156,7 @@ async function CreateRightMoney() {
     }
 
     for (let money of rates[GetLeftSelectedMoney().id]) {
-        const elem = CreateMoney(document.querySelector('.change_right_dn'), money['name_right'], money['right'], money['type_right'], '/static/img/c-qiwi.svg')
+        const elem = CreateMoney(document.querySelector('.change_right_dn'), money['name_right'], money['right'], money['type_right'], money['img_right'])
         if (!money['active']) {
             elem.classList.add('disabled')
         }
@@ -224,7 +226,7 @@ async function MainLoop() {
     for (let money in rates) {
         // если текущей монеты нет в массиве rates_money_nameзначит добавлять её не надо
         if (rates_money_name.indexOf(money) < 0) continue
-        const elem = CreateMoney(document.querySelector('.change_left_dn'), rates[money][0]['name_left'], money, rates[money][0]['type_left'], '/static/img/c-qiwi.svg')
+        const elem = CreateMoney(document.querySelector('.change_left_dn'), rates[money][0]['name_left'], money, rates[money][0]['type_left'], rates[money][0]['img_left'])
         elem.addEventListener('click', SetItemSelect)
         elem.addEventListener('click', CreateRightMoney)
     }
@@ -251,7 +253,7 @@ function CreateSwapBlock(direct) {
         let add_field = document.createElement('input')
         add_field.className = 'form-control'
         add_field.setAttribute('type', 'text')
-        add_field.setAttribute('required', '')
+        // add_field.setAttribute('required', '')
         add_field.setAttribute('placeholder', i)
         document.querySelector('#left_fields').append(add_field)
     }
@@ -260,7 +262,7 @@ function CreateSwapBlock(direct) {
         let add_field = document.createElement('input')
         add_field.className = 'form-control'
         add_field.setAttribute('type', 'text')
-        add_field.setAttribute('required', '')
+        // add_field.setAttribute('required', '')
         add_field.setAttribute('placeholder', i)
         document.querySelector('#right_fields').append(add_field)
     }

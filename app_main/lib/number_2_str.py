@@ -10,7 +10,7 @@ def number_2_str(number_for_slice, comma: str = '.') -> str:
     number_for_slice = str(number_for_slice)
 
     if comma in number_for_slice:
-        int_part, fract_part, = number_for_slice.split(comma)
+        int_part, fract_part = number_for_slice.split(comma)
     else:
         int_part = number_for_slice
         fract_part = ''
@@ -44,5 +44,5 @@ def number_2_str(number_for_slice, comma: str = '.') -> str:
 
 
 if __name__ == '__main__':
-    temp = '12345678.1234567890123'
+    temp = '12345678.002000000000000000'
     print(number_2_str(temp))

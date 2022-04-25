@@ -2,5 +2,10 @@
 {% load static %}
 
 {% block content %}
-    {{ rules.rules_exchange|safe }}
+    <br>
+    <h1>Правила сайта</h1>
+    <br>
+    <div class="rules">
+        {{ rules.rules_exchange|safe }}
+    </div>
 {% endblock %}
