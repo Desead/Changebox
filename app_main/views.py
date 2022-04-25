@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as xml
+from decimal import Decimal
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -8,7 +9,7 @@ from django.views.generic import CreateView
 
 from app_main.forms import CustomUserCreationForm
 from app_main.lib.get_pause import get_pause
-from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings
+from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel
 
 
 class SignUpView(CreateView):
@@ -30,7 +31,7 @@ class StartView(View):
             time_job = f' с {job_start}:00 по {job_end}:00 (МСК)'
 
         if get_pause(temp):
-            return render(req, 'pause.html')
+            return render(req, 'pause.html', {'settings': temp})
 
         context = {
             'settings': temp,
@@ -42,44 +43,56 @@ class StartView(View):
 
 class LKView(View):
     def get(self, req):
-        return render(req, 'lk.html')
+        context = {'settings': Settings.objects.first()}
+        return render(req, 'lk.html', context)
 
 
 class FAQView(View):
     def get(self, request):
-        context = {'rules': Settings.objects.first()}
+        context = {'settings': Settings.objects.first()}
         return render(request, 'faq.html', context)
 
 
 class FeedbackView(View):
     def get(self, request):
-        context = {'rules': Settings.objects.first()}
+        context = {'settings': Settings.objects.first()}
         return render(request, 'feedback.html', context)
 
 
 class RulesView(View):
     def get(self, request):
-        context = {'rules': Settings.objects.first()}
+        context = {'settings': Settings.objects.first()}
         return render(request, 'rules.html', context)
 
 
 class SecurityView(View):
     def get(self, request):
-        context = {'rules': Settings.objects.first()}
+        context = {'settings': Settings.objects.first()}
         return render(request, 'security.html', context)
 
 
 class ConfirmView(View):
     def post(self, request):
-        context = {}
+        context = {'settings': Settings.objects.first()}
+        swap = SwapMoney.objects.filter(money_left__xml_code=request.POST.get('money_left'),
+                                        money_right__xml_code=request.POST.get('money_right'))
+        if swap.count() != 1:
+            InfoPanel.objects.create(description='Попытка обмена завершилась ошибкой')
+            return render(request, 'error.html', context)
+
+        context['swap'] = swap[0]
         return render(request, 'confirm.html', context)
 
 
 def ExportXML(request):
-    rates = SwapMoney.objects.filter(active=True, money_left__money__active=True, money_left__active=True,
-                                     money_right__active=True, money_right__money__active=True)
     # добавить ограничения по монетам и резервам
     root_element = xml.Element('rates')
+
+    if get_pause(Settings.objects.first()):
+        return HttpResponse(xml.tostring(root_element, method='xml', encoding='utf8'), content_type='text/xml')
+
+    rates = SwapMoney.objects.filter(active=True, money_left__money__active=True, money_left__active=True,
+                                     money_right__active=True, money_right__money__active=True)
 
     for i in rates:
         # Минимумы и максимум для обмена надо высчитывать для левой монеты, поэтому правый мин и макс переводим в левую валюту
@@ -201,15 +214,17 @@ def ExportRates(request):
         # для подсчёта доступности обмена по резервам, надо минимальную сумму слева и справа привести к правой монете
         # и сравнить с имеющимися резервами
 
-        # if active:
-        #     min_left = i.min_left
-        #     min_right = i.min_right
-        #     rate_left = i.rate_left_final
-        #     rate_right = i.rate_right_final
-        #     reserv = i.money_right.reserv
-        #     min_left_to_right = min_left * rate_right / rate_left
-        #
-        #     if max(min_left_to_right, min_right) > reserv: active = False
+        if active:
+            min_left = i.min_left
+            min_right = i.min_right
+            rate_left = i.rate_left_final
+            rate_right = i.rate_right_final
+            reserv = i.money_right.reserv
+            if rate_left <= 0:
+                active = False
+            else:
+                min_left_to_right = min_left * rate_right / rate_left
+                if max(min_left_to_right, min_right) > reserv: active = False
 
         temp = {}
         temp['active'] = active
@@ -228,6 +243,9 @@ def ExportRates(request):
 
 
 def ExportDirect(request):
+    if get_pause(Settings.objects.first()):
+        return JsonResponse({'error': 'pause'})
+
     cur_from = request.GET.get('cur_from')
     cur_to = request.GET.get('cur_to')
     city = request.GET.get('city')
@@ -267,28 +285,28 @@ def ExportDirect(request):
     max_left = money.max_left
     if money.rate_right_final > 0:
         max_left = min(money.max_right, reserv) / money.rate_right_final * money.rate_left_final
-        max_left = min(money.max_left, max_left)
+        max_left = max(money.max_left, max_left) if 0 in [money.max_left,max_left] else min(money.max_left, max_left)
 
     max_right = money.max_right
     if money.rate_left_final > 0:
         max_right = money.max_left / money.rate_left_final * money.rate_right_final
-        max_right = min(money.max_right, max_right)
+        max_right = max(money.max_right, max_right) if 0 in [money.max_right, max_right] else min(money.max_right, max_right)
 
     if money.money_left.money.money_type == 'fiat':
-        min_left = round(min_left, 2)
-        max_left = round(max_left, 2)
+        min_left = 0 if min_left == 0 else min_left.quantize(Decimal('0.01'))
+        max_left = 0 if max_left == 0 else max_left.quantize(Decimal('0.01'))
     else:
-        min_left = round(min_left, 8)
-        max_left = round(max_left, 8)
+        min_left = 0 if min_left == 0 else min_left.quantize(Decimal('0.00000001'))
+        max_left = 0 if max_left == 0 else max_left.quantize(Decimal('0.00000001'))
 
     if money.money_right.money.money_type == 'fiat':
-        min_right = round(min_right, 2)
-        max_right = round(max_right, 2)
-        reserv = round(reserv, 2)
+        min_right = 0 if min_right == 0 else min_right.quantize(Decimal('0.01'))
+        max_right = 0 if max_right == 0 else max_right.quantize(Decimal('0.01'))
+        reserv = 0 if reserv == 0 else reserv.quantize(Decimal('0.01'))
     else:
-        min_right = round(min_right, 8)
-        max_right = round(max_right, 8)
-        reserv = round(reserv, 8)
+        min_right = 0 if min_right == 0 else min_right.quantize(Decimal('0.00000001'))
+        max_right = 0 if max_right == 0 else max_right.quantize(Decimal('0.00000001'))
+        reserv = 0 if reserv == 0 else reserv.quantize(Decimal('0.00000001'))
 
     direct = {
         'money_left': money.money_left.id,
@@ -301,8 +319,8 @@ def ExportDirect(request):
         'max_right': max_right,
         'rate_left_final': money.rate_left_final,
         'rate_right_final': money.rate_right_final,
-        'add_fee_left': money.add_fee_left,
-        'add_fee_right': money.add_fee_right,
+        'add_fee_left': 0 if money.add_fee_left == 0 else money.add_fee_left.quantize(Decimal('0.00000001')),
+        'add_fee_right': 0 if money.add_fee_right == 0 else money.add_fee_right.quantize(Decimal('0.00000001')),
         'reserv': reserv,
 
         'seo_title': money.seo_title,

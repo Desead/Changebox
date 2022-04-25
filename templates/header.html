@@ -1,17 +1,16 @@
-
 {% load static %}
+
 <header class="shadow-money rounded">
     <div class="head_logo">
         <a href="/">
-            <img src="{{ settings.logo }}" alt="logo">
-            <h1>{{ settings.exchane_name}}</h1>
+            <img src="{{ settings.logo.url }}" alt="logo">
+            <h1>{{ settings.exchane_name }}</h1>
         </a>
 
     </div>
     <menu>
         {#        <li><a href="{% url 'view_faq' %}">Вопросы</a></li>#}
-        <li><a href="{% url 'view_feedback' %}">Отзывы</a></li>
+        {#        <li><a href="{% url 'view_feedback' %}">Отзывы</a></li>#}
         <li><a href="{% url 'view_rules' %}">Правила</a></li>
     </menu>
-    {{ block.super }}
 </header>

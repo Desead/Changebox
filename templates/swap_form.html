@@ -1,5 +1,5 @@
 <template id="template_change">
-    <form action="{% url 'view_confirm' %}" class="row" method="post">
+    <form action="{% url 'view_confirm' %}" class="row" method="post" id="form_confirm">
         {% csrf_token %}
         <div class="col">
             <div id="swap_left"></div>
@@ -10,8 +10,9 @@
 
             {#обернули в див чтобы можно было добавить доп.поле при его наличии#}
             <div id="left_fields">
-                <input type="number" id="left_sum" min="0" step="0.01" class="form-control" placeholder="Сумма"
-                       >
+                <input type="number" name="left_sum" id="left_sum" min="0" step="0.01" class="form-control"
+                       placeholder="Сумма"
+                >
             </div>
 
             <hr>
@@ -23,17 +24,20 @@
             <p id="swap_right_reserv"></p>
 
             <div id="right_fields">
-                <input type="number" id="right_sum" min="0" step="0.01" class="form-control" placeholder="Сумма"
-                       >
+                <input type="number" name="right_sum" id="right_sum" min="0" step="0.01" class="form-control"
+                       placeholder="Сумма"
+                >
             </div>
 
             <hr>
-            <input type="tel" min="0" class="form-control" placeholder="Ваш номер">
-            <input type="email" class="form-control" placeholder="Электронная почта">
+            <input type="tel" min="0" class="form-control" name="phone" placeholder="Ваш номер телефона">
+            <input type="email" class="form-control" name="email" placeholder="Электронная почта">
             <hr>
             <p style="font-size: small; text-align: center;">Нажимая кнопку
                 <a href="/rules/" target="_blank"><strong>Оплатить</strong></a>
                 я соглашаюсь с правилами работы сервиса</p>
+            <input type="text" id="money_left" name="money_left" value="" hidden>
+            <input type="text" id="money_right" name="money_right" value="" hidden>
             <div class="pay_btn">
                 <button class="btn btn-primary" type="submit">Оплатить</button>
             </div>

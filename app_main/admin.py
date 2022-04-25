@@ -147,15 +147,15 @@ class SettingsAdmin(admin.ModelAdmin):
             from app_main.lib.bestchange import get_rates_from_bestchange
             get_rates_from_bestchange(SwapMoney.objects.all(), {}, {}, True)
         elif request.POST.get('cbr_rates'):
-            from app_main.lib.start.cbr import get_cbr_data
-            from app_main.lib.start.cbr import convert_cbr_data_to_dict
-            from app_main.lib.start.cbr import set_cbr_rates
+            from app_main.lib.cbr import get_cbr_data
+            from app_main.lib.cbr import convert_cbr_data_to_dict
+            from app_main.lib.cbr import set_cbr_rates
             cbr = get_cbr_data()
             cbr = convert_cbr_data_to_dict(cbr[1])
             set_cbr_rates(Money.objects.filter(money_type='fiat'), cbr)
         elif request.POST.get('binance_rates'):
-            from app_main.lib.start.binance import get_binance_data
-            from app_main.lib.start.binance import set_binance_rate
+            from app_main.lib.binance import get_binance_data
+            from app_main.lib.binance import set_binance_rate
             binance = get_binance_data()
             set_binance_rate(Money.objects.filter(money_type='crypto'), binance[1])
         return HttpResponseRedirect("../")

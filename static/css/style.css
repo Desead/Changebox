@@ -5,7 +5,6 @@ body {
     background: -o-linear-gradient(left, var(--gradient-back-1), var(--gradient-back-2));
     background: linear-gradient(to right, var(--gradient-back-1), var(--gradient-back-2));
     margin: 10px;
-    background-image: url('../img/back/back2.jpg');
 }
 
 a {
@@ -122,7 +121,7 @@ header, menu, footer {
 }
 
 header, footer {
-    background: white;
+    background: var(--select-item-color);
     padding: 5px;
 }
 
@@ -137,7 +136,8 @@ header, footer {
     font-size: x-large;
     color: black;
 }
-.head_logo a img{
+
+.head_logo a img {
     height: auto;
     width: auto;
     max-width: 50px;
@@ -166,6 +166,52 @@ menu li {
 }
 
 
+/*  /////////////////// confirm  ///////////////////        */
+
+.confirm {
+    background: var(--select-item-color);
+    margin-top: 20px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+}
+.confirm_data{
+    display: flex;
+    flex-direction: column;
+
+}
+.confirm_warning{
+    background-color: red;
+}
+.confirm_money {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.confirm_left, .confirm_right {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 10px;
+}
+.cl_money, .cr_money{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+}
+#confirm_check{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+#confirm_check button{
+    max-width: 150px;
+}
 
 
 

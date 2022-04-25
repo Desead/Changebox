@@ -2,5 +2,48 @@
 {% load static %}
 
 {% block content %}
-    <p>Подтверждение транзакции</p>
+    <div class="confirm shadow-money rounded">
+        <div class="confirm_data">
+            <div class="confirm_warning">
+            </div>
+            <p>Номер транзакции: </p>
+            <hr>
+            <div class="confirm_money">
+                <div class="confirm_left">
+                    <div class="cl_money">
+                        <img src="{{ swap.money_left.logo.url }}">
+                        <p>money name</p>
+                    </div>
+                    <p>старая сумма</p>
+                    <p>новая сумма</p>
+                </div>
+                <div class="confirm_right">
+                    <div class="cr_money">
+                        <img src="{{ swap.money_right.logo.url }}">
+                        <p>money name</p>
+                    </div>
+                    <p>старая сумма</p>
+                    <p>новая сумма</p>
+                </div>
+            </div>
+            <div class="confirm_rules">
+                <hr>
+                <p>Необходимые выдержки из правил</p>
+            </div>
+            <div class="confirm_buttons">
+                <form action="" class="row" method="post" id="confirm_check">
+                    {% csrf_token %}
+                    <button class="btn btn-danger" type="submit" name="cancel">Отменить</button>
+                    <button class="btn btn-primary" type="submit" name="pay">Оплатить</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
+
+
+{#<template id="template_change">#}
+{#    <form action="{% url 'view_confirm' %}" class="row" method="post" id="form_confirm">#}
+{#        {% csrf_token %}#}
+{#    </form>#}
+{#</template>#}

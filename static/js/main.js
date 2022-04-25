@@ -277,11 +277,15 @@ function CreateSwapBlock(direct) {
 
     //изменяем атрибуты точности у полей сумма
     if (left_money_select['type'] === 'crypto')
-        document.querySelector('#left_sum').setAttribute('step', '0.000000011')
+        document.querySelector('#left_sum').setAttribute('step', '0.00000001')
     if (right_money_select['type'] === 'crypto')
         document.querySelector('#right_sum').setAttribute('step', '0.00000001')
 
     SEOSet(direct['seo_title'], direct['seo_descriptions'], direct['seo_keywords'])
+
+
+    document.querySelector('#money_left').value = left_money_select['id']
+    document.querySelector('#money_right').value = right_money_select['id']
 }
 
 function SEOSet(title, descriptions, keywords) {
@@ -311,9 +315,6 @@ function SumToSum() {
         left.value = temp
     }
 
-    // let temp = left.value
-    console.log(this, left, right)
-    console.log(left_money_select, right_money_select)
 }
 
 //      swap            //////////////////////////////////////////////////
