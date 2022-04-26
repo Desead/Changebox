@@ -391,17 +391,44 @@ class SwapMoney(models.Model):  # Основная таблица настрое
         unique_together = ['money_left', 'money_right']
 
 
-class SwapOrders(models.Model):
-    swapmoney = models.ForeignKey(SwapMoney, on_delete=models.CASCADE, verbose_name='Направление обмена')
-    value_from = models.CharField('Сумма слева', max_length=50)
-    value_to = models.CharField('Сумма справа', max_length=50)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь', null=True,
-                             blank=True)
-    pl = models.FloatField('Прибыль со сделки', default=0,
-                           help_text='Прибыль рассчитывается в USD по курсу на момент сделки')
+class Wallets(models.Model):
+    fullmoney = models.ForeignKey(FullMoney, on_delete=models.CASCADE, verbose_name='Кошелёк')
+    name = models.CharField('Номер кошелька', max_length=100)
 
     def __str__(self):
-        return str(self.swapmoney)
+        return self.fullmoney.title + ': ' + self.name
+
+    class Meta:
+        verbose_name = 'Кошелёк'
+        verbose_name_plural = 'Кошелёк'
+
+
+class SwapOrders(models.Model):
+    ORDERS_STATUS = (
+        ('new', 'Новая'),
+        ('cancel', 'Отмена'),
+    )
+    status = models.CharField('Статус сделки', max_length=100, choices=ORDERS_STATUS, default='new')
+    swap_create = models.DateTimeField('Время сделки', auto_now=True)
+    money_left = models.ForeignKey(FullMoney, verbose_name='Монета слева', on_delete=models.CASCADE,
+                                   related_name='swap_orders_left')
+    money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
+                                    related_name='swap_orders_right')
+    left_in = models.CharField('Денег пришло', max_length=50)
+    rate_out = models.CharField('Денег ушло', max_length=50)
+    pl = models.FloatField('Прибыль со сделки', default=0,
+                           help_text='Прибыль рассчитывается в USD по курсу на момент сделки')
+    wallet_in = models.ForeignKey(Wallets, on_delete=models.CASCADE, verbose_name='Кошелёк обменника', blank=True,
+                                  null=True, related_name='wallet_in')
+    wallet_out = models.ForeignKey(Wallets, on_delete=models.CASCADE, verbose_name='Кошелёк клиента', blank=True,
+                                   null=True, related_name='wallet_out')
+    phone = models.CharField('Телефон', max_length=20, default='', blank=True)
+    email = models.EmailField('Почта', default='', blank=True)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь', null=True,
+                             blank=True)
+
+    def __str__(self):
+        return str(self.money_left.title) + ' -> ' + str(self.money_right.title)
 
     class Meta:
         verbose_name = 'Обмен: Заявки'

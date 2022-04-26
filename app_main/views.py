@@ -9,7 +9,7 @@ from django.views.generic import CreateView
 
 from app_main.forms import CustomUserCreationForm
 from app_main.lib.get_pause import get_pause
-from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel
+from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel, SwapOrders, FullMoney
 
 
 class SignUpView(CreateView):
@@ -19,7 +19,7 @@ class SignUpView(CreateView):
 
 
 class StartView(View):
-    def get(self, req):
+    def get(self, request):
         temp = Settings.objects.first()
 
         job_start = temp.job_start
@@ -31,20 +31,20 @@ class StartView(View):
             time_job = f' с {job_start}:00 по {job_end}:00 (МСК)'
 
         if get_pause(temp):
-            return render(req, 'pause.html', {'settings': temp})
+            return render(request, 'pause.html', {'settings': temp})
 
         context = {
             'settings': temp,
             'time_job': time_job,
         }
 
-        return render(req, 'index.html', context)
+        return render(request, 'index.html', context)
 
 
 class LKView(View):
-    def get(self, req):
+    def get(self, request):
         context = {'settings': Settings.objects.first()}
-        return render(req, 'lk.html', context)
+        return render(request, 'lk.html', context)
 
 
 class FAQView(View):
@@ -74,13 +74,25 @@ class SecurityView(View):
 class ConfirmView(View):
     def post(self, request):
         context = {'settings': Settings.objects.first()}
+        fullmoney = FullMoney.objects.all()
         swap = SwapMoney.objects.filter(money_left__xml_code=request.POST.get('money_left'),
                                         money_right__xml_code=request.POST.get('money_right'))
         if swap.count() != 1:
-            InfoPanel.objects.create(description='Попытка обмена завершилась ошибкой')
+            InfoPanel.objects.create(
+                description='Попытка обмена завершилась ошибкой. ' + str(request.POST.get('money_left')) + ' to ' + str(
+                    request.POST.get('money_right')))
             return render(request, 'error.html', context)
 
-        context['swap'] = swap[0]
+        order = SwapOrders.objects.create(
+            money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
+            money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
+            left_in=request.POST.get('left_sum'),
+            rate_out=request.POST.get('right_sum'),
+            phone=request.POST.get('phone'),
+            email=request.POST.get('email'),
+        )
+
+        context['swap'] = order
         return render(request, 'confirm.html', context)
 
 

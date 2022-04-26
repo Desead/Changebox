@@ -166,8 +166,8 @@ class SwapMoneyAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Основные настройки обмена',
          {'fields': (
-             'active', 'freeze',('money_left', 'money_right'), ('min_left_str', 'min_right_str',),
-             ('max_left_str', 'max_right_str',), )}),
+             'active', 'freeze', ('money_left', 'money_right'), ('min_left_str', 'min_right_str',),
+             ('max_left_str', 'max_right_str',),)}),
         ('Настройка курсов обмена',
          {'fields': ('best_place', ('manual_rate_left_str', 'manual_rate_right_str', 'manual_active',),
                      ('rate_left_str', 'rate_right_str',),
@@ -249,6 +249,11 @@ class PaySystemAdmin(admin.ModelAdmin):
 
 @admin.register(SwapOrders)
 class SwapOrdersAdmin(admin.ModelAdmin):
+    actions = [all_on, all_off]
+
+
+@admin.register(Wallets)
+class WalletsAdmin(admin.ModelAdmin):
     actions = [all_on, all_off]
 
 
