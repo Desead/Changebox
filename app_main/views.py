@@ -9,7 +9,6 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 
-from Changebox import settings
 from app_main.forms import CustomUserCreationForm
 from app_main.lib.get_pause import get_pause
 from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel, SwapOrders, FullMoney, CustomUser
@@ -46,7 +45,7 @@ class StartView(View):
 
 class LKView(View):
     def get(self, request):
-        context = {'settings': Settings.objects.first()}
+        context = {'settings': Settings.objects.first(), 'user': CustomUser.objects.get(email=request.user)}
         return render(request, 'lk.html', context)
 
 
