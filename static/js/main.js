@@ -238,11 +238,11 @@ function CreateSwapBlock(direct) {
     const template_block = document.querySelector('#template_change')
     main_block.append(template_block.content.cloneNode(true))
 
-    document.querySelector('#swap_left').innerHTML = 'Отдаёте: ' + left_money_select['title']
+    document.querySelector('#swap_left').innerHTML = 'Отдаёте: <b>' + left_money_select['title'] + '</b>'
     document.querySelector('#swap_left_min').innerHTML = 'мин: ' + direct['min_left']
     document.querySelector('#swap_left_max').innerHTML = 'макс: ' + direct['max_left']
 
-    document.querySelector('#swap_right').innerHTML = 'Получаете: ' + right_money_select['title']
+    document.querySelector('#swap_right').innerHTML = 'Получаете: <b>' + right_money_select['title'] + '</b>'
     document.querySelector('#swap_right_min').innerHTML = 'мин: ' + direct['min_right']
     document.querySelector('#swap_right_max').innerHTML = 'макс: ' + direct['max_right']
     document.querySelector('#swap_right_reserv').innerHTML = 'резерв: ' + direct['reserv']
@@ -302,19 +302,20 @@ function SumToSum() {
     const left = document.querySelector('#left_sum')
     const right = document.querySelector('#right_sum')
 
-    if (left === this) {
-        let temp = left.value * right_money_select['rate'] / left_money_select['rate']
-        if (left_money_select['type'] === 'fiat') temp = +temp.toFixed(2)
-        else temp = +temp.toFixed(8)
-        right.value = temp
-    }
-    if (right === this) {
-        let temp = right.value * left_money_select['rate'] / right_money_select['rate']
-        if (right_money_select['type'] === 'fiat') temp = +temp.toFixed(2)
-        else temp = +temp.toFixed(8)
-        left.value = temp
-    }
+    let left_num = left.value
+    let right_num = right.value
 
+    if (left === this)
+        right_num = left_num * right_money_select['rate'] / left_money_select['rate']
+
+    if (right === this)
+        left_num = right_num * left_money_select['rate'] / right_money_select['rate']
+
+
+    if (left_money_select['type'] === 'fiat') left.value = (+left_num).toFixed(2)
+    else left.value = (+left_num).toFixed(8)
+    if (right_money_select['type'] === 'fiat') right.value = (+right_num).toFixed(2)
+    else right.value = (+right_num).toFixed(8)
 }
 
 //      swap            //////////////////////////////////////////////////

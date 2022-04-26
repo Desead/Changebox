@@ -344,13 +344,26 @@ class SwapMoney(models.Model):  # Основная таблица настрое
                                help_text='Проведение обмена может быть задержано')
 
     def save(self, *args, **kwargs):
+        def round_string(mmstr, rnd_num):
+            mmstr = mmstr.replace(',', '.').split('.')
+            if len(mmstr) > 1:
+                mmstr[1] = mmstr[1][:rnd_num]
+            return '.'.join(mmstr)
+
         set_seo(self)
         # set_change_rate(self)
 
-        self.min_left, self.min_left_str = copy_str_to_decimal(self.min_left_str)
-        self.max_left, self.max_left_str = copy_str_to_decimal(self.max_left_str)
-        self.min_right, self.min_right_str = copy_str_to_decimal(self.min_right_str)
-        self.max_right, self.max_right_str = copy_str_to_decimal(self.max_right_str)
+        rnd_left = 2
+        rnd_right = 2
+        if self.money_left.money.money_type == 'crypto':
+            rnd_left = 8
+        if self.money_right.money.money_type == 'crypto':
+            rnd_right = 8
+
+        self.min_left, self.min_left_str = copy_str_to_decimal(round_string(self.min_left_str, rnd_left))
+        self.max_left, self.max_left_str = copy_str_to_decimal(round_string(self.max_left_str, rnd_left))
+        self.min_right, self.min_right_str = copy_str_to_decimal(round_string(self.min_right_str, rnd_right))
+        self.max_right, self.max_right_str = copy_str_to_decimal(round_string(self.max_right_str, rnd_right))
 
         self.rate_left, self.rate_left_str = copy_str_to_decimal(self.rate_left_str)
         self.rate_right, self.rate_right_str = copy_str_to_decimal(self.rate_right_str)

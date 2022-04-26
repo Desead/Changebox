@@ -285,12 +285,13 @@ def ExportDirect(request):
     max_left = money.max_left
     if money.rate_right_final > 0:
         max_left = min(money.max_right, reserv) / money.rate_right_final * money.rate_left_final
-        max_left = max(money.max_left, max_left) if 0 in [money.max_left,max_left] else min(money.max_left, max_left)
+        max_left = max(money.max_left, max_left) if 0 in [money.max_left, max_left] else min(money.max_left, max_left)
 
     max_right = money.max_right
     if money.rate_left_final > 0:
         max_right = money.max_left / money.rate_left_final * money.rate_right_final
-        max_right = max(money.max_right, max_right) if 0 in [money.max_right, max_right] else min(money.max_right, max_right)
+        max_right = max(money.max_right, max_right) if 0 in [money.max_right, max_right] else min(money.max_right,
+                                                                                                  max_right)
 
     if money.money_left.money.money_type == 'fiat':
         min_left = 0 if min_left == 0 else min_left.quantize(Decimal('0.01'))
@@ -308,15 +309,28 @@ def ExportDirect(request):
         max_right = 0 if max_right == 0 else max_right.quantize(Decimal('0.00000001'))
         reserv = 0 if reserv == 0 else reserv.quantize(Decimal('0.00000001'))
 
+    def del_last_zero(num) -> str:  # Удаляем последние незначащие нули
+        num = list(str(num))
+        if '.' in num:
+            while True:
+                n = len(num) - 1
+                if n <= 0:
+                    break
+                if num[n] == '0':
+                    num.pop(n)
+                else:
+                    break
+        return ''.join(num)
+
     direct = {
         'money_left': money.money_left.id,
         'money_right': money.money_right.id,
         'add_left': left,
         'add_right': right,
-        'min_left': min_left,
-        'max_left': max_left,
-        'min_right': min_right,
-        'max_right': max_right,
+        'min_left': del_last_zero(min_left),
+        'max_left': del_last_zero(max_left),
+        'min_right': del_last_zero(min_right),
+        'max_right': del_last_zero(max_right),
         'rate_left_final': money.rate_left_final,
         'rate_right_final': money.rate_right_final,
         'add_fee_left': 0 if money.add_fee_left == 0 else money.add_fee_left.quantize(Decimal('0.00000001')),
