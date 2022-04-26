@@ -1,5 +1,7 @@
+import random
 import xml.etree.ElementTree as xml
 from decimal import Decimal
+from string import ascii_letters
 
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
@@ -7,9 +9,10 @@ from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import CreateView
 
+from Changebox import settings
 from app_main.forms import CustomUserCreationForm
 from app_main.lib.get_pause import get_pause
-from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel, SwapOrders, FullMoney
+from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel, SwapOrders, FullMoney, CustomUser
 
 
 class SignUpView(CreateView):
@@ -74,25 +77,39 @@ class SecurityView(View):
 class ConfirmView(View):
     def post(self, request):
         context = {'settings': Settings.objects.first()}
+        if request.POST.get('cancel'):
+            return render(request, 'cancel_swap.html', context)
+
         fullmoney = FullMoney.objects.all()
-        swap = SwapMoney.objects.filter(money_left__xml_code=request.POST.get('money_left'),
-                                        money_right__xml_code=request.POST.get('money_right'))
-        if swap.count() != 1:
-            InfoPanel.objects.create(
-                description='Попытка обмена завершилась ошибкой. ' + str(request.POST.get('money_left')) + ' to ' + str(
-                    request.POST.get('money_right')))
-            return render(request, 'error.html', context)
 
-        order = SwapOrders.objects.create(
-            money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
-            money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
-            left_in=request.POST.get('left_sum'),
-            rate_out=request.POST.get('right_sum'),
-            phone=request.POST.get('phone'),
-            email=request.POST.get('email'),
-        )
+        while True:
+            num = ''.join([random.choice(ascii_letters) for i in range(15)])
+            if SwapOrders.objects.filter(num=num).count() == 0:
+                break
 
-        context['swap'] = order
+        if request.user.is_anonymous:
+            order = SwapOrders.objects.create(
+                money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
+                money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
+                left_in=request.POST.get('left_sum'),
+                right_out=request.POST.get('right_sum'),
+                phone=request.POST.get('phone'),
+                email=request.POST.get('email'),
+                num=num,
+            )
+        else:
+            order = SwapOrders.objects.create(
+                money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
+                money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
+                left_in=request.POST.get('left_sum'),
+                right_out=request.POST.get('right_sum'),
+                phone=request.POST.get('phone'),
+                email=request.POST.get('email'),
+                num=num,
+                user=CustomUser.objects.get(email=request.user),
+            )
+
+        context['order'] = order
         return render(request, 'confirm.html', context)
 
 

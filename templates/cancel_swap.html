@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="confirm shadow-money rounded">
+        <div class="confirm_data">
+            <p>Сделка № ххххх отменена</p>
+            <div class="lk-btn" style="justify-content: space-evenly">
+                <p><a href="{% url 'home' %}">На главную</a></p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

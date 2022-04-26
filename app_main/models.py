@@ -1,3 +1,4 @@
+import uuid
 from decimal import Decimal
 
 from django.contrib.auth.models import AbstractUser
@@ -409,13 +410,14 @@ class SwapOrders(models.Model):
         ('cancel', 'Отмена'),
     )
     status = models.CharField('Статус сделки', max_length=100, choices=ORDERS_STATUS, default='new')
-    swap_create = models.DateTimeField('Время сделки', auto_now=True)
+    num = models.CharField('Номер сделки', max_length=15)
+    swap_create = models.DateTimeField('Время сделки', auto_now=True,editable=False)
     money_left = models.ForeignKey(FullMoney, verbose_name='Монета слева', on_delete=models.CASCADE,
                                    related_name='swap_orders_left')
     money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
                                     related_name='swap_orders_right')
     left_in = models.CharField('Денег пришло', max_length=50)
-    rate_out = models.CharField('Денег ушло', max_length=50)
+    right_out = models.CharField('Денег ушло', max_length=50)
     pl = models.FloatField('Прибыль со сделки', default=0,
                            help_text='Прибыль рассчитывается в USD по курсу на момент сделки')
     wallet_in = models.ForeignKey(Wallets, on_delete=models.CASCADE, verbose_name='Кошелёк обменника', blank=True,
@@ -426,6 +428,7 @@ class SwapOrders(models.Model):
     email = models.EmailField('Почта', default='', blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь', null=True,
                              blank=True)
+    comment = models.TextField('Комментарий', blank=True, help_text='Любой необходимый для себя комментарий')
 
     def __str__(self):
         return str(self.money_left.title) + ' -> ' + str(self.money_right.title)
