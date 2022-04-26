@@ -35,9 +35,15 @@ class StartView(View):
         if get_pause(temp):
             return render(request, 'pause.html', {'settings': temp})
 
+        while True:
+            num = ''.join([random.choice(ascii_letters) for i in range(15)])
+            if SwapOrders.objects.filter(num=num).count() == 0:
+                break
+
         context = {
             'settings': temp,
             'time_job': time_job,
+            'num': num,
         }
 
         return render(request, 'index.html', context)
@@ -88,34 +94,23 @@ class ConfirmView(View):
 
         fullmoney = FullMoney.objects.all()
 
-        while True:
-            num = ''.join([random.choice(ascii_letters) for i in range(15)])
-            if SwapOrders.objects.filter(num=num).count() == 0:
-                break
-
-        if request.user.is_anonymous:
-            order = SwapOrders.objects.create(
-                money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
-                money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
-                left_in=request.POST.get('left_sum'),
-                right_out=request.POST.get('right_sum'),
-                phone=request.POST.get('phone'),
-                email=request.POST.get('email'),
-                num=num,
-            )
+        if request.user.is_authenticated:
+            user = CustomUser.objects.get(email=request.user)
         else:
-            order = SwapOrders.objects.create(
-                money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
-                money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
-                left_in=request.POST.get('left_sum'),
-                right_out=request.POST.get('right_sum'),
-                phone=request.POST.get('phone'),
-                email=request.POST.get('email'),
-                num=num,
-                user=CustomUser.objects.get(email=request.user),
-            )
+            user = None
 
-        context['order'] = order
+        order = SwapOrders.objects.get_or_create(
+            money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
+            money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
+            left_in=request.POST.get('left_sum'),
+            right_out=request.POST.get('right_sum'),
+            phone=request.POST.get('phone'),
+            email=request.POST.get('email'),
+            num=request.POST.get('num'),
+            user=user,
+        )
+
+        context['order'] = order[0]
         return render(request, 'confirm.html', context)
 
 

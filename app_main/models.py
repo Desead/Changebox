@@ -410,7 +410,7 @@ class SwapOrders(models.Model):
         ('cancel', 'Отмена'),
     )
     status = models.CharField('Статус сделки', max_length=100, choices=ORDERS_STATUS, default='new')
-    num = models.CharField('Номер сделки', max_length=15)
+    num = models.CharField('Номер сделки', max_length=15, unique=True)
     swap_create = models.DateTimeField('Время сделки', auto_now=True,editable=False)
     money_left = models.ForeignKey(FullMoney, verbose_name='Монета слева', on_delete=models.CASCADE,
                                    related_name='swap_orders_left')

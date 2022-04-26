@@ -3,39 +3,49 @@
 
 {% block content %}
     <div class="confirm shadow-money rounded">
-        <div class="confirm_data">
-            <div class="confirm_warning"></div>
-            <form action="" class="row" method="post" id="confirm_check">
-                {% csrf_token %}
-                <p>Номер транзакции: {{ order.num }}</p>
-                <input type="text" name="num" value="{{ order.num }}" hidden>
-                <hr>
-                <div class="confirm_money">
-                    <div class="confirm_left">
-                        <div class="cl_money">
-                            <img src="{{ order.money_left.logo.url }}">
-                            <p>{{ order.money_left.title }}</p>
-                        </div>
+        <form action="" class="row" method="post" id="confirm_check">
+            {% csrf_token %}
+            <p>Номер транзакции: <b>{{ order.num }}</b></p>
+            <input type="text" name="num" value="{{ order.num }}" hidden>
+            <hr>
+
+            <div class="confirm_money">
+
+                <div class="confirm_left">
+                    <div class="cl_money">
+                        <img src="{{ order.money_left.logo.url }}">
+                        <p>{{ order.money_left.title }}</p>
+                    </div>
+                    <div class="left_price">
                         <p>{{ order.left_in }}</p>
                     </div>
-                    <div class="confirm_right">
-                        <div class="cr_money">
-                            <img src="{{ order.money_right.logo.url }}">
-                            <p>{{ order.money_right.title }}</p>
-                        </div>
+                </div>
+                <div class="arrow-2">
+                    <div class="arrow-2-top"></div>
+                    <div class="arrow-2-bottom"></div>
+                </div>
+                <div class="confirm_right">
+                    <div class="cr_money">
+                        <img src="{{ order.money_right.logo.url }}">
+                        <p>{{ order.money_right.title }}</p>
+                    </div>
+                    <div class="right_price">
                         <p>{{ order.right_out }}</p>
                     </div>
                 </div>
-                <div class="confirm_rules">
-                    <hr>
-                    <p>Необходимые выдержки из правил</p>
-                </div>
-                <div class="confirm_buttons">
-                    <button class="btn btn-danger" type="submit" name="cancel" value="cancel">Отменить</button>
-                    <button class="btn btn-primary" type="submit" name="pay" value="pay">Оплатить</button>
-                </div>
-            </form>
-        </div>
+
+            </div>
+            <br>
+            <hr>
+            <div class="confirm_rules">
+
+                <p>Необходимые выдержки из правил</p>
+            </div>
+            <div class="confirm_buttons">
+                <button class="btn btn-danger" type="submit" name="cancel" value="cancel">Отменить</button>
+                <button class="btn btn-primary" type="submit" name="pay" value="pay">Оплатить</button>
+            </div>
+        </form>
     </div>
 {% endblock %}
 

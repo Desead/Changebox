@@ -175,19 +175,16 @@ menu li {
     display: flex;
     justify-content: center;
 }
-.confirm_data{
-    display: flex;
-    flex-direction: column;
 
-}
-.confirm_warning{
-    background-color: red;
-}
 .confirm_money {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    align-items: center;
+    justify-content: space-between;
+}
+
+.confirm_money * {
+    margin: 5px;
 }
 
 .confirm_left, .confirm_right {
@@ -195,22 +192,99 @@ menu li {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
-    margin: 10px;
+    border: 1px solid #d3d3d3;
+    min-width: 180px;
 }
-.cl_money, .cr_money{
+
+.cl_money, .cr_money {
     display: flex;
     flex-direction: row;
     align-items: center;
     flex-wrap: wrap;
 }
-#confirm_check{
+
+#confirm_check {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+}
+
+.confirm_buttons {
+    display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
     justify-content: space-evenly;
 }
-#confirm_check button{
+
+#confirm_check button {
     max-width: 150px;
 }
 
+/*/////////////////*/
+.arrow-2 {
+    cursor: pointer;
+    height: 120px;
+    width: 60px;
+    position: relative;
+}
+
+.arrow-2-top,
+.arrow-2-bottom {
+    background: #242e3e;
+    height: 10px;
+    position: absolute;
+    top: 48px;
+    width: 40px;
+}
+
+.arrow-2-top {
+    top: 52px;
+}
+
+.arrow-2-top {
+    transform: rotate(45deg);
+    transform-origin: bottom right;
+}
+
+.arrow-2-bottom {
+    transform: rotate(-45deg);
+    transform-origin: top right;
+}
+
+.arrow-2-top::after,
+.arrow-2-bottom::after {
+    background: #0D6EFD;
+    content: '';
+    height: 100%;
+    position: absolute;
+    top: 0;
+    transition: all 0.15s;
+}
+
+.arrow-2-top::after {
+    left: 100%;
+    right: 0;
+    transition-delay: 0s;
+}
+
+.arrow-2-bottom::after {
+    left: 0;
+    right: 100%;
+    transition-delay: 0.15s;
+}
+
+.arrow-2:hover .arrow-2-top::after {
+    left: 0;
+    transition-delay: 0.15s;
+}
+
+.arrow-2:hover .arrow-2-bottom::after {
+    right: 0;
+    transition-delay: 0s;
+}
+
+@media (max-width: 520px) {
+    .arrow-2 {
+        display: none;
+    }
+}
 

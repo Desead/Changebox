@@ -1,6 +1,7 @@
 <template id="template_change">
     <form action="{% url 'view_confirm' %}" class="row" method="post" id="form_confirm">
         {% csrf_token %}
+        <input type="hidden" name="num" value="{{ num }}">
         <div class="col">
             <div id="swap_left"></div>
             <div class="minmax mm_left">
@@ -36,8 +37,8 @@
             <p style="font-size: small; text-align: center;">Нажимая кнопку
                 <a href="/rules/" target="_blank"><strong>Оплатить</strong></a>
                 я соглашаюсь с правилами работы сервиса</p>
-            <input type="text" id="money_left" name="money_left" value="" hidden>
-            <input type="text" id="money_right" name="money_right" value="" hidden>
+            <input type="hidden" id="money_left" name="money_left" value="">
+            <input type="hidden" id="money_right" name="money_right" value="">
             <div class="pay_btn">
                 <button class="btn btn-primary" type="submit">Оплатить</button>
             </div>
