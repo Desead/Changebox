@@ -416,9 +416,9 @@ class SwapOrders(models.Model):
                                    related_name='swap_orders_left')
     money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
                                     related_name='swap_orders_right')
-    left_in = models.CharField('Денег пришло', max_length=50)
-    right_out = models.CharField('Денег ушло', max_length=50)
-    pl = models.FloatField('Прибыль со сделки', default=0,
+    left_in = models.CharField('Приход', max_length=50,help_text='Сколько денег пришло')
+    right_out = models.CharField('Расход', max_length=50,help_text='Сколько денег ушло')
+    pl = models.FloatField('Прибыль', default=0,
                            help_text='Прибыль рассчитывается в USD по курсу на момент сделки')
     wallet_in = models.ForeignKey(Wallets, on_delete=models.CASCADE, verbose_name='Кошелёк обменника', blank=True,
                                   null=True, related_name='wallet_in')

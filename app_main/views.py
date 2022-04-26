@@ -78,6 +78,13 @@ class ConfirmView(View):
     def post(self, request):
         context = {'settings': Settings.objects.first()}
         if request.POST.get('cancel'):
+            order = SwapOrders.objects.filter(num=request.POST.get('num'))
+            if order.count() == 1:
+                order = order[0]
+                order.ORDERS_STATUS = 'cancel'
+                order.save()
+                context['order'] = order
+
             return render(request, 'cancel_swap.html', context)
 
         fullmoney = FullMoney.objects.all()

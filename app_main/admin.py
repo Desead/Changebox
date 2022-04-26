@@ -249,9 +249,10 @@ class PaySystemAdmin(admin.ModelAdmin):
 
 @admin.register(SwapOrders)
 class SwapOrdersAdmin(admin.ModelAdmin):
-    list_display = ('status', 'num', 'money_left', 'money_right', 'left_in', 'right_out', 'user', 'swap_create',)
-    list_filter = ('status', 'money_left', 'money_right', 'user',)
-    list_display_links = ('status', 'num', 'money_left', 'money_right',)
+    list_display = ('num', 'status', 'money_left', 'money_right', 'left_in',  'right_out', 'pl','user', 'swap_create',)
+    list_editable = ('status',)
+    list_filter = ('status', 'user', 'money_left', 'money_right',)
+    list_display_links = ('num', 'money_left', 'money_right',)
     search_fields = ('num',)
     readonly_fields = ('num', 'money_left', 'money_right', 'left_in', 'right_out', 'pl', 'swap_create')
     fieldsets = (
