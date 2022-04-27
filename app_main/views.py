@@ -23,7 +23,6 @@ class SignUpView(CreateView):
 
 class StartView(View):
     def get(self, request):
-        print('ref', request.GET.get('referal'))
         temp = Settings.objects.first()
 
         job_start = temp.job_start

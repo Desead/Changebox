@@ -63,10 +63,14 @@ li {
     text-align: right;
 }
 
-.swap_midle, .swap_dn {
+.swap_midle, .swap_dn, .swap_news {
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
+}
+
+.swap_news p {
+    margin: 5px 0;
 }
 
 .swap_table p {
@@ -103,6 +107,7 @@ li {
     justify-content: end;
     align-items: center;
     min-height: 45px;
+    padding-right: 5px;
 }
 
 .change_swap_dn {

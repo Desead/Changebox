@@ -86,6 +86,8 @@ class Settings(models.Model):
     rules_security = models.TextField('Политика безопасности',
                                       default='<h1>политика безопасности</h1><div class="rules"> Lorem ipsum dolor sit amet.</div>',
                                       help_text='Можно писать с html тэгами')
+    news = models.TextField('Новость на главную', blank=True, help_text='Можно использовать html тэги',
+                            default='Добрый день. Сегодня Bitcoin в очередной раз удивил общественность, показав рост на 20% за два часа!')
 
     def __str__(self):
         return 'Базовые настройки'

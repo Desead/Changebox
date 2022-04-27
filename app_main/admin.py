@@ -127,11 +127,13 @@ class SettingsAdmin(admin.ModelAdmin):
     list_display = ('title', 'pause', 'job_start', 'job_end',)
     list_editable = ('pause',)
     inlines = [MonitoringInline]
+    save_on_top = True
 
     fieldsets = (
-        ('', {'fields': ('logo', 'exchane_name',)}),
+        ('', {'fields': ('logo', 'exchane_name', 'news',)}),
         ('SEO', {'classes': ('collapse',), 'fields': ('title', 'description', 'keywords',)}),
-        ('Режим работы', {'classes': ('collapse',), 'fields': (('pause', 'reload_exchange'), ('job_start', 'job_end'),)}),
+        ('Режим работы',
+         {'classes': ('collapse',), 'fields': (('pause', 'reload_exchange'), ('job_start', 'job_end'),)}),
         ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address', 'reload_url',)}),
         ('Правила', {'classes': ('collapse',), 'fields': ('rules_exchange', 'rules_security',)}),
     )
