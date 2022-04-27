@@ -42,7 +42,7 @@ class StartView(View):
             if SwapOrders.objects.filter(num=num).count() == 0:
                 break
 
-        last_swap = SwapOrders.objects.all()
+        last_swap = SwapOrders.objects.all().order_by('-swap_create')
 
         context = {
             'settings': temp,

@@ -33,41 +33,39 @@
                     <p>Время работы: <b>{{ time_job }}</b></p>
                     <hr>
                 </div>
-
-
                 <div class="swap_midle">
-                    <p class="table_caption">Последние обмены</p>
+                    <p class="block_caption">Последние обмены</p>
                     <table class="swap_table">
                         <tbody>
                         {% for last in last_swap %}
-                            <tr>
-                                <td colspan="4" class="change_last"></td>
-                            </tr>
-                            <tr>
-                                <td><img src="{{ last.money_left.logo }}" alt=""></td>
-                                <td><p class="change_sum">{{ last.left_in }}</p></td>
-                                <td><img src="{{ last.money_right.logo }}" alt=""></td>
-                                <td><p class="change_sum">{{ last.right_out }}</p></td>
-                            </tr>
-                            <tr>
-                                <td colspan="4">
-                                    <p class="change_data">{{ last.swap_create }}</p>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td colspan="4" class="change_last"></td>
-                            </tr>
+                            {% if  forloop.counter  < 4 %}
+                                <tr>
+                                    <td><img src="{{ last.money_left.logo }}" alt=""></td>
+                                    <td><p class="change_sum">{{ last.left_in }}</p></td>
+                                    <td><img src="{{ last.money_right.logo }}" alt=""></td>
+                                    <td><p class="change_sum">{{ last.right_out }}</p></td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4">
+                                        <p class="change_data">{{ last.swap_create }}</p>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td colspan="4" class="change_last"></td>
+                                </tr>
+                            {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
-
                 </div>
-
                 <hr>
                 <div class="swap_dn">
-                    {% for monitor in monitors %}
-                        <a href="{{ monitor.url }}" target="_blank"><img src="{{ monitor.logo }}" alt=""></a>
-                    {% endfor %}
+                    <p class="block_caption">Партнёры</p>
+                    <div class="monitor_links">
+                        {% for monitor in monitors %}
+                            <a href="{{ monitor.url }}" target="_blank"><img src="{{ monitor.logo }}" alt=""></a>
+                        {% endfor %}
+                    </div>
                 </div>
             </div>
         </div>
