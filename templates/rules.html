@@ -8,4 +8,8 @@
     <div class="rules">
         {{ settings.rules_exchange|safe }}
     </div>
+    <script type="text/javascript">
+        const site_name = location.origin
+        document.body.innerHTML = document.body.innerHTML.replace(/domain_name/g, site_name)
+    </script>
 {% endblock %}
