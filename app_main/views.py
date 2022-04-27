@@ -42,11 +42,14 @@ class StartView(View):
             if SwapOrders.objects.filter(num=num).count() == 0:
                 break
 
+        last_swap = SwapOrders.objects.all()
+
         context = {
             'settings': temp,
             'time_job': time_job,
             'num': num,
-            'monitors': Monitoring.objects.filter(connect=temp.pk, active=True)
+            'monitors': Monitoring.objects.filter(connect=temp.pk, active=True),
+            'last_swap': last_swap,
         }
 
         return render(request, 'index.html', context)
