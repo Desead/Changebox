@@ -11,7 +11,8 @@ from django.views.generic import CreateView
 
 from app_main.forms import CustomUserCreationForm
 from app_main.lib.get_pause import get_pause
-from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel, SwapOrders, FullMoney, CustomUser
+from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel, SwapOrders, FullMoney, CustomUser, \
+    Monitoring
 
 
 class SignUpView(CreateView):
@@ -22,6 +23,7 @@ class SignUpView(CreateView):
 
 class StartView(View):
     def get(self, request):
+        print('ref', request.GET.get('referal'))
         temp = Settings.objects.first()
 
         job_start = temp.job_start
@@ -44,6 +46,7 @@ class StartView(View):
             'settings': temp,
             'time_job': time_job,
             'num': num,
+            'monitors': Monitoring.objects.filter(connect=temp.pk, active=True)
         }
 
         return render(request, 'index.html', context)
@@ -51,7 +54,10 @@ class StartView(View):
 
 class LKView(View):
     def get(self, request):
-        context = {'settings': Settings.objects.first(), 'user': CustomUser.objects.get(email=request.user)}
+        print(request.user)
+        context = {'settings': Settings.objects.first(),
+                   'user': CustomUser.objects.get(email=request.user),
+                   'orders': SwapOrders.objects.filter(user__email=request.user)}
         return render(request, 'lk.html', context)
 
 
@@ -86,7 +92,7 @@ class ConfirmView(View):
             order = SwapOrders.objects.filter(num=request.POST.get('num'))
             if order.count() == 1:
                 order = order[0]
-                order.ORDERS_STATUS = 'cancel'
+                order.status = 'cancel'
                 order.save()
                 context['order'] = order
 

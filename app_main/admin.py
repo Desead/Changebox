@@ -115,10 +115,26 @@ class FullMoneyAdmin(admin.ModelAdmin):
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
 
 
+class MonitoringInline(admin.TabularInline):
+    model = Monitoring
+    extra = 0
+    verbose_name = 'Мониторинг'
+    verbose_name_plural = 'Мониторинги'
+
+
 @admin.register(Settings)
 class SettingsAdmin(admin.ModelAdmin):
     list_display = ('title', 'pause', 'job_start', 'job_end',)
     list_editable = ('pause',)
+    inlines = [MonitoringInline]
+
+    fieldsets = (
+        ('', {'fields': ('logo', 'exchane_name',)}),
+        ('SEO', {'classes': ('collapse',), 'fields': ('title', 'description', 'keywords',)}),
+        ('Режим работы', {'classes': ('collapse',), 'fields': (('pause', 'reload_exchange'), ('job_start', 'job_end'),)}),
+        ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address', 'reload_url',)}),
+        ('Правила', {'classes': ('collapse',), 'fields': ('rules_exchange', 'rules_security',)}),
+    )
 
     def get_urls(self):
         urls = super().get_urls()
@@ -249,7 +265,7 @@ class PaySystemAdmin(admin.ModelAdmin):
 
 @admin.register(SwapOrders)
 class SwapOrdersAdmin(admin.ModelAdmin):
-    list_display = ('num', 'status', 'money_left', 'money_right', 'left_in',  'right_out', 'pl','user', 'swap_create',)
+    list_display = ('num', 'status', 'money_left', 'money_right', 'left_in', 'right_out', 'pl', 'user', 'swap_create',)
     list_editable = ('status',)
     list_filter = ('status', 'user', 'money_left', 'money_right',)
     list_display_links = ('num', 'money_left', 'money_right',)

@@ -272,8 +272,12 @@ function CreateSwapBlock(direct) {
     right_money_select['rate'] = direct['rate_right_final']
 
     //вешаем событие на поля сумм
-    document.querySelector('#left_sum').addEventListener('input', SumToSum)
-    document.querySelector('#right_sum').addEventListener('input', SumToSum)
+    document.querySelector('#left_sum').addEventListener('blur', SumToSum)
+    document.querySelector('#right_sum').addEventListener('blur', SumToSum)
+    document.querySelector('#left_sum').addEventListener('change', SumToSum)
+    document.querySelector('#right_sum').addEventListener('change', SumToSum)
+    document.querySelector('#left_sum').addEventListener('focus', SumToSum)
+    document.querySelector('#right_sum').addEventListener('focus', SumToSum)
 
     //изменяем атрибуты точности у полей сумма
     if (left_money_select['type'] === 'crypto')

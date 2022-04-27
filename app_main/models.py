@@ -408,16 +408,20 @@ class SwapOrders(models.Model):
     ORDERS_STATUS = (
         ('new', 'Новая'),
         ('cancel', 'Отмена'),
+        ('end', 'Завершена'),
+        ('error', 'Ошибка'),
+        ('back', 'Возврат'),
+        ('pause', 'Ожидание клиента'),
     )
     status = models.CharField('Статус сделки', max_length=100, choices=ORDERS_STATUS, default='new')
     num = models.CharField('Номер сделки', max_length=15, unique=True)
-    swap_create = models.DateTimeField('Время сделки', auto_now=True,editable=False)
+    swap_create = models.DateTimeField('Время сделки', auto_now=True, editable=False)
     money_left = models.ForeignKey(FullMoney, verbose_name='Монета слева', on_delete=models.CASCADE,
                                    related_name='swap_orders_left')
     money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
                                     related_name='swap_orders_right')
-    left_in = models.CharField('Приход', max_length=50,help_text='Сколько денег пришло')
-    right_out = models.CharField('Расход', max_length=50,help_text='Сколько денег ушло')
+    left_in = models.CharField('Приход', max_length=50, help_text='Сколько денег пришло')
+    right_out = models.CharField('Расход', max_length=50, help_text='Сколько денег ушло')
     pl = models.FloatField('Прибыль', default=0,
                            help_text='Прибыль рассчитывается в USD по курсу на момент сделки')
     wallet_in = models.ForeignKey(Wallets, on_delete=models.CASCADE, verbose_name='Кошелёк обменника', blank=True,
@@ -471,3 +475,14 @@ class FieldsLeft(AddFields):
 
 class FieldsRight(AddFields):
     pass
+
+
+class Monitoring(models.Model):
+    active = models.BooleanField('Использовать', default=True)
+    title = models.CharField('Название', max_length=50)
+    url = models.URLField('Ссылка')
+    logo = models.ImageField('Лого', upload_to='static/image/monitor/', default='', blank=True)
+    connect = models.ForeignKey(Settings, on_delete=models.CASCADE, verbose_name='Партнёр')
+
+    def __str__(self):
+        return self.title

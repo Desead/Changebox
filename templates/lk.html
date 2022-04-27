@@ -7,58 +7,26 @@
         <hr>
         <p>Партнёрская ссылка: {{ user.referal }}</p>
         <hr>
-        <style type="text/css">
-            .tftable {
-                font-size: 12px;
-                color: #333333;
-                width: 100%;
-                border-width: 1px;
-                border-color: #729ea5;
-                border-collapse: collapse;
-            }
 
-            .tftable th {
-                font-size: 12px;
-                background-color: #acc8cc;
-                border-width: 1px;
-                padding: 8px;
-                border-style: solid;
-                border-color: #729ea5;
-                text-align: left;
-            }
-
-            .tftable tr {
-                background-color: #d4e3e5;
-            }
-
-            .tftable td {
-                font-size: 12px;
-                border-width: 1px;
-                padding: 8px;
-                border-style: solid;
-                border-color: #729ea5;
-            }
-
-            .tftable tr:hover {
-                background-color: #ffffff;
-            }
-        </style>
-
-        <table class="tftable" border="1">
+        <table class="tftable">
             <tr>
-                <th>Header 1</th>
-                <th>Header 2</th>
-                <th>Header 3</th>
-                <th>Header 4</th>
-                <th>Header 5</th>
+                <th>Номер сделки</th>
+                <th>Дата</th>
+                <th>Отдано</th>
+                <th>Получено</th>
+                <th>Кошелёк</th>
+                <th>Статус</th>
             </tr>
-            <tr>
-                <td>Строка:1 Столбец:1</td>
-                <td>Строка:1 Столбец:2</td>
-                <td>Строка:1 Столбец:3</td>
-                <td>Строка:1 Столбец:4</td>
-                <td>Строка:1 Столбец:5</td>
-            </tr>
+            {% for order in orders %}
+                <tr>
+                    <td>{{ order.num }}</td>
+                    <td>{{ order.swap_create }}</td>
+                    <td>{{ order.money_left }} : {{ order.left_in }}</td>
+                    <td>{{ order.money_right }} : {{ order.right_out }}</td>
+                    <td>{{ order.wallet_out }}</td>
+                    <td>{{ order.get_status_display }}</td>
+                </tr>
+            {% endfor %}
         </table>
         <hr>
         <div class="lk-btn" style="justify-content: space-evenly">

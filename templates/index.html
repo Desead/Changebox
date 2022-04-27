@@ -43,7 +43,9 @@
                     <hr>
                 </div>
                 <div class="swap_dn">
-                    <p>Здесь могут быть кнопки мониторингов</p>
+                    {% for monitor in monitors %}
+                        <img src="{{ monitor.logo }}" alt="">
+                    {% endfor %}
                 </div>
             </div>
         </div>
