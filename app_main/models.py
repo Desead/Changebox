@@ -114,7 +114,7 @@ class Settings(models.Model):
     job_end = models.PositiveSmallIntegerField('Час окончания работы', default=24)
     off_money = models.BooleanField('Отключать монеты', default=True,
                                     help_text='Отключать монеты и валюты, котировки которых небылы найдены среди ЦБ или Binance')
-    logo = models.ImageField('Логотип', upload_to='static/image/', default='', blank=True)
+    logo = models.FileField('Логотип', upload_to='static/img/', default='', blank=True)
     exchane_name = models.CharField('Название на сайт', max_length=200, default='Exchange Money')
     rules_exchange = models.TextField('Правила обменника',
                                       default='<h1>Правила сервиса</h1><div class="rules"> Lorem ipsum dolor sit amet.</div>',
@@ -221,6 +221,7 @@ class PaySystem(Commisions):  # список платёжных систем: к
     active = models.BooleanField('Использовать', default=False)
     title = models.CharField('Название', max_length=100, help_text='Название платёжной системы', unique=True)
 
+
     def save(self, *args, **kwargs):
         self.fee_percent, self.fee_percent_str = copy_str_to_decimal(self.fee_percent_str)
         self.fee_absolut, self.fee_absolut_str = copy_str_to_decimal(self.fee_absolut_str)
@@ -246,7 +247,7 @@ class FullMoney(Commisions):  # объединили монетки и плат�
     reserv = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS, editable=False)
     reserv_str = models.CharField('Резерв', max_length=MAX_DIGITS, help_text='Доступный для обмена резерв',
                                   default='0.0', validators=[validate_string])
-    logo = models.ImageField('Логотип', upload_to='static/image/', default='', blank=True)
+    logo = models.FileField('Логотип', upload_to='static/img/money', default='', blank=True)
 
     def save(self, *args, **kwargs):
         self.reserv, self.reserv_str = copy_str_to_decimal(self.reserv_str)
@@ -506,7 +507,7 @@ class Monitoring(models.Model):
     active = models.BooleanField('Использовать', default=True)
     title = models.CharField('Название', max_length=50)
     url = models.URLField('Ссылка')
-    logo = models.ImageField('Лого', upload_to='static/image/monitor/', default='', blank=True)
+    logo = models.FileField('Лого', upload_to='static/img/monitor/', default='', blank=True)
     connect = models.ForeignKey(Settings, on_delete=models.CASCADE, verbose_name='Партнёр')
 
     def __str__(self):
