@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="30px" height="40px" viewBox="0 0 30 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: sketchtool 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>6961CF10-76F3-4ED4-8075-F472DFE5033F</title>
+    <desc>Created with sketchtool.</desc>
+    <g id="Symbols" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="icons/currencys/litecoin/default" fill-rule="nonzero">
+            <rect id="Rectangle" fill-opacity="0" fill="#D8D8D8" x="0" y="-5" width="30" height="50"></rect>
+            <g id="iconfinder_Litecoin_2785456" transform="translate(0.000000, 5.000000)" fill="#BEBEBE">
+                <path d="M15,30 C6.71572875,30 0,23.2842713 0,15 C0,6.71572875 6.71572875,0 15,0 C23.2842713,0 30,6.71572875 30,15 C30,23.2842713 23.2842713,30 15,30 Z M10.4798368,14.907178 L8.58368825,15.6095994 L8.04777971,17.6944443 L9.92360497,17.0303296 L8.69033538,21.84 L21.1925546,21.84 L21.96,18.9889221 L14.2589075,18.9889221 L15.2161957,15.1142272 L17.3266545,14.3487151 L17.8226725,12.2342307 L15.8382466,12.9586557 L17.3995144,6.84 L12.6274425,6.84 L10.4798368,14.907178 Z" id="Logo"></path>
+            </g>
+        </g>
+    </g>
+</svg>
