@@ -56,7 +56,6 @@ class StartView(View):
 
 class LKView(View):
     def get(self, request):
-        print(request.user)
         context = {'settings': Settings.objects.first(),
                    'user': CustomUser.objects.get(email=request.user),
                    'orders': SwapOrders.objects.filter(user__email=request.user)}

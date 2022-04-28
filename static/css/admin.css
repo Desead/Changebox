@@ -5,3 +5,7 @@
 #changelist table .vIntegerField {
     max-width: 30px;
 }
+
+.hide_element {
+    display: none;
+}

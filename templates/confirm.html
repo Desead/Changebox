@@ -38,8 +38,7 @@
             <br>
             <hr>
             <div class="confirm_rules">
-
-                <p>Необходимые выдержки из правил</p>
+                <p>{{ settings.rules_warning|safe }}</p>
             </div>
             <div class="confirm_buttons">
                 <button class="btn btn-danger" type="submit" name="cancel" value="cancel">Отменить</button>

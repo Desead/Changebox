@@ -62,6 +62,42 @@ class CustomUser(AbstractUser):
         self.referal = gen_referal_num()
         super().save()
 
+    class Meta:
+        verbose_name_plural = '11. Пользователи'
+
+
+class Commisions(models.Model):
+    COMMISSION_PAYER = (
+        ('sender', 'Отправитель платежа'),
+        ('payment', 'Получатель платежа'),
+        ('half', '50/50'),
+    )
+    payer = models.CharField('Оплачивает комиссию', max_length=50, choices=COMMISSION_PAYER, default='sender')
+
+    fee_percent = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
+    fee_absolut = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
+    fee_min = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
+    fee_max = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
+
+    fee_percent_str = models.CharField('Комиссия %', default='0.0', max_length=MAX_DIGITS,
+                                       validators=[validate_string], help_text='Комиссия платёжной системы в %')
+    fee_absolut_str = models.CharField('Комиссия фикс', default='0.0', max_length=MAX_DIGITS,
+                                       validators=[validate_string], help_text='Фиксированная комиссия в валюте')
+    fee_min_str = models.CharField('Минимальное ограничение', default='0.0', max_length=MAX_DIGITS,
+                                   validators=[validate_string], help_text='Минимальная взимаемая комиссия')
+    fee_max_str = models.CharField('Максимальное ограничение', default='0.0', max_length=MAX_DIGITS,
+                                   validators=[validate_string], help_text='Максимально возможная комиссия')
+
+    def save(self, *args, **kwargs):
+        self.fee_percent, self.fee_percent_str = copy_str_to_decimal(self.fee_percent_str)
+        self.fee_absolut, self.fee_absolut_str = copy_str_to_decimal(self.fee_absolut_str)
+        self.fee_min, self.fee_min_str = copy_str_to_decimal(self.fee_min_str)
+        self.fee_max, self.fee_max_str = copy_str_to_decimal(self.fee_max_str)
+        super().save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+
 
 class Settings(models.Model):
     title = models.CharField('Title', max_length=100, help_text='title на сайте', default='Обменник')
@@ -86,6 +122,9 @@ class Settings(models.Model):
     rules_security = models.TextField('Политика безопасности',
                                       default='<h1>политика безопасности</h1><div class="rules"> Lorem ipsum dolor sit amet.</div>',
                                       help_text='Можно писать с html тэгами')
+    rules_warning = models.TextField('Выдержка из правил',
+                                     default='Проверьте все введённые данные и нажмите кнопку <b>Оплатить</b>',
+                                     help_text='Главные тезисы при совершении обмена. Отображаются на странице совершения обмена. Можно писать с html тэгами')
     news = models.TextField('Новость на главную', blank=True, help_text='Можно использовать html тэги',
                             default='Добрый день. Сегодня Bitcoin в очередной раз удивил общественность, показав рост на 20% за два часа!')
 
@@ -98,7 +137,7 @@ class Settings(models.Model):
 
     class Meta:
         verbose_name = 'Базовые настройки'
-        verbose_name_plural = '08. Базовые настройки'
+        verbose_name_plural = '09. Базовые настройки'
 
 
 class City(models.Model):
@@ -111,7 +150,7 @@ class City(models.Model):
 
     class Meta:
         verbose_name = 'Город'
-        verbose_name_plural = '07. Города'
+        verbose_name_plural = '08. Города'
         ordering = ['title']
 
 
@@ -126,19 +165,17 @@ class Exchange(models.Model):
 
     class Meta:
         verbose_name = 'Обменник'
-        verbose_name_plural = '06. Обменники'
+        verbose_name_plural = '07. Обменники'
         ordering = ['-ignore', 'title', ]
 
 
 class Money(models.Model):  # список валют
     help_string = '''
-    Название для определения стоимости данной валюты (монеты) с биржи.
-    Для фиатной валюты поле не актуально.
-    Для криптовалюты автоматически установится связь со стейблкоином USDT. Если данный стейблкоин не устраивает,
+    Название для определения стоимости данной монеты с биржи.
+    Aвтоматически установится связь со стейблкоином USDT. Если данный стейблкоин не устраивает,
     то поле можно заполнить самостоятельно. Пример для Bitcoin: Было - BTCUSDT, можно заменить на BTCUSDP
     Правила заполнения следующие: 1. Указанный тикер должен котироваться на бирже Binance. 2. Регистр имеет значение.
     Актуальные тикеры с Binance можно получить здесь: https://api.binance.com/api/v3/ticker/price
-    Курс ЦБ: http://www.cbr.ru/scripts/XML_daily.asp
     '''
     MONEY_TYPE = (
         ('crypto', 'Крипта'),
@@ -149,14 +186,14 @@ class Money(models.Model):  # список валют
     title = models.CharField('Название', max_length=100, unique=True)
     abc_code = models.CharField('Код', max_length=20,
                                 help_text='Буквенный код валюты: RUB, USD, BTC, XMR...')
-    tiker = models.CharField('Тикер с Binance', help_text=help_string, blank=True, max_length=20)
-    money_type = models.CharField('Тип', choices=MONEY_TYPE, max_length=10, default='crypto')
+    money_type = models.CharField('Тип', choices=MONEY_TYPE, max_length=20, default='crypto')
     nominal = models.PositiveIntegerField('Номинал', default=1,
                                           help_text='Единица в которых котируется данная валюта')
     cost = models.DecimalField(default=1, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS, editable=False)
     cost_str = models.CharField('USD', default='1', max_length=MAX_DIGITS, validators=[validate_string],
                                 help_text='Текущая стоимость валюты/монеты выраженная в USD(T)')
     time = models.DateTimeField('Время обновления котировки', auto_now=True)
+    tiker = models.CharField('Тикер с Binance', help_text=help_string, blank=True, max_length=20)
     conformation = models.PositiveSmallIntegerField('Подтверждения', default=1,
                                                     help_text='Количество необходимых подтверждения для начала перевода. Актуально только для крипты')
 
@@ -176,27 +213,13 @@ class Money(models.Model):  # список валют
 
     class Meta:
         verbose_name = 'Валюта/Монета'
-        verbose_name_plural = '04. Валюты/Монеты'
+        verbose_name_plural = '05. Валюты/Монеты'
         ordering = ['-active', 'money_type', 'abc_code', 'title']
 
 
-class PaySystem(models.Model):  # список платёжных систем: киви, яндекс, вебмани и т.д.
+class PaySystem(Commisions):  # список платёжных систем: киви, яндекс, вебмани и т.д.
     active = models.BooleanField('Использовать', default=False)
     title = models.CharField('Название', max_length=100, help_text='Название платёжной системы', unique=True)
-
-    fee_percent = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
-    fee_absolut = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
-    fee_min = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
-    fee_max = models.DecimalField(max_digits=MAX_DIGITS, decimal_places=DECIMAL_PLACES, default=0)
-
-    fee_percent_str = models.CharField('Комиссия %', default='0.0', max_length=MAX_DIGITS,
-                                       validators=[validate_string], help_text='Комиссия платёжной системы в %')
-    fee_absolut_str = models.CharField('Комиссия фикс', default='0.0', max_length=MAX_DIGITS,
-                                       validators=[validate_string], help_text='Фиксированная комиссия в валюте')
-    fee_min_str = models.CharField('Ограничение комиссии', default='0.0', max_length=MAX_DIGITS,
-                                   validators=[validate_string], help_text='Миимальная взимаемая комиссия')
-    fee_max_str = models.CharField('Ограничение комиссии', default='0.0', max_length=MAX_DIGITS,
-                                   validators=[validate_string], help_text='Максимально возможная комиссия')
 
     def save(self, *args, **kwargs):
         self.fee_percent, self.fee_percent_str = copy_str_to_decimal(self.fee_percent_str)
@@ -208,11 +231,11 @@ class PaySystem(models.Model):  # список платёжных систем: 
 
     class Meta:
         verbose_name = 'Платёжная система'
-        verbose_name_plural = '05. Платёжные системы'
+        verbose_name_plural = '06. Платёжные системы'
         ordering = ['-active', '-title']
 
 
-class FullMoney(models.Model):  # объединили монетки и платёжные системы
+class FullMoney(Commisions):  # объединили монетки и платёжные системы
     active = models.BooleanField('Использовать', default=False)
     title = models.CharField('Название', max_length=30, unique=True, help_text='Это название отображается на сайте')
     xml_code = models.CharField('XML', max_length=20,
@@ -234,7 +257,7 @@ class FullMoney(models.Model):  # объединили монетки и пла�
 
     class Meta:
         verbose_name = 'Валюта+ПС'
-        verbose_name_plural = '03. Валюта+ПС'
+        verbose_name_plural = '04. Валюта+ПС'
         ordering = ('title',)
         unique_together = ('pay', 'money')
 
@@ -403,7 +426,7 @@ class Wallets(models.Model):
 
     class Meta:
         verbose_name = 'Кошелёк'
-        verbose_name_plural = 'Кошелёк'
+        verbose_name_plural = '03. Кошельки'
 
 
 class SwapOrders(models.Model):
@@ -455,7 +478,7 @@ class InfoPanel(models.Model):
 
     class Meta:
         verbose_name = 'Информация'
-        verbose_name_plural = '09. Информация'
+        verbose_name_plural = '10. Информация'
         ordering = ['-time', ]
 
 

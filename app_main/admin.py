@@ -106,6 +106,11 @@ class FullMoneyAdmin(admin.ModelAdmin):
     save_on_top = True
     actions = [all_on, all_off]
     inlines = [FieldsLeftInline, FieldsRightInline]
+    fieldsets = (
+        ('', {'fields': ('active', 'title', 'xml_code', 'pay', 'money', 'reserv_str', 'logo',)}),
+        ('Комиссии', {'classes': ('collapse',),
+                      'fields': ('payer', ('fee_percent_str', 'fee_absolut_str'), ('fee_min_str', 'fee_max_str'),)}),
+    )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "pay":
@@ -131,11 +136,11 @@ class SettingsAdmin(admin.ModelAdmin):
 
     fieldsets = (
         ('', {'fields': ('logo', 'exchane_name', 'news',)}),
-        ('SEO', {'classes': ('collapse',), 'fields': ('title', 'description', 'keywords',)}),
         ('Режим работы',
          {'classes': ('collapse',), 'fields': (('pause', 'reload_exchange'), ('job_start', 'job_end'),)}),
         ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address', 'reload_url',)}),
-        ('Правила', {'classes': ('collapse',), 'fields': ('rules_exchange', 'rules_security',)}),
+        ('SEO', {'classes': ('collapse',), 'fields': ('title', 'description', 'keywords',)}),
+        ('Правила', {'classes': ('collapse',), 'fields': ('rules_exchange', 'rules_security', 'rules_warning',)}),
     )
 
     def get_urls(self):
@@ -262,6 +267,7 @@ class PaySystemAdmin(admin.ModelAdmin):
     list_editable = ('active',)
     list_filter = ('active',)
     search_fields = ('title',)
+    fields = ('active', 'payer', 'title', 'fee_percent_str', 'fee_absolut_str', 'fee_min_str', 'fee_max_str',)
     actions = [all_on, all_off]
 
 
