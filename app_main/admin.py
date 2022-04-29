@@ -5,6 +5,8 @@ from django.http import HttpResponseRedirect
 from django.urls import path
 
 from app_main.forms import CustomUserCreationForm, CustomUserChangeForm
+from app_main.lib.set_all_rates import set_all_rates
+from app_main.lib.start.create_all_swap import create_all_swap
 from app_main.models import *
 
 
@@ -137,8 +139,8 @@ class SettingsAdmin(admin.ModelAdmin):
     fieldsets = (
         ('', {'fields': ('logo', 'exchane_name', 'news',)}),
         ('Режим работы',
-         {'classes': ('collapse',), 'fields': (('pause', 'reload_exchange'), ('job_start', 'job_end'),)}),
-        ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address', 'reload_url',)}),
+         {'classes': ('collapse',), 'fields': ('pause', ('job_start', 'job_end'),)}),
+        ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address',)}),
         ('SEO', {'classes': ('collapse',), 'fields': ('title', 'description', 'keywords',)}),
         ('Правила', {'classes': ('collapse',), 'fields': ('rules_exchange', 'rules_security', 'rules_warning',)}),
     )
@@ -163,12 +165,6 @@ class SettingsAdmin(admin.ModelAdmin):
         elif request.POST.get('money'):
             from app_main.lib.start.money_load import money_load
             money_load()
-        elif request.POST.get('best_load'):
-            from app_main.lib.bestchange import download_files_from_bestchange
-            download_files_from_bestchange(True)
-        elif request.POST.get('best_read'):
-            from app_main.lib.bestchange import get_rates_from_bestchange
-            get_rates_from_bestchange(SwapMoney.objects.all(), {}, {}, True)
         elif request.POST.get('cbr_rates'):
             from app_main.lib.cbr import get_cbr_data
             from app_main.lib.cbr import convert_cbr_data_to_dict
@@ -181,6 +177,10 @@ class SettingsAdmin(admin.ModelAdmin):
             from app_main.lib.binance import set_binance_rate
             binance = get_binance_data()
             set_binance_rate(Money.objects.filter(money_type='crypto'), binance[1])
+        elif request.POST.get('create_swap'):
+            create_all_swap()
+        elif request.POST.get('set_all_rates'):
+            set_all_rates()
         return HttpResponseRedirect("../")
 
 
@@ -220,45 +220,12 @@ class SwapMoneyAdmin(admin.ModelAdmin):
     actions = [all_on, all_off]
     filter_horizontal = ('city',)
 
-    # def formfield_for_manytomany(self, db_field, request, **kwargs):
-    #     if db_field.name == "city":
-    #         kwargs["queryset"] = City.objects.filter(active=True)
-    #     return super().formfield_for_manytomany(db_field, request, **kwargs)
-
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "money_left":
             kwargs["queryset"] = FullMoney.objects.filter(active=True)
         if db_field.name == "money_right":
             kwargs["queryset"] = FullMoney.objects.filter(active=True)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
-
-    def get_urls(self):
-        urls = super().get_urls()
-        my_urls = [
-            path('import/', self.my_view),
-        ]
-        return my_urls + urls
-
-    def my_view(self, request):
-        if request.POST.get('rnd_swap'):
-            fm = FullMoney.objects.all()
-            if fm.count() <= 0: return
-            import random
-            for i in range(20):
-                swap = SwapMoney()
-                swap.money_left = random.choice(fm)
-                swap.money_right = random.choice(fm)
-                swap.min_left = random.randint(0, 100)
-                swap.max_left = random.randint(swap.min_left, 100)
-                swap.min_right = random.randint(0, 10000)
-                swap.max_right = random.randint(swap.min_right, 10000)
-                swap.best_place = 1
-                try:
-                    swap.save()
-                except:
-                    continue
-
-        return HttpResponseRedirect("../")
 
 
 @admin.register(PaySystem)

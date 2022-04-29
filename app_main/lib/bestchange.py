@@ -71,7 +71,8 @@ def download_files_from_bestchange(save_file=False) -> (bool, dict):
 
 def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, use_local_files=False):
     '''
-    на выходе получаем словарь словарей где собраны все мои обмены с курсами.
+    получаем все курсы и устанавливает у них обмены. Там где установили меняем флаг mark_changes
+    устанавливаем только начальный курс обмена. Изменение +-% и финальный курс ставиться в функции set_single_rate
     '''
     if use_local_files:
         with open(BESTCHANGE_FILES / 'bm_rates.dat', mode='r') as fl:
@@ -191,21 +192,21 @@ def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, use_local_fi
             temp = [Decimal(x) for x in rate_right]
             delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
             temp.sort(reverse=True)
-            i.rate_left_str = Decimal('1')
+            i.rate_left_str = '1'
             if need_place >= len_rate:
-                i.rate_right_str = temp[len_rate - 1] - delta  # значит хотим занять последнюю позицию
+                i.rate_right_str = str(temp[len_rate - 1] - delta)  # значит хотим занять последнюю позицию
             else:
-                i.rate_right_str = temp[need_place] + delta
+                i.rate_right_str = str(temp[need_place] + delta)
 
         if rate_right[0] == '1':
             temp = [Decimal(x) for x in rate_left]
             delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
             temp.sort(reverse=False)
-            i.rate_right_str = Decimal('1')
+            i.rate_right_str = '1'
             if need_place >= len_rate:
-                i.rate_left_str = temp[len_rate - 1] + delta  # значит хотим занять последнюю позицию
+                i.rate_left_str = str(temp[len_rate - 1] + delta)  # значит хотим занять последнюю позицию
             else:
-                i.rate_left_str = temp[need_place] - delta
+                i.rate_left_str = str(temp[need_place] - delta)
 
         set_single_rate(i)
         mark_changes[num] = True

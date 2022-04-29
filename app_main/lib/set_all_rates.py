@@ -46,6 +46,7 @@ def set_all_rates():
                 info.description = 'Ошибка получения данных с BestChange'
                 info.save()
             else:
+                # устанавливаем сразу все курсы с best которые нашли
                 get_rates_from_bestchange(swap, mark_changes, best_files[1])
             break
 
@@ -61,6 +62,7 @@ def set_all_rates():
             info.save()
         return False,
 
+    # сюда попадаем если не нашли курс на get_rates_from_bestchange
     for num, i in enumerate(mark_changes):
         if not i:
             # устанавливаем стоимость обменов
@@ -101,8 +103,8 @@ def set_all_rates():
                 rate_left = 1
                 rate_right = 1
 
-            change.rate_left = rate_left
-            change.rate_right = rate_right
+            change.rate_left_str = str(rate_left)
+            change.rate_right_str = str(rate_right)
 
             set_single_rate(change)
             change.save()

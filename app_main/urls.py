@@ -3,12 +3,11 @@ from django.urls import path, include
 from app_main.views import *
 
 export_url = 'api/v1/xml_export/'
-
 try:
     from app_main.models import Settings
 
     export_url = Settings.objects.first().xml_address
-    export_url = 'api/v1/'+str(export_url).strip('/') + '/'
+    export_url = 'api/v1/' + str(export_url).strip('/') + '/'
 except:
     pass
 

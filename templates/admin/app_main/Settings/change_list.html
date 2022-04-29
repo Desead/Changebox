@@ -8,7 +8,7 @@
 
 {% block object-tools %}
     <details>
-        <summary>Ввести начальные данные</summary>
+        <summary style="cursor: pointer">Ввести начальные данные</summary>
         <form action="import/" method="post">
             {% csrf_token %}
             <div class="btn_w" style="max-width: 950px">
@@ -18,12 +18,12 @@
                 <input type="submit" name="money" value="Добавить монеты и валюты" style="width: 230px"/>
                 <input type="submit" name="cbr_rates" value="Получить курсы с ЦБ" style="width: 230px"/>
                 <input type="submit" name="binance_rates" value="Получить данные с Binance" style="width: 230px"/>
-                <input type="submit" name="best_load" value="Загрузить данные с BestChange" style="width: 230px"/>
-                <input type="submit" name="best_read" value="Прочитать данные BestChange" style="width: 230px"/>
+                <input type="submit" name="create_swap" value="Создать все обмены" style="width: 230px"/>
+                <input type="submit" name="set_all_rates" value="Установить курсы обмена" style="width: 230px"/>
             </div>
         </form>
     </details>
 
     <br>
-        {{ block.super }}
+    {{ block.super }}
 {% endblock %}

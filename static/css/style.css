@@ -15,8 +15,6 @@ li {
     list-style-type: none;
 }
 
-
-
 .change_left_up, .change_right_up {
     display: flex;
     flex-direction: row;
@@ -53,6 +51,7 @@ li {
     background-color: var(--select-item-back) !important;
     color: var(--select-item-color) !important;
     font-weight: var(--select-item-font) !important;
+
 }
 
 .menu_item {

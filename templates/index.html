@@ -44,9 +44,9 @@
                         {% for last in last_swap %}
                             {% if  forloop.counter  < 4 %}
                                 <tr>
-                                    <td><img src="{{ last.money_left.logo }}" alt=""></td>
+                                    <td><img src="{{ last.money_left.logo }}" alt="" height="30" width="auto"></td>
                                     <td><p class="change_sum">{{ last.left_in }}</p></td>
-                                    <td><img src="{{ last.money_right.logo }}" alt=""></td>
+                                    <td><img src="{{ last.money_right.logo }}" alt="" height="30" width="auto"></td>
                                     <td><p class="change_sum">{{ last.right_out }}</p></td>
                                 </tr>
                                 <tr>

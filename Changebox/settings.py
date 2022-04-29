@@ -146,12 +146,6 @@ FIXTURE_DIRS = ['fixtures']
 BESTCHANGE_FILES = BASE_DIR / 'BestChange_Files'
 BEST_SAVE = False  # Сохранять или нет на диск файлы с беста
 
-'''
-settings_prod перекрывает переменные:
-SECRET_KEY
-DATABASES
-'''
-
 CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
 CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
 CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'

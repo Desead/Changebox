@@ -1,4 +1,4 @@
-def remove_space_from_string(check_string) -> str:
+def remove_space_from_string(check_string: str) -> str:
     return ''.join(check_string.split())
 
 

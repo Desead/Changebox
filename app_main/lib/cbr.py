@@ -93,7 +93,7 @@ def set_cbr_rates(money, cbr):
             else:
                 cost = cbr[i.abc_code]['Value']  # получили цену с ЦБ текущей валюты, но она выражена в RUB
                 nominal = cbr[i.abc_code]['Nominal']
-            i.cost_str = cost
+            i.cost_str = str(cost)
             i.nominal = nominal
             i.save()
 

@@ -95,11 +95,8 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     let div_money_img = document.createElement('div')
     div_money_img.className = 'money_change_img'
     let money_img = document.createElement('img')
-    money_img.setAttribute('height', 'auto')
+    money_img.setAttribute('height', '30')
     money_img.setAttribute('width', 'auto')
-    money_img.setAttribute('max-height', '50px')
-    money_img.setAttribute('max-width', '50px')
-    // money_img.setAttribute('alt', money_name)
     money_img.setAttribute('src', img_path)
     div_money_img.append(money_img)
 
