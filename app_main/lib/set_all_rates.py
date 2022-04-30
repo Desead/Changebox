@@ -2,7 +2,7 @@ from Changebox.settings import BEST_SAVE
 from app_main.lib.bestchange import get_rates_from_bestchange, download_files_from_bestchange
 from app_main.lib.binance import set_binance_rate, get_binance_data
 from app_main.lib.cbr import set_cbr_rates, get_cbr_data, convert_cbr_data_to_dict
-from app_main.lib.set_single_rate import set_single_rate
+from app_main.lib.set_final_single_rate import set_final_single_rate
 from app_main.models import Money, SwapMoney, InfoPanel
 
 
@@ -103,8 +103,7 @@ def set_all_rates():
                 rate_left = 1
                 rate_right = 1
 
-            change.rate_left_str = str(rate_left)
-            change.rate_right_str = str(rate_right)
+            change.rate_left = rate_left
+            change.rate_right = rate_right
 
-            set_single_rate(change)
             change.save()

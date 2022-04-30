@@ -31,9 +31,7 @@ def get_binance_data() -> tuple[bool, dict]:
     return True, binance
 
 
-def set_binance_rate(money, binance):
-    off_money = Settings.objects.first().off_money
-
+def set_binance_rate(money, binance, off_money=True):
     for i in money:
         if i.money_type == 'crypto':
             if binance.get(i.tiker) is None:
@@ -46,5 +44,5 @@ def set_binance_rate(money, binance):
                     info.description = error_string
                     info.save()
             else:
-                i.cost_str = binance[i.tiker]
+                i.cost = binance[i.tiker]
             i.save()

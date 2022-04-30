@@ -1,6 +1,5 @@
 import random
 import xml.etree.ElementTree as xml
-from decimal import Decimal
 from string import ascii_letters
 
 from django.http import HttpResponse, JsonResponse
@@ -331,20 +330,20 @@ def ExportDirect(request):
                                                                                                   max_right)
 
     if money.money_left.money.money_type == 'fiat':
-        min_left = 0 if min_left == 0 else min_left.quantize(Decimal('0.01'))
-        max_left = 0 if max_left == 0 else max_left.quantize(Decimal('0.01'))
+        min_left = round(min_left, 2)
+        max_left = round(max_left, 2)
     else:
-        min_left = 0 if min_left == 0 else min_left.quantize(Decimal('0.00000001'))
-        max_left = 0 if max_left == 0 else max_left.quantize(Decimal('0.00000001'))
+        min_left = round(min_left, 8)
+        max_left = round(max_left, 8)
 
     if money.money_right.money.money_type == 'fiat':
-        min_right = 0 if min_right == 0 else min_right.quantize(Decimal('0.01'))
-        max_right = 0 if max_right == 0 else max_right.quantize(Decimal('0.01'))
-        reserv = 0 if reserv == 0 else reserv.quantize(Decimal('0.01'))
+        min_right = round(min_right, 2)
+        max_right = round(max_right, 2)
+        reserv = round(reserv, 2)
     else:
-        min_right = 0 if min_right == 0 else min_right.quantize(Decimal('0.00000001'))
-        max_right = 0 if max_right == 0 else max_right.quantize(Decimal('0.00000001'))
-        reserv = 0 if reserv == 0 else reserv.quantize(Decimal('0.00000001'))
+        min_right = round(min_right, 8)
+        max_right = round(max_right, 8)
+        reserv = round(reserv, 8)
 
     def del_last_zero(num) -> str:  # Удаляем последние незначащие нули
         num = list(str(num))
@@ -370,8 +369,8 @@ def ExportDirect(request):
         'max_right': del_last_zero(max_right),
         'rate_left_final': money.rate_left_final,
         'rate_right_final': money.rate_right_final,
-        'add_fee_left': 0 if money.add_fee_left == 0 else money.add_fee_left.quantize(Decimal('0.00000001')),
-        'add_fee_right': 0 if money.add_fee_right == 0 else money.add_fee_right.quantize(Decimal('0.00000001')),
+        'add_fee_left': money.add_fee_left,
+        'add_fee_right': money.add_fee_right,
         'reserv': reserv,
 
         'seo_title': money.seo_title,

@@ -1,6 +1,5 @@
 import io
 import zipfile
-from decimal import Decimal
 from pathlib import Path
 from time import sleep
 from typing import Dict
@@ -8,7 +7,7 @@ from typing import Dict
 import requests
 
 from Changebox.settings import BESTCHANGE_FILES
-from app_main.lib.set_single_rate import set_single_rate
+from app_main.lib.set_final_single_rate import set_final_single_rate
 from app_main.models import Exchange, InfoPanel
 
 
@@ -189,27 +188,24 @@ def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, use_local_fi
         '''
 
         if rate_left[0] == '1':
-            temp = [Decimal(x) for x in rate_right]
-            delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
+            temp = [float(x) for x in rate_right]
+            delta = 0.01 if i.money_right.money.money_type == 'fiat' else 0.00001
             temp.sort(reverse=True)
-            i.rate_left = Decimal('1')
+            i.rate_left = 1
             if need_place >= len_rate:
                 i.rate_right = temp[len_rate - 1] - delta  # значит хотим занять последнюю позицию
             else:
                 i.rate_right = temp[need_place] + delta
 
         if rate_right[0] == '1':
-            temp = [Decimal(x) for x in rate_left]
-            delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
+            temp = [float(x) for x in rate_left]
+            delta = 0.01 if i.money_right.money.money_type == 'fiat' else 0.00001
             temp.sort(reverse=False)
-            i.rate_right = Decimal('1')
+            i.rate_right = 1
             if need_place >= len_rate:
                 i.rate_left = temp[len_rate - 1] + delta  # значит хотим занять последнюю позицию
             else:
                 i.rate_left = temp[need_place] - delta
-
-        i.rate_left_str = str(i.rate_left)
-        i.rate_right_str = str(i.rate_right)
 
         mark_changes[num] = True
         i.save()

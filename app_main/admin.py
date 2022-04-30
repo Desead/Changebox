@@ -76,7 +76,7 @@ class ExchangeAdmin(admin.ModelAdmin):
 
 @admin.register(Money)
 class MoneyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'abc_code', 'money_type', 'active', 'nominal', 'cost_str', 'time')
+    list_display = ('title', 'abc_code', 'money_type', 'active', 'nominal', 'cost', 'time')
     list_filter = ('active', 'money_type',)
     list_editable = ('active',)
     search_fields = ('title', 'abc_code',)
@@ -101,17 +101,17 @@ class FieldsRightInline(admin.TabularInline):
 
 @admin.register(FullMoney)
 class FullMoneyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'active', 'reserv_str',)
-    list_editable = ('active', 'reserv_str',)
+    list_display = ('title', 'active', 'reserv',)
+    list_editable = ('active', 'reserv',)
     list_filter = ('active', 'pay',)
     search_fields = ('title', 'xml_code',)
     save_on_top = True
     actions = [all_on, all_off]
     inlines = [FieldsLeftInline, FieldsRightInline]
     fieldsets = (
-        ('', {'fields': ('active', 'title', 'xml_code', 'pay', 'money', 'reserv_str', 'logo',)}),
+        ('', {'fields': ('active', 'title', 'xml_code', 'pay', 'money', 'reserv', 'logo',)}),
         ('Комиссии', {'classes': ('collapse',),
-                      'fields': ('payer', ('fee_percent_str', 'fee_absolut_str'), ('fee_min_str', 'fee_max_str'),)}),
+                      'fields': ('payer', ('fee_percent', 'fee_absolut'), ('fee_min', 'fee_max'),)}),
     )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -176,7 +176,7 @@ class SettingsAdmin(admin.ModelAdmin):
             from app_main.lib.binance import get_binance_data
             from app_main.lib.binance import set_binance_rate
             binance = get_binance_data()
-            set_binance_rate(Money.objects.filter(money_type='crypto'), binance[1])
+            set_binance_rate(Money.objects.filter(money_type='crypto'), binance[1],Settings.objects.first().off_money)
         elif request.POST.get('create_swap'):
             create_all_swap()
         elif request.POST.get('set_all_rates'):
@@ -189,15 +189,15 @@ class SwapMoneyAdmin(admin.ModelAdmin):
     fieldsets = (
         ('Основные настройки обмена',
          {'fields': (
-             'active', 'freeze', ('money_left', 'money_right'), ('min_left_str', 'min_right_str',),
-             ('max_left_str', 'max_right_str',),)}),
+             'active', 'freeze', ('money_left', 'money_right'), ('min_left', 'min_right',),
+             ('max_left', 'max_right',),)}),
         ('Настройка курсов обмена',
-         {'fields': ('best_place', ('manual_rate_left_str', 'manual_rate_right_str', 'manual_active',),
-                     ('rate_left_str', 'rate_right_str',),
-                     ('change_left_str', 'change_right_str',),
-                     ('rate_left_final_str', 'rate_right_final_str',),)}),
+         {'fields': ('best_place', ('manual_rate_left', 'manual_rate_right', 'manual_active',),
+                     ('rate_left', 'rate_right',),
+                     ('change_left', 'change_right',),
+                     ('rate_left_final', 'rate_right_final',),)}),
         ('Дополнительные комиссии',
-         {'fields': (('add_fee_left_str', 'add_fee_right_str',),)}),
+         {'fields': (('add_fee_left', 'add_fee_right',),)}),
 
         ('Города', {'classes': ('collapse',), 'fields': ('city',)}),
 
@@ -209,19 +209,19 @@ class SwapMoneyAdmin(admin.ModelAdmin):
     )
 
     list_display = (
-        'money_left', 'money_right', 'active', 'min_left_str', 'max_left_str', 'min_right_str', 'max_right_str',
-        'best_place', 'rate_left_final_str', 'rate_right_final_str', 'time',)
+        'money_left', 'money_right', 'active', 'min_left', 'max_left', 'min_right', 'max_right',
+        'best_place', 'rate_left_final', 'rate_right_final', 'time',)
 
-    list_display_links = ('money_left', 'money_right', 'rate_left_final_str', 'rate_right_final_str',)
-    list_editable = ('active', 'best_place', 'min_left_str', 'max_left_str', 'min_right_str', 'max_right_str',)
-    list_filter = ('active', 'best_place', 'money_left', 'money_right',)
+    list_display_links = ('money_left', 'money_right', 'rate_left_final', 'rate_right_final',)
+    list_editable = ('active', 'best_place', 'min_left', 'max_left', 'min_right', 'max_right',)
+    list_filter = ('active', 'best_place','money_left__money__money_type','money_right__money__money_type', 'money_left', 'money_right',)
     readonly_fields = ('time',)
     save_on_top = True
     actions = [all_on, all_off]
     filter_horizontal = ('city',)
 
     def save_model(self, request, obj, form, change):
-        # obj.change_left = Decimal(remove_space_from_string(obj.change_left_str))
+        # obj.change_left = Decimal(remove_space_froming(obj.change_left))
         super().save_model(request, obj, form, change)
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -238,7 +238,7 @@ class PaySystemAdmin(admin.ModelAdmin):
     list_editable = ('active',)
     list_filter = ('active',)
     search_fields = ('title',)
-    fields = ('active', 'payer', 'title', 'fee_percent_str', 'fee_absolut_str', 'fee_min_str', 'fee_max_str',)
+    fields = ('active', 'payer', 'title', 'fee_percent', 'fee_absolut', 'fee_min', 'fee_max',)
     actions = [all_on, all_off]
 
 
