@@ -514,7 +514,7 @@ class SwapMoney(models.Model):  # Основная таблица настрое
 
     rate_left_str = models.CharField('Курс слева', max_length=MAX_DIGITS, default='0.0', validators=[validate_string])
     rate_right_str = models.CharField('Курс справа', max_length=MAX_DIGITS, default='0.0', validators=[validate_string],
-                                      help_text='Начальный курс, полученный с ЦБ, Binance или BestChange. Менять не рекомендуется. Данный курс периодически изменяется автоматически')
+                                      help_text='Курс, полученный с ЦБ, Binance или BestChange.')
 
     change_left = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
     change_right = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
@@ -523,7 +523,7 @@ class SwapMoney(models.Model):  # Основная таблица настрое
                                        validators=[validate_string])
     change_right_str = models.CharField('+/- % справа', max_length=MAX_DIGITS, default='0.0',
                                         validators=[validate_string],
-                                        help_text='Изменение курса в % (прибыль) Пример расчёта: Если = 5, то курс умножается на 1.05, если = -5, то на 0.95.')
+                                        help_text='Изменение курса в %')
 
     rate_left_final = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
     rate_right_final = models.DecimalField(default=0, decimal_places=DECIMAL_PLACES, max_digits=MAX_DIGITS)
@@ -541,7 +541,7 @@ class SwapMoney(models.Model):  # Основная таблица настрое
                                         validators=[validate_string])
     add_fee_right_str = models.CharField('Доп справа', max_length=MAX_DIGITS, default='0.0',
                                          validators=[validate_string],
-                                         help_text='Сумма фиксированной удерживаемой комисии. На курс обмена не влияет, изменяется только итоговая отдаваемая сумма!')
+                                         help_text='Сумма фиксированной удерживаемой комисии.')
 
     manual_active = models.BooleanField('Ручной курс', default=False,
                                         help_text='Курс установленный вручную является приоритетным')

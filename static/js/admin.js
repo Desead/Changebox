@@ -24,6 +24,7 @@ ConfirmHide()
 ////////////////////////////////////////////////////////////
 
 // Берём help_text и делаем его ссылкой в модели Валюта+ПС (Fullmoney)
+
 const a_link = 'https://jsons.info/signatures/currencies'
 
 const help_text = document.querySelectorAll('.help')
@@ -34,4 +35,13 @@ if (help_text)
             break
         }
     }
+////////////////////////////////////////////////////////////
+
+// закрываем для редактирования input с финальным курсом обмена
+const rate_left = document.querySelector('#id_rate_left_final_str')
+const rate_right = document.querySelector('#id_rate_right_final_str')
+
+if (rate_left) rate_left.setAttribute('readonly','')
+if (rate_right) rate_right.setAttribute('readonly','')
+
 ////////////////////////////////////////////////////////////

@@ -220,6 +220,10 @@ class SwapMoneyAdmin(admin.ModelAdmin):
     actions = [all_on, all_off]
     filter_horizontal = ('city',)
 
+    def save_model(self, request, obj, form, change):
+        # obj.change_left = Decimal(remove_space_from_string(obj.change_left_str))
+        super().save_model(request, obj, form, change)
+
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "money_left":
             kwargs["queryset"] = FullMoney.objects.filter(active=True)

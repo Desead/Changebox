@@ -192,22 +192,24 @@ def get_rates_from_bestchange(swap, mark_changes, best_files: Dict, use_local_fi
             temp = [Decimal(x) for x in rate_right]
             delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
             temp.sort(reverse=True)
-            i.rate_left_str = '1'
+            i.rate_left = Decimal('1')
             if need_place >= len_rate:
-                i.rate_right_str = str(temp[len_rate - 1] - delta)  # значит хотим занять последнюю позицию
+                i.rate_right = temp[len_rate - 1] - delta  # значит хотим занять последнюю позицию
             else:
-                i.rate_right_str = str(temp[need_place] + delta)
+                i.rate_right = temp[need_place] + delta
 
         if rate_right[0] == '1':
             temp = [Decimal(x) for x in rate_left]
             delta = Decimal('0.01') if i.money_right.money.money_type == 'fiat' else Decimal('0.00001')
             temp.sort(reverse=False)
-            i.rate_right_str = '1'
+            i.rate_right = Decimal('1')
             if need_place >= len_rate:
-                i.rate_left_str = str(temp[len_rate - 1] + delta)  # значит хотим занять последнюю позицию
+                i.rate_left = temp[len_rate - 1] + delta  # значит хотим занять последнюю позицию
             else:
-                i.rate_left_str = str(temp[need_place] - delta)
+                i.rate_left = temp[need_place] - delta
 
-        set_single_rate(i)
+        i.rate_left_str = str(i.rate_left)
+        i.rate_right_str = str(i.rate_right)
+
         mark_changes[num] = True
         i.save()
