@@ -10,7 +10,7 @@ from django.views.generic import CreateView
 
 from app_main.forms import CustomUserCreationForm
 from app_main.lib.get_pause import get_pause
-from app_main.models import SwapMoney, FieldsLeft, FieldsRight, Settings, InfoPanel, SwapOrders, FullMoney, CustomUser, \
+from app_main.models import SwapMoney, Settings, SwapOrders, FullMoney, CustomUser, \
     Monitoring
 
 
@@ -18,6 +18,11 @@ class SignUpView(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy("login")
     template_name = "registration/signup.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['settings'] = Settings.objects.first()
+        return context
 
 
 class StartView(View):
@@ -55,9 +60,12 @@ class StartView(View):
 
 class LKView(View):
     def get(self, request):
+        MAX_LAST_ORDERS_VIEW = 100
+
         context = {'settings': Settings.objects.first(),
                    'user': CustomUser.objects.get(email=request.user),
-                   'orders': SwapOrders.objects.filter(user__email=request.user)}
+                   'orders': SwapOrders.objects.filter(user__email=request.user).order_by('-swap_create')
+                   [:MAX_LAST_ORDERS_VIEW]}
         return render(request, 'lk.html', context)
 
 
@@ -104,6 +112,7 @@ class ConfirmView(View):
             user = CustomUser.objects.get(email=request.user)
         else:
             user = None
+
 
         order = SwapOrders.objects.get_or_create(
             money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
@@ -286,57 +295,46 @@ def ExportDirect(request):
     cur_to = request.GET.get('cur_to')
     city = request.GET.get('city')
 
-    money = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
+    swap = SwapMoney.objects.filter(money_left__xml_code=cur_from, money_right__xml_code=cur_to)
 
-    if money.count() != 1:
+    if swap.count() != 1:
         return JsonResponse({
-            'error': 'exchanges count: ' + str(money.count()),
+            'error': 'exchanges count: ' + str(swap.count()),
         })
-    money = money[0]
-
-    # добавили дополнительные поля
-    temp = FieldsLeft.objects.filter(pay=money.money_left)
-    left = []
-    for i in temp:
-        left.append(i.title)
-
-    temp = FieldsRight.objects.filter(pay=money.money_right)
-    right = []
-    for i in temp:
-        right.append(i.title)
+    swap = swap[0]
 
     # считаем и передём минимальный минимум и максимальный максимум
-    reserv = money.money_right.reserv
+    reserv = swap.money_right.reserv
 
-    min_left = money.min_left
-    if money.rate_right_final > 0:
-        min_left = money.min_right / money.rate_right_final * money.rate_left_final
-        min_left = max(money.min_left, min_left)
+    min_left = swap.min_left
+    if swap.rate_right_final > 0:
+        min_left = swap.min_right / swap.rate_right_final * swap.rate_left_final
+        min_left = max(swap.min_left, min_left)
 
-    min_right = money.rate_left_final
-    if money.rate_left_final > 0:
-        min_right = money.min_left / money.rate_left_final * money.rate_right_final
-        min_right = max(money.min_right, min_right)
+    min_right = swap.rate_left_final
+    if swap.rate_left_final > 0:
+        min_right = swap.min_left / swap.rate_left_final * swap.rate_right_final
+        min_right = max(swap.min_right, min_right)
 
-    max_left = money.max_left
-    if money.rate_right_final > 0:
-        max_left = min(money.max_right, reserv) / money.rate_right_final * money.rate_left_final
-        max_left = max(money.max_left, max_left) if 0 in [money.max_left, max_left] else min(money.max_left, max_left)
+    max_left = swap.max_left
+    if swap.rate_right_final > 0:
+        max_left = min(swap.max_right, reserv) / swap.rate_right_final * swap.rate_left_final
+        max_left = max(swap.max_left, max_left) if 0 in [swap.max_left, max_left] else min(swap.max_left, max_left)
 
-    max_right = money.max_right
-    if money.rate_left_final > 0:
-        max_right = money.max_left / money.rate_left_final * money.rate_right_final
-        max_right = max(money.max_right, max_right) if 0 in [money.max_right, max_right] else min(money.max_right,
-                                                                                                  max_right)
+    max_right = swap.max_right
+    if swap.rate_left_final > 0:
+        max_right = swap.max_left / swap.rate_left_final * swap.rate_right_final
+        max_right = max(swap.max_right, max_right) if 0 in [swap.max_right, max_right] else min(swap.max_right,
+                                                                                                max_right)
 
-    if money.money_left.money.money_type == 'fiat':
+    if swap.money_left.money.money_type == 'fiat':
         min_left = round(min_left, 2)
         max_left = round(max_left, 2)
     else:
         min_left = round(min_left, 8)
         max_left = round(max_left, 8)
 
-    if money.money_right.money.money_type == 'fiat':
+    if swap.money_right.money.money_type == 'fiat':
         min_right = round(min_right, 2)
         max_right = round(max_right, 2)
         reserv = round(reserv, 2)
@@ -345,39 +343,33 @@ def ExportDirect(request):
         max_right = round(max_right, 8)
         reserv = round(reserv, 8)
 
-    def del_last_zero(num) -> str:  # Удаляем последние незначащие нули
-        num = list(str(num))
-        if '.' in num:
-            while True:
-                n = len(num) - 1
-                if n <= 0:
-                    break
-                if num[n] == '0':
-                    num.pop(n)
-                else:
-                    break
-        return ''.join(num)
+    left = []
+    if swap.money_left.add_field_in: left.append(swap.money_left.add_field_in)
+
+    right = []
+    if swap.money_right.add_field_out: right.append(swap.money_right.add_field_out)
+    if swap.money_right.add_field_memo: right.append(swap.money_right.add_field_memo)
 
     direct = {
-        'money_left': money.money_left.id,
-        'money_right': money.money_right.id,
+        'money_left': swap.money_left.id,
+        'money_right': swap.money_right.id,
         'add_left': left,
         'add_right': right,
-        'min_left': del_last_zero(min_left),
-        'max_left': del_last_zero(max_left),
-        'min_right': del_last_zero(min_right),
-        'max_right': del_last_zero(max_right),
-        'rate_left_final': money.rate_left_final,
-        'rate_right_final': money.rate_right_final,
-        'add_fee_left': money.add_fee_left,
-        'add_fee_right': money.add_fee_right,
+        'min_left': min_left,
+        'max_left': max_left,
+        'min_right': min_right,
+        'max_right': max_right,
+        'rate_left_final': swap.rate_left_final,
+        'rate_right_final': swap.rate_right_final,
+        'add_fee_left': swap.add_fee_left,
+        'add_fee_right': swap.add_fee_right,
         'reserv': reserv,
 
-        'seo_title': money.seo_title,
-        'seo_descriptions': money.seo_descriptions,
-        'seo_keywords': money.seo_keywords,
+        'seo_title': swap.seo_title,
+        'seo_descriptions': swap.seo_descriptions,
+        'seo_keywords': swap.seo_keywords,
     }
-    city = ','.join([i.abc_code for i in money.city.all()])
+    city = ','.join([i.abc_code for i in swap.city.all()])
     if city:
         direct['city'] = city
 

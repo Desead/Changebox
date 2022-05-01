@@ -444,6 +444,13 @@ class FullMoney(Commisions):  # объединили монетки и плат�
     reserv = models.FloatField('Резерв', help_text='Доступный для обмена резерв', default=0)
     logo = models.FileField('Логотип', upload_to='static/img/money', default='', blank=True)
 
+    add_field_in = models.CharField('Поле входящее', max_length=30, blank=True,
+                                    help_text='Дополнительное поле для входящей валюты')
+    add_field_out = models.CharField('Поле исходящее', max_length=30, blank=True,
+                                     help_text='Дополнительное поле для исходящей валюты')
+    add_field_memo = models.CharField('Поле исходящее 2', max_length=30, blank=True,
+                                      help_text='Дополнительное поле для исходящей валюты')
+
     def __str__(self):
         return self.title
 
@@ -480,8 +487,8 @@ class SwapMoney(models.Model):  # Основная таблица настрое
 
     manual_active = models.BooleanField('Ручной курс', default=False, help_text='Ручной курс является приоритетным')
 
-    manual_rate_left = models.FloatField('Ручной курс слева',default=0, )
-    manual_rate_right = models.FloatField('Ручной курс справа',default=0, )
+    manual_rate_left = models.FloatField('Ручной курс слева', default=0, )
+    manual_rate_right = models.FloatField('Ручной курс справа', default=0, )
 
     freeze = models.PositiveIntegerField('Заморозка', default=0, help_text='Заморозка средств при обмене, в минутах.')
 
@@ -554,14 +561,14 @@ class SwapOrders(models.Model):
     ORDERS_STATUS = (
         ('new', 'Новая'),
         ('cancel', 'Отмена'),
-        ('end', 'Завершена'),
+        ('end', 'Выполнена'),
         ('error', 'Ошибка'),
         ('back', 'Возврат'),
         ('pause', 'Ожидание клиента'),
     )
     status = models.CharField('Статус сделки', max_length=100, choices=ORDERS_STATUS, default='new')
-    num = models.CharField('Номер сделки', max_length=15, unique=True)
-    swap_create = models.DateTimeField('Время сделки', auto_now=True, editable=False)
+    num = models.CharField('Номер сделки', max_length=15)
+    swap_create = models.DateTimeField('Время сделки', auto_now_add=True, editable=False)
     money_left = models.ForeignKey(FullMoney, verbose_name='Монета слева', on_delete=models.CASCADE,
                                    related_name='swap_orders_left')
     money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
@@ -601,26 +608,6 @@ class InfoPanel(models.Model):
         verbose_name = 'Информация'
         verbose_name_plural = '10. Информация'
         ordering = ['-time', ]
-
-
-class AddFields(models.Model):
-    # Модель для дополнительных полей, нужных для обмена. Необходимо две идентичных модели для левой и правой монеты
-    title = models.CharField('Название', max_length=20, unique=True)
-    pay = models.ForeignKey(FullMoney, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return ''
-
-    class Meta:
-        abstract = True
-
-
-class FieldsLeft(AddFields):
-    pass
-
-
-class FieldsRight(AddFields):
-    pass
 
 
 class Monitoring(models.Model):

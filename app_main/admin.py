@@ -85,33 +85,19 @@ class MoneyAdmin(admin.ModelAdmin):
     actions = [all_on, all_off]
 
 
-class FieldsLeftInline(admin.TabularInline):
-    model = FieldsLeft
-    extra = 0
-    verbose_name = 'Дополнительное поле'
-    verbose_name_plural = 'Список дополнительных полей которые надо заполнить клиенту на сайте чтобы отдать данную валюту'
-
-
-class FieldsRightInline(admin.TabularInline):
-    model = FieldsRight
-    extra = 0
-    verbose_name = 'Дополнительное поле'
-    verbose_name_plural = 'Список дополнительных полей которые надо заполнить клиенту на сайте чтобы получить данную валюту'
-
-
 @admin.register(FullMoney)
 class FullMoneyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'active', 'reserv',)
-    list_editable = ('active', 'reserv',)
+    list_display = ('title', 'active', 'reserv', 'add_field_in', 'add_field_out', 'add_field_memo',)
+    list_editable = ('active', 'reserv', 'add_field_in', 'add_field_out', 'add_field_memo',)
     list_filter = ('active', 'pay',)
     search_fields = ('title', 'xml_code',)
     save_on_top = True
     actions = [all_on, all_off]
-    inlines = [FieldsLeftInline, FieldsRightInline]
     fieldsets = (
         ('', {'fields': ('active', 'title', 'xml_code', 'pay', 'money', 'reserv', 'logo',)}),
-        ('Комиссии', {'classes': ('collapse',),
-                      'fields': ('payer', ('fee_percent', 'fee_absolut'), ('fee_min', 'fee_max'),)}),
+        ('Дополнительные поля', {'fields': ('add_field_in', 'add_field_out', 'add_field_memo',)}),
+        ('Комиссии',
+         {'fields': ('payer', ('fee_percent', 'fee_absolut'), ('fee_min', 'fee_max'),)}),
     )
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
@@ -176,7 +162,7 @@ class SettingsAdmin(admin.ModelAdmin):
             from app_main.lib.binance import get_binance_data
             from app_main.lib.binance import set_binance_rate
             binance = get_binance_data()
-            set_binance_rate(Money.objects.filter(money_type='crypto'), binance[1],Settings.objects.first().off_money)
+            set_binance_rate(Money.objects.filter(money_type='crypto'), binance[1], Settings.objects.first().off_money)
         elif request.POST.get('create_swap'):
             create_all_swap()
         elif request.POST.get('set_all_rates'):
@@ -214,7 +200,7 @@ class SwapMoneyAdmin(admin.ModelAdmin):
 
     list_display_links = ('money_left', 'money_right', 'rate_left_final', 'rate_right_final',)
     list_editable = ('active', 'best_place', 'min_left', 'max_left', 'min_right', 'max_right',)
-    list_filter = ('active', 'best_place','money_left__money__money_type','money_right__money__money_type', 'money_left', 'money_right',)
+    list_filter = ('active', 'best_place', 'money_left', 'money_right',)
     readonly_fields = ('time',)
     save_on_top = True
     actions = [all_on, all_off]
