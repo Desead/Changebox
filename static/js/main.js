@@ -361,10 +361,29 @@ setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
 
 
 function check_minmax() {
-    const min_left = document.querySelector('#swap_left_min').innerHTML
-    const max_left = document.querySelector('#swap_left_max').innerText
+    const send_pay = document.querySelector('#send_pay')
+    send_pay.setAttribute('type', 'button')
+
+    const min_left = document.querySelector('#swap_left_min')
+    const max_left = document.querySelector('#swap_left_max')
     const min_right = document.querySelector('#swap_right_min')
     const max_right = document.querySelector('#swap_right_max')
 
-    console.log(min_left, max_left, min_right, max_right)
+    const left_sum = document.querySelector('#left_sum')
+    const right_sum = document.querySelector('#right_sum')
+
+    let error_flag = false
+    if (+left_sum.value < +min_left.innerText || +left_sum.value > +max_left.innerText) {
+        left_sum.classList.add('red_border')
+        error_flag = true
+    } else left_sum.classList.remove('red_border')
+
+    if (+right_sum.value < +min_right.innerText || +right_sum.value > +max_right.innerText) {
+        right_sum.classList.add('red_border')
+        error_flag = true
+    } else right_sum.classList.remove('red_border')
+
+    if (error_flag) return false
+
+    send_pay.setAttribute('type', 'submit')
 }

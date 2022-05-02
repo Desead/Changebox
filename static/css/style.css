@@ -47,6 +47,10 @@ li {
     text-decoration-color: red;
 }
 
+.red_border {
+    border: 1px red solid;
+}
+
 .item_select {
     background-color: var(--select-item-back) !important;
     color: var(--select-item-color) !important;
@@ -148,6 +152,11 @@ li {
 
 .mm_text {
     margin: 0 5px 0 0;
+}
+
+#left_sum,
+#right_sum {
+    margin-top: 15px;
 }
 
 .pay_btn {
