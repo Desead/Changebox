@@ -40,9 +40,18 @@
             <div class="confirm_rules">
                 <p>{{ settings.rules_warning|safe }}</p>
             </div>
+            <hr>
+            <div class="confirm_time">
+                <p>
+                    При отсутствии оплаты, заявка будет автоматически отменена через 15 минут
+                </p>
+                <p>Время создания: {{ order.swap_create }}</p>
+                <p>Время отмены: {{ order.swap_del }}</p>
+            </div>
+            <hr>
             <div class="confirm_buttons">
                 <button class="btn btn-danger" type="submit" name="cancel" value="cancel">Отменить</button>
-                <button class="btn btn-primary" type="submit" name="pay" value="pay">Оплатить</button>
+                <button class="btn btn-primary" type="submit" name="pay" value="pay">Подтвердить</button>
             </div>
         </form>
     </div>

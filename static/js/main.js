@@ -349,5 +349,3 @@ for (let i of document.querySelectorAll('.menu_item')) {
 
 MainLoop()
 setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
-
-

@@ -249,6 +249,9 @@ class SwapOrdersAdmin(admin.ModelAdmin):
 
 @admin.register(Wallets)
 class WalletsAdmin(admin.ModelAdmin):
+    list_display = ('fullmoney', 'active', 'number', 'balance', 'max_balance',)
+    list_editable = ('active', 'number', 'balance', 'max_balance',)
+
     actions = [all_on, all_off]
 
 

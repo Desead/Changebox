@@ -1,5 +1,8 @@
+from datetime import timedelta
+
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.timezone import now
 
 from Changebox import settings
 from app_main.lib.number_2_str import number_2_str
@@ -546,15 +549,20 @@ class SwapMoney(models.Model):  # Основная таблица настрое
 
 
 class Wallets(models.Model):
+    active = models.BooleanField('Вкл', default=False, help_text='Использовтаь или нет кошелёк в работе')
     fullmoney = models.ForeignKey(FullMoney, on_delete=models.CASCADE, verbose_name='Кошелёк')
-    name = models.CharField('Номер кошелька', max_length=100)
+    number = models.CharField('Номер кошелька', max_length=100)
+    balance = models.FloatField('Баланс', default=0)
+    max_balance = models.FloatField('Максимум', default=0,
+                                    help_text='Максимальное количество денег в данном кошельке. 0=без ограничений')
 
     def __str__(self):
-        return self.fullmoney.title + ': ' + self.name
+        return self.fullmoney.title + ': ' + self.number
 
     class Meta:
         verbose_name = 'Кошелёк'
         verbose_name_plural = '03. Кошельки'
+        ordering = ('fullmoney',)
 
 
 class SwapOrders(models.Model):
@@ -569,6 +577,7 @@ class SwapOrders(models.Model):
     status = models.CharField('Статус сделки', max_length=100, choices=ORDERS_STATUS, default='new')
     num = models.CharField('Номер сделки', max_length=15)
     swap_create = models.DateTimeField('Время сделки', auto_now_add=True, editable=False)
+    swap_del = models.DateTimeField(editable=False, help_text='Время в которое сделка отменится автоматически')
     money_left = models.ForeignKey(FullMoney, verbose_name='Монета слева', on_delete=models.CASCADE,
                                    related_name='swap_orders_left')
     money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
@@ -586,6 +595,10 @@ class SwapOrders(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь', null=True,
                              blank=True)
     comment = models.TextField('Комментарий', blank=True, help_text='Любой необходимый для себя комментарий')
+
+    def save(self, *args, **kwargs):
+        self.swap_del = now() + timedelta(minutes=15)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.money_left.title) + ' -> ' + str(self.money_right.title)
