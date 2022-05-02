@@ -123,7 +123,7 @@ class SettingsAdmin(admin.ModelAdmin):
     save_on_top = True
 
     fieldsets = (
-        ('', {'fields': ('logo', 'exchane_name', 'news',)}),
+        ('', {'fields': ('logo', 'exchane_name', 'timedelta_fiat','timedelta_crypto','news',)}),
         ('Режим работы',
          {'classes': ('collapse',), 'fields': ('pause', ('job_start', 'job_end'),)}),
         ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address',)}),
@@ -230,6 +230,7 @@ class PaySystemAdmin(admin.ModelAdmin):
 
 @admin.register(SwapOrders)
 class SwapOrdersAdmin(admin.ModelAdmin):
+    save_on_top = True
     list_display = ('num', 'status', 'money_left', 'money_right', 'left_in', 'right_out', 'pl', 'user', 'swap_create',)
     list_editable = ('status',)
     list_filter = ('status', 'user', 'money_left', 'money_right',)

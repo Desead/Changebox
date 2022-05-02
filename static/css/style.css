@@ -257,6 +257,15 @@ menu li {
     max-width: 150px;
 }
 
+.confirm_time li{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.swap_time_limit{
+    min-width: 260px;
+}
+
 /*/////////////////*/
 .arrow-2 {
     cursor: pointer;

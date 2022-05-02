@@ -38,15 +38,20 @@
             <br>
             <hr>
             <div class="confirm_rules">
-                <p>{{ settings.rules_warning|safe }}</p>
+                {{ settings.rules_warning|safe }}
             </div>
             <hr>
             <div class="confirm_time">
-                <p>
-                    При отсутствии оплаты, заявка будет автоматически отменена через 15 минут
-                </p>
-                <p>Время создания: {{ order.swap_create }}</p>
-                <p>Время отмены: {{ order.swap_del }}</p>
+                <ul>
+                    <li>
+                        <div class="swap_time_limit">Время создания заявки на обмен:</div>
+                        <div><b>{{ order.swap_create }}</b></div>
+                    </li>
+                    <li>
+                        <div class="swap_time_limit" title="Заявка отменяется атвоматически через 15 после создания, если за этот период не будут">Время автоматической отмены:</div>
+                        <div><b>{{ order.swap_del }}</b></div>
+                    </li>
+                </ul>
             </div>
             <hr>
             <div class="confirm_buttons">

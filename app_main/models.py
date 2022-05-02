@@ -338,6 +338,11 @@ class Settings(models.Model):
     news = models.TextField('Новость на главную', blank=True, help_text='Можно использовать html тэги',
                             default='Добрый день. Сегодня Bitcoin в очередной раз удивил общественность, показав рост на 20% за два часа!')
 
+    timedelta_fiat = models.PositiveSmallIntegerField('Время отмены заявки', default=15,
+                                                      help_text='Сколько минут живёт заявка при получении обменником электронных денег')
+    timedelta_crypto = models.PositiveSmallIntegerField('Время отмены заявки', default=40,
+                                                        help_text='Сколько минут живёт заявка при получении обменником криптовалюты')
+
     def __str__(self):
         return 'Базовые настройки'
 
@@ -597,7 +602,14 @@ class SwapOrders(models.Model):
     comment = models.TextField('Комментарий', blank=True, help_text='Любой необходимый для себя комментарий')
 
     def save(self, *args, **kwargs):
-        self.swap_del = now() + timedelta(minutes=15)
+        if not self.swap_del:
+            time_last = Settings.objects.first()
+            if self.money_left.money.money_type == 'fiat':
+                time_last = time_last.timedelta_fiat
+            else:
+                time_last = time_last.timedelta_crypto
+            self.swap_del = now() + timedelta(minutes=time_last)
+
         super().save(*args, **kwargs)
 
     def __str__(self):
