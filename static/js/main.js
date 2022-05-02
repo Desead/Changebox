@@ -78,7 +78,7 @@ function GetLeftSelectedMoney() {
     alert('Не выделен ни один элемент. Ошибка')
 }
 
-function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
+function CreateMoney(p_node, money_name, money_id, money_type, img_path, reserv_num = 0) {
     /*  Создаём компонент монетку
     p_node      родительская нода к которой прицепляемся
     money_name  название монетки для сайта
@@ -100,7 +100,6 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     money_img.setAttribute('src', img_path)
     div_money_img.append(money_img)
 
-
     let div_money = document.createElement('div')
     div_money.className = 'money'
     div_money.append(div_money_img)
@@ -109,8 +108,17 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     let elem_list = document.createElement('a')
     elem_list.setAttribute('href', '#')
     if (money_id !== '') elem_list.setAttribute('id', money_id)
-    elem_list.className = 'list-group-item list-group-item-action shadow-money rounded ' + money_type
+    elem_list.className = 'list-group-item list-group-item-action shadow-money rounded reserv_link ' + money_type
     elem_list.append(div_money)
+
+    if (reserv_num > 0) {
+        let reserv = document.createElement('div')
+        reserv.className = 'reserv_site'
+        let reserv_text = document.createElement('p')
+        reserv_text.innerText = reserv_num
+        reserv.append(reserv_text)
+        elem_list.append(reserv)
+    }
 
     p_node.append(elem_list)
 
@@ -154,12 +162,13 @@ async function CreateRightMoney() {
     }
 
     for (let money of rates[GetLeftSelectedMoney().id]) {
-        const elem = CreateMoney(document.querySelector('.change_right_dn'), money['name_right'], money['right'], money['type_right'], money['img_right'])
+        const elem = CreateMoney(document.querySelector('.change_right_dn'), money['name_right'], money['right'], money['type_right'], money['img_right'], money['reserv'])
         if (!money['active']) {
             elem.classList.add('disabled')
         }
         elem.addEventListener('click', SetItemSelect)
         elem.addEventListener('click', SwapDelNew)
+
 
         if (class_view !== 'all') if (class_view !== money['type_right']) elem.style.display = 'none'
     }
@@ -237,13 +246,12 @@ function CreateSwapBlock(direct) {
     main_block.append(template_block.content.cloneNode(true))
 
     document.querySelector('#swap_left').innerHTML = 'Отдаёте: <b>' + left_money_select['title'] + '</b>'
-    document.querySelector('#swap_left_min').innerHTML = 'мин: ' + direct['min_left']
-    document.querySelector('#swap_left_max').innerHTML = 'макс: ' + direct['max_left']
+    document.querySelector('#swap_left_min').innerHTML = direct['min_left']
+    document.querySelector('#swap_left_max').innerHTML = direct['max_left']
 
     document.querySelector('#swap_right').innerHTML = 'Получаете: <b>' + right_money_select['title'] + '</b>'
-    document.querySelector('#swap_right_min').innerHTML = 'мин: ' + direct['min_right']
-    document.querySelector('#swap_right_max').innerHTML = 'макс: ' + direct['max_right']
-    document.querySelector('#swap_right_reserv').innerHTML = 'резерв: ' + direct['reserv']
+    document.querySelector('#swap_right_min').innerHTML = direct['min_right']
+    document.querySelector('#swap_right_max').innerHTML = direct['max_right']
 
     // добавляем дополнительнрые поля
     let temp = direct['add_left']
@@ -350,3 +358,13 @@ for (let i of document.querySelectorAll('.menu_item')) {
 
 MainLoop()
 setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
+
+
+function check_minmax() {
+    const min_left = document.querySelector('#swap_left_min').innerHTML
+    const max_left = document.querySelector('#swap_left_max').innerText
+    const min_right = document.querySelector('#swap_right_min')
+    const max_right = document.querySelector('#swap_right_max')
+
+    console.log(min_left, max_left, min_right, max_right)
+}

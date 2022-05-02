@@ -282,6 +282,7 @@ def ExportRates(request):
         temp['img_left'] = str(i.money_left.logo)
         temp['img_right'] = str(i.money_right.logo)
         temp['place'] = 1
+        temp['reserv'] = i.money_right.reserv
 
         swap_to_export[left].append(temp)
 
@@ -319,14 +320,12 @@ def ExportDirect(request):
 
     max_left = swap.max_left
     if swap.rate_right_final > 0:
-        max_left = min(swap.max_right, reserv) / swap.rate_right_final * swap.rate_left_final
+        max_left = swap.max_right / swap.rate_right_final * swap.rate_left_final
         max_left = max(swap.max_left, max_left) if 0 in [swap.max_left, max_left] else min(swap.max_left, max_left)
 
-    max_right = swap.max_right
+    max_right = min(swap.max_right, reserv)
     if swap.rate_left_final > 0:
-        max_right = swap.max_left / swap.rate_left_final * swap.rate_right_final
-        max_right = max(swap.max_right, max_right) if 0 in [swap.max_right, max_right] else min(swap.max_right,
-                                                                                                max_right)
+        max_right = min(swap.max_left / swap.rate_left_final * swap.rate_right_final, max_right)
 
     if swap.money_left.money.money_type == 'fiat':
         min_left = round(min_left, 2)

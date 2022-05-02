@@ -5,23 +5,32 @@
         <div class="col">
             <div id="swap_left"></div>
             <div class="minmax mm_left">
-                <p id="swap_left_min"></p>
-                <p id="swap_left_max"></p>
+                <div class="mm_data">
+                    <p class="mm_text">мин:</p>
+                    <p class="mm_text" id="swap_left_min"></p>
+                </div>
+                <div class="mm_data">
+                    <p class="mm_text">макс:</p>
+                    <p class="mm_text" id="swap_left_max"></p>
+                </div>
             </div>
 
             {#обернули в див чтобы можно было добавить доп.поле при его наличии#}
             <div id="left_fields">
                 <input type="number" name="left_sum" id="left_sum" min="0" step="0.01" class="form-control"
-                       placeholder="Сумма" title="Сумма, которая должна поступить в обменник" required>
-            </div>
-
+                       placeholder="Сумма" title="Сумма, которая должна поступить в обменник" required></div>
             <hr>
             <div id="swap_right"></div>
             <div class="minmax mm_right">
-                <p id="swap_right_min"></p>
-                <p id="swap_right_max"></p>
+                <div class="mm_data">
+                    <p class="mm_text">мин:</p>
+                    <p class="mm_text" id="swap_right_min"></p>
+                </div>
+                <div class="mm_data">
+                    <p class="mm_text">макс:</p>
+                    <p class="mm_text" id="swap_right_max"></p>
+                </div>
             </div>
-            <p id="swap_right_reserv"></p>
 
             <div id="right_fields">
                 <input type="number" name="right_sum" id="right_sum" min="0" step="0.01" class="form-control"
@@ -39,7 +48,7 @@
             <input type="hidden" id="money_left" name="money_left" value="">
             <input type="hidden" id="money_right" name="money_right" value="">
             <div class="pay_btn">
-                <button class="btn btn-primary" type="submit">Оплатить</button>
+                <button id="send_pay" class="btn btn-primary" type="button" onclick="check_minmax()">Оплатить</button>
             </div>
         </div>
     </form>

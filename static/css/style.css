@@ -119,6 +119,35 @@ li {
 .minmax {
     display: flex;
     justify-content: space-between;
+    background: rgb(245, 245, 245);
+}
+
+.mm_data {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+}
+
+#swap_left_min,
+#swap_left_max,
+#swap_right_min,
+#swap_right_max {
+    font-weight: bold;
+}
+
+.reserv_site {
+    font-size: xx-small;
+    color: #5b80b2;
+}
+
+.reserv_link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.mm_text {
+    margin: 0 5px 0 0;
 }
 
 .pay_btn {
@@ -257,12 +286,13 @@ menu li {
     max-width: 150px;
 }
 
-.confirm_time li{
+.confirm_time li {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
 }
-.swap_time_limit{
+
+.swap_time_limit {
     min-width: 260px;
 }
 
