@@ -100,6 +100,7 @@ function CreateMoney(p_node, money_name, money_id, money_type, img_path) {
     money_img.setAttribute('src', img_path)
     div_money_img.append(money_img)
 
+
     let div_money = document.createElement('div')
     div_money.className = 'money'
     div_money.append(div_money_img)
@@ -250,7 +251,7 @@ function CreateSwapBlock(direct) {
         let add_field = document.createElement('input')
         add_field.className = 'form-control'
         add_field.setAttribute('type', 'text')
-        // add_field.setAttribute('required', '')
+        add_field.setAttribute('required', '')
         add_field.setAttribute('placeholder', i)
         document.querySelector('#left_fields').append(add_field)
     }
@@ -259,7 +260,7 @@ function CreateSwapBlock(direct) {
         let add_field = document.createElement('input')
         add_field.className = 'form-control'
         add_field.setAttribute('type', 'text')
-        // add_field.setAttribute('required', '')
+        add_field.setAttribute('required', '')
         add_field.setAttribute('placeholder', i)
         document.querySelector('#right_fields').append(add_field)
     }

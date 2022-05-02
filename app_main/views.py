@@ -95,7 +95,8 @@ class SecurityView(View):
 
 class ConfirmView(View):
     def post(self, request):
-        context = {'settings': Settings.objects.first()}
+        settings = Settings.objects.first()
+        context = {'settings': settings}
         if request.POST.get('cancel'):
             order = SwapOrders.objects.filter(num=request.POST.get('num'))
             if order.count() == 1:
@@ -113,7 +114,6 @@ class ConfirmView(View):
         else:
             user = None
 
-
         order = SwapOrders.objects.get_or_create(
             money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
             money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
@@ -126,6 +126,7 @@ class ConfirmView(View):
         )
 
         context['order'] = order[0]
+        context['confirm'] = order[0].money_left.money.conformation
         return render(request, 'confirm.html', context)
 
 

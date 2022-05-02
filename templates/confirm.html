@@ -5,7 +5,7 @@
     <div class="confirm shadow-money rounded">
         <form action="" class="row" method="post" id="confirm_check">
             {% csrf_token %}
-            <p>Номер транзакции: <b>{{ order.num }}</b></p>
+            <p>Номер заявки на обмен: <b>{{ order.num }}</b></p>
             <input type="text" name="num" value="{{ order.num }}" hidden>
             <hr>
 
@@ -13,7 +13,7 @@
 
                 <div class="confirm_left">
                     <div class="cl_money">
-                        <img src="{{ order.money_left.logo.url }}" height="60" width="auto">
+                        <img src="{{ order.money_left.logo.url }}" alt="" height="60" width="auto">
                         <p>{{ order.money_left.title }}</p>
                     </div>
                     <div class="left_price">
@@ -26,7 +26,7 @@
                 </div>
                 <div class="confirm_right">
                     <div class="cr_money">
-                        <img src="{{ order.money_right.logo.url }}" height="60" width="auto">
+                        <img src="{{ order.money_right.logo.url }}" alt="" height="60" width="auto">
                         <p>{{ order.money_right.title }}</p>
                     </div>
                     <div class="right_price">
@@ -48,8 +48,17 @@
                         <div><b>{{ order.swap_create }}</b></div>
                     </li>
                     <li>
-                        <div class="swap_time_limit" title="Заявка отменяется атвоматически через 15 после создания, если за этот период не будут">Время автоматической отмены:</div>
+                        <div class="swap_time_limit">Время автоматической отмены:</div>
                         <div><b>{{ order.swap_del }}</b></div>
+                    </li>
+                    {% if confirm > 0 %}
+                        <li>
+                            <div class="swap_time_limit">Количество подтверждений:</div>
+                            <div><b>{{ confirm }}</b></div>
+                        </li>
+                    {% endif %}
+                    <li style="font-size: xx-small">*Заявка отменяется автоматически, если за указанный период не будет
+                        поступления
                     </li>
                 </ul>
             </div>

@@ -12,8 +12,7 @@
             {#обернули в див чтобы можно было добавить доп.поле при его наличии#}
             <div id="left_fields">
                 <input type="number" name="left_sum" id="left_sum" min="0" step="0.01" class="form-control"
-                       placeholder="Сумма" title="Сумма, которая должна поступить в обменник"
-                >
+                       placeholder="Сумма" title="Сумма, которая должна поступить в обменник" required>
             </div>
 
             <hr>
@@ -26,12 +25,12 @@
 
             <div id="right_fields">
                 <input type="number" name="right_sum" id="right_sum" min="0" step="0.01" class="form-control"
-                       placeholder="Сумма"
-                >
+                       placeholder="Сумма" required>
             </div>
 
             <hr>
-            <input type="tel" min="0" class="form-control" name="phone" placeholder="Ваш номер телефона">
+            <input type="tel" min="0" class="form-control" name="phone" placeholder="Ваш номер телефона"
+                   title="Указывать не объязательно, но крайне редко оператор может позвонить для уточнения деталей">
             <input type="email" class="form-control" name="email" placeholder="Электронная почта">
             <hr>
             <p style="font-size: small; text-align: center;">Нажимая кнопку
