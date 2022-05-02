@@ -123,7 +123,7 @@ class SettingsAdmin(admin.ModelAdmin):
     save_on_top = True
 
     fieldsets = (
-        ('', {'fields': ('logo', 'exchane_name', 'timedelta_fiat','timedelta_crypto','news',)}),
+        ('', {'fields': ('logo', 'exchane_name', 'timedelta_fiat', 'timedelta_crypto', 'news',)}),
         ('Режим работы',
          {'classes': ('collapse',), 'fields': ('pause', ('job_start', 'job_end'),)}),
         ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address',)}),
@@ -242,7 +242,7 @@ class SwapOrdersAdmin(admin.ModelAdmin):
          {'fields':
              (
                  'status', 'num', 'swap_create', 'money_left', 'money_right', 'left_in', 'right_out', 'pl', 'wallet_in',
-                 'wallet_out', 'user', 'phone', 'email', 'comment',
+                 'wallet_client', 'wallet_out', 'memo_out', 'user', 'phone', 'email', 'comment',
              ),
          }),
     )
@@ -250,7 +250,7 @@ class SwapOrdersAdmin(admin.ModelAdmin):
 
 @admin.register(Wallets)
 class WalletsAdmin(admin.ModelAdmin):
-    list_display = ('fullmoney', 'active', 'number', 'balance', 'max_balance',)
+    list_display = ('fullmoney', 'active', 'number','tag', 'balance', 'max_balance',)
     list_editable = ('active', 'number', 'balance', 'max_balance',)
 
     actions = [all_on, all_off]

@@ -254,6 +254,7 @@ function CreateSwapBlock(direct) {
     document.querySelector('#swap_right_max').innerHTML = direct['max_right']
 
     // добавляем дополнительнрые поля
+    let count = 1
     let temp = direct['add_left']
     for (let i of temp) {
         let add_field = document.createElement('input')
@@ -261,8 +262,11 @@ function CreateSwapBlock(direct) {
         add_field.setAttribute('type', 'text')
         add_field.setAttribute('required', '')
         add_field.setAttribute('placeholder', i)
+        add_field.setAttribute('name', 'add_in_' + String(count))
         document.querySelector('#left_fields').append(add_field)
+        count++
     }
+    count = 1
     temp = direct['add_right']
     for (let i of temp) {
         let add_field = document.createElement('input')
@@ -270,7 +274,9 @@ function CreateSwapBlock(direct) {
         add_field.setAttribute('type', 'text')
         add_field.setAttribute('required', '')
         add_field.setAttribute('placeholder', i)
+        add_field.setAttribute('name', 'add_out_' + String(count))
         document.querySelector('#right_fields').append(add_field)
+        count++
     }
 
     //запоминаем курс обмена
@@ -328,6 +334,35 @@ function SumToSum() {
     else right.value = (+right_num).toFixed(8)
 }
 
+function CheckMinmax() {
+    // проверяем соответствие введённых сумм ограничениям мин-макс
+    const send_pay = document.querySelector('#send_pay')
+    send_pay.setAttribute('type', 'button')
+
+    const min_left = document.querySelector('#swap_left_min')
+    const max_left = document.querySelector('#swap_left_max')
+    const min_right = document.querySelector('#swap_right_min')
+    const max_right = document.querySelector('#swap_right_max')
+
+    const left_sum = document.querySelector('#left_sum')
+    const right_sum = document.querySelector('#right_sum')
+
+    let error_flag = false
+    if (+left_sum.value < +min_left.innerText || +left_sum.value > +max_left.innerText) {
+        left_sum.classList.add('red_border')
+        error_flag = true
+    } else left_sum.classList.remove('red_border')
+
+    if (+right_sum.value < +min_right.innerText || +right_sum.value > +max_right.innerText) {
+        right_sum.classList.add('red_border')
+        error_flag = true
+    } else right_sum.classList.remove('red_border')
+
+    if (error_flag) return false
+
+    send_pay.setAttribute('type', 'submit')
+}
+
 //      swap            //////////////////////////////////////////////////
 async function SwapDelNew() {
     if (left_money_select['id'] !== undefined && right_money_select['id'] !== undefined) {
@@ -360,30 +395,19 @@ MainLoop()
 setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
 
 
-function check_minmax() {
-    const send_pay = document.querySelector('#send_pay')
-    send_pay.setAttribute('type', 'button')
+// function MinLeftToInput() {
+//     document.querySelector('#left_sum').value = document.querySelector('#swap_left_min').innerText
+// }
+//
+// function MaxLeftToInput() {
+//     document.querySelector('#left_sum').value = document.querySelector('#swap_left_max').innerText
+// }
+//
+// function MinRightToInput() {
+//     document.querySelector('#right_sum').value = document.querySelector('#swap_right_min').innerText
+// }
+//
+// function MaxRightToInput() {
+//     document.querySelector('#right_sum').value = document.querySelector('#swap_right_max').innerText
+// }
 
-    const min_left = document.querySelector('#swap_left_min')
-    const max_left = document.querySelector('#swap_left_max')
-    const min_right = document.querySelector('#swap_right_min')
-    const max_right = document.querySelector('#swap_right_max')
-
-    const left_sum = document.querySelector('#left_sum')
-    const right_sum = document.querySelector('#right_sum')
-
-    let error_flag = false
-    if (+left_sum.value < +min_left.innerText || +left_sum.value > +max_left.innerText) {
-        left_sum.classList.add('red_border')
-        error_flag = true
-    } else left_sum.classList.remove('red_border')
-
-    if (+right_sum.value < +min_right.innerText || +right_sum.value > +max_right.innerText) {
-        right_sum.classList.add('red_border')
-        error_flag = true
-    } else right_sum.classList.remove('red_border')
-
-    if (error_flag) return false
-
-    send_pay.setAttribute('type', 'submit')
-}

@@ -454,12 +454,13 @@ class FullMoney(Commisions):  # объединили монетки и плат�
     money = models.ForeignKey(Money, verbose_name='Код валюты', on_delete=models.CASCADE)
     reserv = models.FloatField('Резерв', help_text='Доступный для обмена резерв', default=0)
     logo = models.FileField('Логотип', upload_to='static/img/money')
+    place = models.PositiveSmallIntegerField('Место на сайте', default=1)
 
-    add_field_in = models.CharField('Поле входящее', max_length=30, blank=True,
+    add_field_in = models.CharField('Поле входящее', max_length=100, blank=True,
                                     help_text='Дополнительное поле для входящей валюты')
-    add_field_out = models.CharField('Поле исходящее', max_length=30, blank=True,
+    add_field_out = models.CharField('Поле исходящее', max_length=100, blank=True,
                                      help_text='Дополнительное поле для исходящей валюты')
-    add_field_memo = models.CharField('Поле исходящее 2', max_length=30, blank=True,
+    add_field_memo = models.CharField('Поле исходящее 2', max_length=100, blank=True,
                                       help_text='Дополнительное поле для исходящей валюты')
 
     def __str__(self):
@@ -560,6 +561,7 @@ class Wallets(models.Model):
     active = models.BooleanField('Вкл', default=False, help_text='Использовтаь или нет кошелёк в работе')
     fullmoney = models.ForeignKey(FullMoney, on_delete=models.CASCADE, verbose_name='Кошелёк')
     number = models.CharField('Номер кошелька', max_length=100)
+    tag = models.CharField('Тэг', max_length=100, blank=True)
     balance = models.FloatField('Баланс', default=0)
     max_balance = models.FloatField('Максимум', default=0,
                                     help_text='Максимальное количество денег в данном кошельке. 0=без ограничений')
@@ -575,12 +577,12 @@ class Wallets(models.Model):
 
 class SwapOrders(models.Model):
     ORDERS_STATUS = (
-        ('new', 'Новая'),
+        ('new', 'Ожидание оплаты'),
         ('cancel', 'Отмена'),
         ('end', 'Выполнена'),
         ('error', 'Ошибка'),
         ('back', 'Возврат'),
-        ('pause', 'Ожидание клиента'),
+        ('receiving', 'Ожидание оплаты'),
     )
     status = models.CharField('Статус сделки', max_length=100, choices=ORDERS_STATUS, default='new')
     num = models.CharField('Номер сделки', max_length=15)
@@ -590,15 +592,19 @@ class SwapOrders(models.Model):
                                    related_name='swap_orders_left')
     money_right = models.ForeignKey(FullMoney, verbose_name='Монета справа', on_delete=models.CASCADE,
                                     related_name='swap_orders_right')
-    left_in = models.CharField('Приход', max_length=50, help_text='Сколько денег пришло')
-    right_out = models.CharField('Расход', max_length=50, help_text='Сколько денег ушло')
+    left_in = models.FloatField('Приход', help_text='Сколько денег пришло')
+    right_out = models.FloatField('Расход', help_text='Сколько денег ушло')
     pl = models.FloatField('Прибыль', default=0,
                            help_text='Прибыль рассчитывается в USD по курсу на момент сделки')
     wallet_in = models.ForeignKey(Wallets, on_delete=models.CASCADE, verbose_name='Кошелёк обменника', blank=True,
-                                  null=True, related_name='wallet_in')
-    wallet_out = models.ForeignKey(Wallets, on_delete=models.CASCADE, verbose_name='Кошелёк клиента', blank=True,
-                                   null=True, related_name='wallet_out')
-    phone = models.CharField('Телефон', max_length=20, default='', blank=True)
+                                  null=True, help_text='Кошелёк обменника на который поступят деньги')
+    wallet_client = models.CharField('Кошелёк клиента', max_length=100, blank=True, null=True,
+                                     help_text='Кошелёк с которого клиент будет отправлять в обменник')
+    wallet_out = models.CharField('Кошелёк клиента', max_length=100, blank=True, null=True,
+                                  help_text='Кошелёк/адрес на который обменник отправит деньги клиенту')
+    memo_out = models.CharField('MEMO клиента', max_length=100, blank=True, null=True,
+                                help_text='Дополнительное поле. Иногда нужно для отправки криптовалюты')
+    phone = models.CharField('Телефон', max_length=20, default='', blank=True, null=True)
     email = models.EmailField('Почта', default='', blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name='Пользователь', null=True,
                              blank=True)
@@ -612,6 +618,10 @@ class SwapOrders(models.Model):
             else:
                 time_last = time_last.timedelta_crypto
             self.swap_del = now() + timedelta(minutes=time_last)
+
+        if self.status == 'end':
+            self.money_left.reserv += self.left_in
+            self.money_right.reserv -= self.right_out
 
         super().save(*args, **kwargs)
 

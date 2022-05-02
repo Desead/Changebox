@@ -7,11 +7,13 @@
             <div class="minmax mm_left">
                 <div class="mm_data">
                     <p class="mm_text">мин:</p>
-                    <p class="mm_text" id="swap_left_min"></p>
+                    <p class="mm_text" id="swap_left_min" ></p>
+{#                    <p class="mm_text" id="swap_left_min" onclick="MinLeftToInput()"></p>#}
                 </div>
                 <div class="mm_data">
                     <p class="mm_text">макс:</p>
                     <p class="mm_text" id="swap_left_max"></p>
+{#                    <p class="mm_text" id="swap_left_max" onclick="MaxLeftToInput()"></p>#}
                 </div>
             </div>
 
@@ -25,10 +27,12 @@
                 <div class="mm_data">
                     <p class="mm_text">мин:</p>
                     <p class="mm_text" id="swap_right_min"></p>
+{#                    <p class="mm_text" id="swap_right_min" onclick="MinRightToInput()"></p>#}
                 </div>
                 <div class="mm_data">
                     <p class="mm_text">макс:</p>
                     <p class="mm_text" id="swap_right_max"></p>
+{#                    <p class="mm_text" id="swap_right_max" onclick="MaxRightToInput()"></p>#}
                 </div>
             </div>
 
@@ -48,7 +52,7 @@
             <input type="hidden" id="money_left" name="money_left" value="">
             <input type="hidden" id="money_right" name="money_right" value="">
             <div class="pay_btn">
-                <button id="send_pay" class="btn btn-primary" type="button" onclick="check_minmax()">Оплатить</button>
+                <button id="send_pay" class="btn btn-primary" type="button" onclick="CheckMinmax()">Оплатить</button>
             </div>
         </div>
     </form>

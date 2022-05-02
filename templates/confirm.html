@@ -5,7 +5,16 @@
     <div class="confirm shadow-money rounded">
         <form action="" class="row" method="post" id="confirm_check">
             {% csrf_token %}
-            <p>Номер заявки на обмен: <b>{{ order.num }}</b></p>
+            <p>Номер заявки: <b>{{ order.num }}</b></p>
+            <p>Статус заявки: <b>{{ order.get_status_display }}</b></p>
+            <p>Переведите со своего кошелька: <b>{{ order.wallet_client }}</b></p>
+            <p>На наш кошелёк: <b>{{ order.wallet_in.number }}</b></p>
+            {% if  order.wallet_out %}
+                <p>После ожидайте получения перевода по адресу: <b>{{ order.wallet_out }}</b></p>
+            {% endif %}
+            {% if order.memo_out %}
+                <p>Memo/Тег получателя: <b>{{ order.memo_out }}</b></p>
+            {% endif %}
             <input type="text" name="num" value="{{ order.num }}" hidden>
             <hr>
 
@@ -44,7 +53,11 @@
             <div class="confirm_time">
                 <ul>
                     <li>
-                        <div class="swap_time_limit">Время создания заявки на обмен:</div>
+                        <div class="swap_time_limit">Текущее время:</div>
+                        <div><b>{{ current_time }}</b></div>
+                    </li>
+                    <li>
+                        <div class="swap_time_limit">Время создания заявки:</div>
                         <div><b>{{ order.swap_create }}</b></div>
                     </li>
                     <li>
@@ -65,7 +78,7 @@
             <hr>
             <div class="confirm_buttons">
                 <button class="btn btn-danger" type="submit" name="cancel" value="cancel">Отменить</button>
-                <button class="btn btn-primary" type="submit" name="pay" value="pay">Подтвердить</button>
+                {#                <button class="btn btn-primary" type="submit" name="pay" value="pay">Оплатил</button>#}
             </div>
         </form>
     </div>

@@ -5,13 +5,14 @@ from string import ascii_letters
 from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render
 from django.urls import reverse_lazy
+from django.utils.timezone import now
 from django.views import View
 from django.views.generic import CreateView
 
 from app_main.forms import CustomUserCreationForm
 from app_main.lib.get_pause import get_pause
 from app_main.models import SwapMoney, Settings, SwapOrders, FullMoney, CustomUser, \
-    Monitoring
+    Monitoring, Wallets
 
 
 class SignUpView(CreateView):
@@ -113,20 +114,47 @@ class ConfirmView(View):
             user = CustomUser.objects.get(email=request.user)
         else:
             user = None
+        # todo прийти и уйти денег должно в не зависимости от того что пришло с сайта а в зависимости от внутренних натстроек!
 
+        # необходимо самостоятельно рассчитать суммы прихода и ухода и эти цифры отдать на сайт
+        left_sum = 0
+        right_sum = 0
+
+        def wallet_choise(money_left):
+            '''
+            Выбираем в зависимости от различных условий подходящий для этого обмена кошелёк
+            '''
+            wallet_in = Wallets.objects.filter(fullmoney__title=money_left)
+
+            if not wallet_in:
+                return None
+            if wallet_in.count() == 1:
+                return wallet_in[0]
+
+            # выбор кошелька по разным критериям
+            wallet_in = wallet_in[0]
+
+            return wallet_in
+
+        money_left = fullmoney.get(xml_code=request.POST.get('money_left'))
         order = SwapOrders.objects.get_or_create(
-            money_left=fullmoney.get(xml_code=request.POST.get('money_left')),
+            money_left=money_left,
             money_right=fullmoney.get(xml_code=request.POST.get('money_right')),
-            left_in=request.POST.get('left_sum'),
-            right_out=request.POST.get('right_sum'),
+            left_in=float(request.POST.get('left_sum')),
+            right_out=float(request.POST.get('right_sum')),
             phone=request.POST.get('phone'),
             email=request.POST.get('email'),
             num=request.POST.get('num'),
             user=user,
+            wallet_in=wallet_choise(money_left),
+            wallet_client=request.POST.get('add_in_1'),
+            wallet_out=request.POST.get('add_out_1'),
+            memo_out=request.POST.get('add_out_2'),
         )
 
         context['order'] = order[0]
         context['confirm'] = order[0].money_left.money.conformation
+        context['current_time'] = now()
         return render(request, 'confirm.html', context)
 
 
