@@ -120,11 +120,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# from .settings_prod import *
-# SECRET_KEY = '=+>_(*{L82(+?t4E+uc^QzM9EI2(3L#}um*wO<U]|>FV@y7E6mn8^iJcB;mgNQp'
-# DEBUG = False
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '5.63.154.146', 'primabit.ru', 'www.primabit.ru', ]
-
 if DEBUG:
     STATICFILES_DIRS = ['static']
 else:
