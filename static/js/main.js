@@ -7,7 +7,7 @@ const url_direct = 'direct/'
 let rates
 let left_money_select = {}
 let right_money_select = {}
-const TIME_REFRESH_IN_MSEC = 5000
+const TIME_REFRESH_IN_MSEC = 30000
 
 function SetSelectFirstMoney() {
     // разовое начальное выделение монеткы слева. В дальнейшем выделение есть всегда и эта функция более не используется
@@ -392,7 +392,11 @@ for (let i of document.querySelectorAll('.menu_item')) {
 }
 
 MainLoop()
-setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
+if (location.hostname === '127.0.0.1') {
+    setInterval(MainLoop, 5000)
+} else {
+    setInterval(MainLoop, TIME_REFRESH_IN_MSEC)
+}
 
 
 // function MinLeftToInput() {
