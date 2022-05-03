@@ -15,6 +15,15 @@ li {
     list-style-type: none;
 }
 
+hr {
+    margin: 1.5rem 0 !important;
+}
+
+ul {
+    margin: 0;
+    padding: 0;
+}
+
 .change_left_up, .change_right_up {
     display: flex;
     flex-direction: row;

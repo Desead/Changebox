@@ -333,8 +333,6 @@ class Settings(models.Model):
                                       help_text='Можно писать с html тэгами. Слово в тексте domain_name заменяется на текущий домен')
     rules_security = models.TextField('Политика безопасности', default=SECURITY,
                                       help_text='Можно писать с html тэгами. Слово в тексте domain_name заменяется на текущий домен')
-    rules_warning = models.TextField('Выдержка из правил', default=WARNING,
-                                     help_text='Главные тезисы при совершении обмена. Отображаются на странице совершения обмена. Можно писать с html тэгами. Слово в тексте domain_name заменяется на текущий домен')
     news = models.TextField('Новость на главную', blank=True, help_text='Можно использовать html тэги',
                             default='Добрый день. Сегодня Bitcoin в очередной раз удивил общественность, показав рост на 20% за два часа!')
 
@@ -600,7 +598,7 @@ class SwapOrders(models.Model):
                                   null=True, help_text='Кошелёк обменника на который поступят деньги')
     wallet_client = models.CharField('Кошелёк клиента', max_length=100, blank=True, null=True,
                                      help_text='Кошелёк с которого клиент будет отправлять в обменник')
-    wallet_out = models.CharField('Кошелёк клиента', max_length=100, blank=True, null=True,
+    wallet_out = models.CharField('Кошелёк клиента', max_length=100,
                                   help_text='Кошелёк/адрес на который обменник отправит деньги клиенту')
     memo_out = models.CharField('MEMO клиента', max_length=100, blank=True, null=True,
                                 help_text='Дополнительное поле. Иногда нужно для отправки криптовалюты')

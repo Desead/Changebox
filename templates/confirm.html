@@ -5,19 +5,10 @@
     <div class="confirm shadow-money rounded">
         <form action="" class="row" method="post" id="confirm_check">
             {% csrf_token %}
+            <input type="text" name="num" value="{{ order.num }}" hidden>
             <p>Номер заявки: <b>{{ order.num }}</b></p>
             <p>Статус заявки: <b>{{ order.get_status_display }}</b></p>
-            <p>Переведите со своего кошелька: <b>{{ order.wallet_client }}</b></p>
-            <p>На наш кошелёк: <b>{{ order.wallet_in.number }}</b></p>
-            {% if  order.wallet_out %}
-                <p>После ожидайте получения перевода по адресу: <b>{{ order.wallet_out }}</b></p>
-            {% endif %}
-            {% if order.memo_out %}
-                <p>Memo/Тег получателя: <b>{{ order.memo_out }}</b></p>
-            {% endif %}
-            <input type="text" name="num" value="{{ order.num }}" hidden>
             <hr>
-
             <div class="confirm_money">
 
                 <div class="confirm_left">
@@ -26,7 +17,7 @@
                         <p>{{ order.money_left.title }}</p>
                     </div>
                     <div class="left_price">
-                        <p>{{ order.left_in }}</p>
+                        <p><b>{{ order.left_in }}</b></p>
                     </div>
                 </div>
                 <div class="arrow-2">
@@ -39,15 +30,43 @@
                         <p>{{ order.money_right.title }}</p>
                     </div>
                     <div class="right_price">
-                        <p>{{ order.right_out }}</p>
+                        <p><b>{{ order.right_out }}</b></p>
                     </div>
                 </div>
 
             </div>
-            <br>
             <hr>
-            <div class="confirm_rules">
-                {{ settings.rules_warning|safe }}
+            <div class="confirm_time">
+                <ul>
+                    <li>
+                        <div class="swap_time_limit">Со своего кошелька:</div>
+                        <div><b>{{ order.wallet_client }}</b></div>
+                    </li>
+                    <li>
+                        <div class="swap_time_limit">Переведите на наш кошелёк:</div>
+                        <div><b>{{ order.wallet_in.number }}</b></div>
+                    </li>
+                    <li>
+                        <div class="swap_time_limit">Указанную сумму:</div>
+                        <div><b>{{ order.left_in }} {{ order.money_left.money.abc_code }}</b></div>
+                    </li>
+                    {% if  order.wallet_out %}
+                        <li>
+                            <div class="swap_time_limit">Ожидайте перевода на:</div>
+                            <div><b>{{ order.wallet_out }}</b></div>
+                        </li>
+                        {% if order.memo_out %}
+                            <li>
+                                <div class="swap_time_limit">Memo/Тег получателя:</div>
+                                <div><b>{{ order.memo_out }}</b></div>
+                            </li>
+                        {% endif %}
+                    {% endif %}
+                    <li>
+                        <div class="swap_time_limit">Следующей суммы:</div>
+                        <div><b>{{ order.right_out }} {{ order.money_right.money.abc_code }}</b></div>
+                    </li>
+                </ul>
             </div>
             <hr>
             <div class="confirm_time">
