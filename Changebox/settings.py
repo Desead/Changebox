@@ -19,15 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-llr-lt0#3=nfxpxekj^a9d8dn9=+!q6_x$umaqs8+gjz=225=&'
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', ]
-
-# Application definition
+ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -81,22 +75,12 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
+# CACHES = {
 #     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': 'change_db2',
-#         'USER': 'alx_db',
-#         'PASSWORD': '1111',
-#         'HOST': '127.0.0.1',
-#         'PORT': '5432',
+#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379',
 #     }
 # }
-CACHES = {
-    'default': {
-        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
-        'LOCATION': 'redis://127.0.0.1:6379',
-    }
-}
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -135,6 +119,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# from .settings_prod import *
+# SECRET_KEY = '=+>_(*{L82(+?t4E+uc^QzM9EI2(3L#}um*wO<U]|>FV@y7E6mn8^iJcB;mgNQp'
+# DEBUG = False
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', '5.63.154.146', 'primabit.ru', 'www.primabit.ru', ]
 
 if DEBUG:
     STATICFILES_DIRS = ['static']

@@ -3,13 +3,10 @@ from django.urls import path, include
 from app_main.views import *
 
 export_url = 'api/v1/xml_export/'
-try:
-    from app_main.models import Settings
 
-    export_url = Settings.objects.first().xml_address
-    export_url = 'api/v1/' + str(export_url).strip('/') + '/'
-except:
-    pass
+temp = Settings.objects.first()
+if temp:
+    export_url = 'api/v1/' + temp.xml_address.strip('/') + '/'
 
 urlpatterns = [
     path('accounts/', include('django.contrib.auth.urls')),

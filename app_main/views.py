@@ -29,6 +29,8 @@ class SignUpView(CreateView):
 class StartView(View):
     def get(self, request):
         temp = Settings.objects.first()
+        if not temp:
+            return HttpResponse("Отсутствуют настройки для запуска сайта")
 
         job_start = temp.job_start
         job_end = temp.job_end

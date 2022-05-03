@@ -16,16 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from Changebox.settings import DEBUG
 from app_main.models import Settings
 
 # если бд ещё нету или в ней не заполнена таблица Settings то вываливается ошибка т.к. нет нужных полей
 admin_path = 'admin/'
-if not DEBUG:
-    try:
-        admin_path = str(Settings.objects.first().adminka).strip('/') + '/'
-    except AttributeError as error:
-        pass
+
+temp = Settings.objects.first()
+if temp:
+    admin_path = temp.adminka.strip('/') + '/'
 
 urlpatterns = [
     path(admin_path, admin.site.urls),

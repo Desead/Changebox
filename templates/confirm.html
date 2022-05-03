@@ -38,10 +38,12 @@
             <hr>
             <div class="confirm_time">
                 <ul>
-                    <li>
-                        <div class="swap_time_limit">Со своего кошелька:</div>
-                        <div><b>{{ order.wallet_client }}</b></div>
-                    </li>
+                    {% if order.wallet_client %}
+                        <li>
+                            <div class="swap_time_limit">Со своего кошелька:</div>
+                            <div><b>{{ order.wallet_client }}</b></div>
+                        </li>
+                    {% endif %}
                     <li>
                         <div class="swap_time_limit">Переведите на наш кошелёк:</div>
                         <div><b>{{ order.wallet_in.number }}</b></div>
@@ -61,11 +63,17 @@
                                 <div><b>{{ order.memo_out }}</b></div>
                             </li>
                         {% endif %}
+                        <li>
+                            <div class="swap_time_limit">Следующей суммы:</div>
+                            <div><b>{{ order.right_out }} {{ order.money_right.money.abc_code }}</b></div>
+                        </li>
+                    {% else %}
+                        <li>
+                            <div class="swap_time_limit">К получению:</div>
+                            <div><b>{{ order.right_out }} {{ order.money_right.money.abc_code }}</b></div>
+                        </li>
                     {% endif %}
-                    <li>
-                        <div class="swap_time_limit">Следующей суммы:</div>
-                        <div><b>{{ order.right_out }} {{ order.money_right.money.abc_code }}</b></div>
-                    </li>
+
                 </ul>
             </div>
             <hr>

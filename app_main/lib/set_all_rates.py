@@ -73,25 +73,23 @@ def set_all_rates():
             money_left_nominal = change.money_left.money.nominal
             money_right_nominal = change.money_right.money.nominal
 
-            match money_left_type:
-                case 'crypto':
-                    money_left = change.money_left.money.tiker
-                    temp = check_dict_rates(change, binance, money_left)
-                    if not temp[0]: continue
-                    money_left_cost = temp[1]
-                case 'fiat':
-                    money_left = change.money_left.money.abc_code
-                    money_left_cost = cbr[money_left]['Value']
+            if money_left_type == 'crypto':
+                money_left = change.money_left.money.tiker
+                temp = check_dict_rates(change, binance, money_left)
+                if not temp[0]: continue
+                money_left_cost = temp[1]
+            if money_left_type == 'fiat':
+                money_left = change.money_left.money.abc_code
+                money_left_cost = cbr[money_left]['Value']
 
-            match money_right_type:
-                case 'crypto':
-                    money_right = change.money_right.money.tiker
-                    temp = check_dict_rates(change, binance, money_right)
-                    if not temp[0]: continue
-                    money_right_cost = temp[1]
-                case 'fiat':
-                    money_right = change.money_right.money.abc_code
-                    money_right_cost = cbr[money_right]['Value']
+            if money_right_type == 'crypto':
+                money_right = change.money_right.money.tiker
+                temp = check_dict_rates(change, binance, money_right)
+                if not temp[0]: continue
+                money_right_cost = temp[1]
+            if money_right_type == 'fiat':
+                money_right = change.money_right.money.abc_code
+                money_right_cost = cbr[money_right]['Value']
 
             if money_left_cost > money_right_cost:
                 rate_left = 1

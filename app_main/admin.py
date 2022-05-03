@@ -128,7 +128,7 @@ class SettingsAdmin(admin.ModelAdmin):
          {'classes': ('collapse',), 'fields': ('pause', ('job_start', 'job_end'),)}),
         ('URL', {'classes': ('collapse',), 'fields': ('adminka', 'xml_address',)}),
         ('SEO', {'classes': ('collapse',), 'fields': ('title', 'description', 'keywords',)}),
-        ('Правила', {'classes': ('collapse',), 'fields': ('rules_exchange', 'rules_security', 'rules_warning',)}),
+        ('Правила', {'classes': ('collapse',), 'fields': ('rules_exchange', 'rules_security',)}),
     )
 
     def get_urls(self):
@@ -250,7 +250,7 @@ class SwapOrdersAdmin(admin.ModelAdmin):
 
 @admin.register(Wallets)
 class WalletsAdmin(admin.ModelAdmin):
-    list_display = ('fullmoney', 'active', 'number','tag', 'balance', 'max_balance',)
+    list_display = ('fullmoney', 'active', 'number', 'tag', 'balance', 'max_balance',)
     list_editable = ('active', 'number', 'balance', 'max_balance',)
 
     actions = [all_on, all_off]

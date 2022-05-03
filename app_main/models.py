@@ -451,7 +451,7 @@ class FullMoney(Commisions):  # объединили монетки и плат�
                             null=True, help_text='У крипты платёжная система может отсутствовать')
     money = models.ForeignKey(Money, verbose_name='Код валюты', on_delete=models.CASCADE)
     reserv = models.FloatField('Резерв', help_text='Доступный для обмена резерв', default=0)
-    logo = models.FileField('Логотип', upload_to='static/img/money')
+    logo = models.FileField('Логотип', upload_to='static/img/money', blank=True)
     place = models.PositiveSmallIntegerField('Место на сайте', default=1)
 
     add_field_in = models.CharField('Поле входящее', max_length=100, blank=True,
@@ -598,7 +598,7 @@ class SwapOrders(models.Model):
                                   null=True, help_text='Кошелёк обменника на который поступят деньги')
     wallet_client = models.CharField('Кошелёк клиента', max_length=100, blank=True, null=True,
                                      help_text='Кошелёк с которого клиент будет отправлять в обменник')
-    wallet_out = models.CharField('Кошелёк клиента', max_length=100,
+    wallet_out = models.CharField('Кошелёк клиента', max_length=100, blank=True, null=True,
                                   help_text='Кошелёк/адрес на который обменник отправит деньги клиенту')
     memo_out = models.CharField('MEMO клиента', max_length=100, blank=True, null=True,
                                 help_text='Дополнительное поле. Иногда нужно для отправки криптовалюты')
