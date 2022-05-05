@@ -138,14 +138,20 @@ CELERY_TASK_SERIALIZER = 'json'
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_ALWAYS_EAGER = True
+CELERY_IGNORE_RESULT = True
 
-# from celery.schedules import crontab
-# CELERY_BEAT_SCHEDULE = {
-#     'get-best-files': {
-#         'task': 'app_main.tasks.best_download',
-#         'schedule': 30.0,
-#     },
-# }
+from celery.schedules import crontab
+
+CELERY_BEAT_SCHEDULE = {
+    'get-rates': {  # получаем данные и меняем котировки
+        'task': 'app_main.tasks.set_ratese',
+        'schedule': crontab(),  # раз в минуту
+    },
+    'clear_redis': {  # чистим список заданий от celery в redis
+        'task': 'app_main.tasks.clear_redis',
+        'schedule': crontab(minute=0, hour=6, day_of_week=1)  # выполняем раз в неделю в 6 утра по TIME_ZONE
+    },
+}
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"

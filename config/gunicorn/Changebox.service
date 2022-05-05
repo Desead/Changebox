@@ -1,0 +1,17 @@
+[Unit]
+Description=Changebox daemon
+Requires=Changebox.socket
+After=network.target
+
+[Service]
+User=desead
+Group=www-data
+WorkingDirectory=/home/desead/www/Changebox
+ExecStart=/home/desead/www/Changebox/venv/bin/gunicorn \
+          --access-logfile - \
+          --workers 3 \
+          --bind unix:/run/Changebox.sock \
+         Changebox.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

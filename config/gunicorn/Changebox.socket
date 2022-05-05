@@ -1,0 +1,8 @@
+[Unit]
+Description=Changebox socket
+
+[Socket]
+ListenStream=/run/Changebox.sock
+
+[Install]
+WantedBy=sockets.target

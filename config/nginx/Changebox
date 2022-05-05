@@ -1,0 +1,16 @@
+server {
+    listen 80;
+    server_name primabit.ru www.primabit.ru;
+
+    location = /favicon.ico { access_log off; log_not_found off; }
+    location /static/ {
+        root /home/desead/www/Changebox;
+    }
+    location = /robots.txt {
+        root /home/desead/www/Changebox;
+    }
+    location / {
+        include proxy_params;
+        proxy_pass http://unix:/run/Changebox.sock;
+    }
+}

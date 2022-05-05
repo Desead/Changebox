@@ -1,5 +1,6 @@
 from Changebox.celery import app
 from app_main.lib.set_all_rates import set_all_rates
+from celery import shared_task
 
 '''
 @app.task(time_limit=20, soft_time_limit=15)
@@ -36,3 +37,8 @@ def clear_redis():
 @app.task(time_limit=25, soft_time_limit=20)
 def set_rates():
     set_all_rates()
+
+
+@shared_task
+def adding_task(x, y):
+    return x + y
