@@ -8,3 +8,5 @@
 /static/img/
 /__pycache__/
 */__pycache__/
+/Changebox/settings_local.py
+

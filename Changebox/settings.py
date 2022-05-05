@@ -19,7 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 SECRET_KEY = 'django-insecure-llr-lt0#3=nfxpxekj^a9d8dn9=+!q6_x$umaqs8+gjz=225=&'
-DEBUG = True
+
+DEBUG = Path('settings_local.py').exists()
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -132,5 +133,27 @@ AUTH_USER_MODEL = 'app_main.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
 
-import settings_celery
+from Changebox.redis import REDIS_HOST, REDIS_PORT
+from celery.schedules import crontab
 
+CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
+CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
+CELERY_ACCEPT_CONTENT = ['application/json']
+CELERY_TASK_SERIALIZER = 'json'
+CELERY_RESULT_SERIALIZER = 'json'
+CELERY_TIMEZONE = TIME_ZONE
+CELERY_ALWAYS_EAGER = True
+CELERY_IGNORE_RESULT = True
+
+CELERY_BEAT_SCHEDULE = {
+    'get-rates': {  # получаем данные и меняем котировки
+        'task': 'app_main.tasks.set_rates',
+        'schedule': crontab(),  # раз в минуту
+        # 'schedule': 30.0,  # каждые 30 секунд
+    },
+    'clear_redis': {  # чистим список заданий от celery в redis
+        'task': 'app_main.tasks.clear_redis',
+        'schedule': crontab(minute=0, hour=6, day_of_week=1)  # выполняем раз в неделю в 6 утра по TIME_ZONE
+    },
+}
