@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 from pathlib import Path
-from Changebox.redis import REDIS_HOST, REDIS_PORT
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -115,9 +114,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if DEBUG:
@@ -130,31 +126,11 @@ FIXTURE_DIRS = ['fixtures']
 BESTCHANGE_FILES = BASE_DIR / 'BestChange_Files'
 BEST_SAVE = False  # Сохранять или нет на диск файлы с беста
 
-CELERY_BROKER_URL = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-CELERY_BROKER_TRANSPORT_OPTIONS = {'visibility_timeout': 3600}
-CELERY_RESULT_BACKEND = 'redis://' + REDIS_HOST + ':' + REDIS_PORT + '/0'
-CELERY_ACCEPT_CONTENT = ['application/json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
-CELERY_TIMEZONE = TIME_ZONE
-CELERY_ALWAYS_EAGER = True
-CELERY_IGNORE_RESULT = True
-
-from celery.schedules import crontab
-
-CELERY_BEAT_SCHEDULE = {
-    'get-rates': {  # получаем данные и меняем котировки
-        'task': 'app_main.tasks.set_ratese',
-        'schedule': crontab(),  # раз в минуту
-    },
-    'clear_redis': {  # чистим список заданий от celery в redis
-        'task': 'app_main.tasks.clear_redis',
-        'schedule': crontab(minute=0, hour=6, day_of_week=1)  # выполняем раз в неделю в 6 утра по TIME_ZONE
-    },
-}
-
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = BASE_DIR / "sent_emails"
 AUTH_USER_MODEL = 'app_main.CustomUser'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+
+import settings_celery
+
